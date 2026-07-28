@@ -280,7 +280,7 @@
         },
         "arc": {
           "titulo": "Rūḥēh d'Mshīḥā",
-          "texto": "Rūḥēh d'Mshīḥā, qadashayn. Fgarēh d'Mshīḥā, fūrqan. D'meh d'Mshīḥā, arwayn. Māyā d'min estēh d'Mshīḥā, aṣgayn. Ḥashēh d'Mshīḥā, ḥayylayn. Ō ṭābha Yeshū', shma'ayn. B'shawḥāthākh ṭashayn. Amēn.",
+          "texto": "Rūḥēh d'Mshīḥā, qadashayn. Fgarēh d'Mshīḥā, fūrqan. D'meh d'Mshīḥā, arwayn. Māyā d'min estēh d'Mshīḥā, aṣgayn. Ḥashēh d'Mshīḥā, ḥayylayn. Ó ṭābha Yeshū', shma'ayn. B'shawḥāthākh ṭashayn. Amēn.",
           "nota": "Transliterativo devocional aramaico medieval adaptado."
         }
       }
@@ -533,7 +533,7 @@
       }
     },
     {
-      "id": "salve-mãe-santa",
+      "id": "salve-mae-santa",
       "nome_universal": "Hail, Holy Mother / Salve Sancta Parens",
       "idiomas": {
         "pt": {
@@ -994,7 +994,7 @@
       "idiomas": {
         "pt": {
           "titulo": "Consagração ao Sagrado Coração de Jesus",
-          "texto": "Docíssimo Jesus, Redentor do gênero humano, lançai os vossos olhares sobre nós, prostrados humildemente diante do vosso altar. Somos vossos e vossos queremos ser; e para podermos viver mais intimamente unidos a vós, cada um de nós se consagra espontaneamente ao vosso Sacratíssimo Coração."
+          "texto": "Docíssimo Jesus, Redentor do gênero humano, lançai os vossos olhares sobre nós, prostrados humildemente diante do vosso altar. Somos vossos e vossos queremos ser; e para podermos viver mais intimamente unidos a vós, cada um de nós se consagra espontaneamente ao vosso Sacratissimo Coração."
         },
         "la": {
           "titulo": "Actus Consecrationis Cordi Iesu",
@@ -1460,215 +1460,6 @@
           "titulo": "",
           "texto": "",
           "nota": "Oração de proteção durante tempestades."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-carlos-borromeu",
-      "nome_universal": "Prayer of St. Charles Borromeo / Oratio Sancti Caroli Borromei",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração de São Carlos Borromeu",
-          "texto": "Mantende em nós, Senhor, o espírito com que enchestes o Bispo São Carlos Borromeu, para que a vossa Igreja seja continuamente renovada e mostre ao mundo a face de Cristo."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Caroli Borromei",
-          "texto": "Custodi in nobis, Domine, spiritum quo beatum Carolum Episcopum implevisti, ut Ecclesia tua continue renovetur et faciem Christi mundo ostendat."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração pela renovação espiritual e fidelidade."
-        }
-      }
-    },
-    {
-      "id": "oracao-santa-clara",
-      "nome_universal": "Prayer of St. Clare / Oratio Sanctae Clarae",
-      "idiomas": {
-        "pt": {
-          "titulo": "Bênção de Santa Clara",
-          "texto": "O Senhor vos abençoe e vos guarde. Mostre a sua face para vós e tenha misericórdia de vós. Volte o seu olhar para vós e vos dê a paz. O Senhor esteja sempre convosco."
-        },
-        "la": {
-          "titulo": "Benedictio Sanctae Clarae",
-          "texto": "Benedicat tibi Dominus et custodiat te. Ostendat faciem suam tibi et misereatur tui. Convertat vultum suum ad te et det tibi pacem. Dominus sit semper tecum."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Bênção de Santa Clara de Assis."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-filipe-neri",
-      "nome_universal": "Joyful Prayer / Oratio Sancti Philippi Nerii",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração de São Filipe Neri (Pela Alegria Cristã)",
-          "texto": "Meu Jesus, dai-me hoje a vossa graça, porque senão eu vos trairei. Concedei-me a verdadeira alegria espiritual que vem do cumprimento da vossa santa vontade."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Philippi Nerii",
-          "texto": "Iesu mi, da mihi hodie gratiam tuam, nam alioquin te prodam. Concede mihi veram laetitiam spiritualem quae ex repletione sanctae voluntatis tuae oritur."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração jaculatória de São Filipe Neri."
-        }
-      }
-    },
-    {
-      "id": "oracao-santo-inacio-alma-mater",
-      "nome_universal": "Prayer for Generosity / Oratio Pro Generositate",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração de Santo Inácio Pela Generosidade",
-          "texto": "Ensina-me, Senhor, a ser generoso. A servir-vos como vós mereceis; a dar e não contar o custo; a lutar sem me importar com as feridas; a trabalhar sem procurar descanso; a gastar-me sem esperar outra recompensa senão saber que estou fazendo a vossa vontade."
-        },
-        "la": {
-          "titulo": "Oratio Pro Generositate",
-          "texto": "Doce me, Domine, esse generosum. Servire tibi sicut mereris; dare nec computare pretium; pugnare nec curare vulnera; laborare nec quaerere requiem; me consumere nec aliam mercedem exspectare nisi scire me facere voluntatem tuam."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração inaciana pela generosidade no serviço divino."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-joao-da-cruz",
-      "nome_universal": "Prayer of St. John of the Cross / Oratio Sancti Ioannis a Cruce",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração de São João da Cruz",
-          "texto": "Meu Deus, vossos são os céus e vossa é a terra; meus são os justos e meus os pecadores; os anjos são meus, e a Mãe de Deus e todas as coisas são minhas; e o próprio Deus é meu e para mim, porque Cristo é meu e todo para mim."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Ioannis a Cruce",
-          "texto": "Deus meus, tui sunt caeli et tua est terra; mei sunt iusti et mei peccatores; angeli mei sunt, et Mater Dei et omnia mea sunt; et ipse Deus meus est et pro me, quia Christus meus est et totus pro me."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração da Alma Enamorada de São João da Cruz."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-maximiliano-kolbe",
-      "nome_universal": "Prayer of St. Maximilian Kolbe / Consecratio ad Immaculatam",
-      "idiomas": {
-        "pt": {
-          "titulo": "Consagração de São Maximiliano Kolbe",
-          "texto": "Dignai-vos aceitar o meu louvor, ó Virgem Santíssima. Fazei-me digno de vos louvar com todas as minhas forças. Concedei-me força contra os vossos inimigos e aceitai toda a minha vida em vosso serviço."
-        },
-        "la": {
-          "titulo": "Consecratio ad Immaculatam",
-          "texto": "Dignare me laudare te, Virgo Sacrata. Da mihi virtutem contra hostes tuos. Accipe me totum in servitium tuum ad gloriam Filii tui."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Ato de entrega à Imaculada por São Maximiliano Kolbe."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-bartolomeu",
-      "nome_universal": "Prayer of St. Bartholomew / Oratio Sancti Bartholomaei",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração a São Bartolomeu",
-          "texto": "Fortalecei em nós, Senhor, a fé com que o santo Apóstolo Bartolomeu se aderiu de todo o coração ao vosso Filho, e fazei que a vossa Igreja seja para todos os povos sacramento de salvação."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Bartholomaei",
-          "texto": "Confirma in nobis, Domine, fidem qua beatus Apostolus Bartholomaeus Filio tuo toto corde adhaesit, et praesta ut Ecclesia tua cunctis gentibus salutis sacramentum existat."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Coleta da festa litúrgica de São Bartolomeu."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-lucas",
-      "nome_universal": "Prayer of St. Luke / Oratio Sancti Lucae",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração a São Lucas Evangelista",
-          "texto": "Senhor nosso Deus, que escolhestes São Lucas para revelar, pela pregação e pelos escritos, o mistério da vossa predileção pelos pobres, concedei aos que já se gloriam do vosso nome perseverar num só coração e numa só alma."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Lucae",
-          "texto": "Domine Deus noster, qui beatum Lucam elegisti ut praedicatione et scriptis mysterium dilectionis tuae erga pauperes revelaret, concede fidelibus tuis in uno corde et una anima perseverare."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração em honra do autor do Evangelho de São Lucas."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-mateus",
-      "nome_universal": "Prayer of St. Matthew / Oratio Sancti Matthaei",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração a São Mateus Apóstolo",
-          "texto": "Ó Deus, que por uma inefável misericórdia vos dignastes escolher São Mateus para transformá-lo de cobrador de impostos em Apóstolo, concedei-nos, por seu exemplo e intercessão, a graça de seguir-vos sempre."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Matthaei",
-          "texto": "Deus, qui ineffabili misericordia beatum Matthaeum ex publicano Apostolum eligere dignatus es, da nobis, eius exemplo et intercessione, te semper fideliter sequi."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração litúrgica do Apóstolo Mateus."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-marcos",
-      "nome_universal": "Prayer of St. Mark / Oratio Sancti Marci",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração a São Marcos Evangelista",
-          "texto": "Ó Deus, que glorificastes o vosso Evangelista São Marcos com a graça de pregar o Evangelho, concedei-nos aproveitar de tal modo dos seus ensinamentos que sigamos fielmente os passos de Cristo."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Marci",
-          "texto": "Deus, qui beatum Marcum Evangelistam tuum evangelicae praedicationis gratia sublimasti, concede nobis eius eruditione ita proficere, ut vestigia Christi fideliter sequamur."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Prece da festa de São Marcos."
-        }
-      }
-    },
-    {
-      "id": "oracao-sao-joao-evangelista",
-      "nome_universal": "Prayer of St. John the Apostle / Oratio Sancti Ioannis Evangelistae",
-      "idiomas": {
-        "pt": {
-          "titulo": "Oração a São João Apóstolo e Evangelista",
-          "texto": "Iluminai, Senhor, a vossa Igreja, para que, esclarecida pelos ensinamentos do vosso Apóstolo e Evangelista São João, alcance os dons eternos que prometestes."
-        },
-        "la": {
-          "titulo": "Oratio Sancti Ioannis Evangelistae",
-          "texto": "Ecclesiam tuam, Domine, benignus illustra, ut beati Ioannis Apostoli tui et Evangelistae illuminata doctrinis, ad dona perveniat sempiterna."
-        },
-        "arc": {
-          "titulo": "",
-          "texto": "",
-          "nota": "Oração da celebração do discípulo amado."
         }
       }
     }
