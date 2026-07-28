@@ -326,16 +326,269 @@
         </div>
     </main>
 
-    <script type="module">
+     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { initializeFirestore, doc, updateDoc, setDoc, getDoc, collection, onSnapshot, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-    // Certifique-se de carregar/importar o arquivo JSON da Bíblia corretamente aqui
-    // Exemplo: import bibliaData from './biblia.json' assert { type: 'json' };
-    // Ou carregue via fetch local na função de leitor da bíblia abaixo.
+    // -------------------------------------------------------------
+    // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO (DECLARADAS PRIMEIRO!)
+    // -------------------------------------------------------------
+    
+    // Navegação por Abas Gerais (Mobile e Desktop)
+    window.switchTab = function(tabName) {
+        const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes'];
+        
+        tabs.forEach(tab => {
+            const tabBtn = document.getElementById(`tab-${tab}`);
+            const content = document.getElementById(`conteudo-${tab}`);
+            
+            if (tabBtn) {
+                if (tab === tabName) tabBtn.classList.add('active-tab');
+                else tabBtn.classList.remove('active-tab');
+            }
+            
+            if (content) {
+                if (tab === tabName) {
+                    content.classList.remove('hidden');
+                    if (window.innerWidth < 768 && tab !== 'escala') {
+                        content.classList.remove('hidden', 'md:block');
+                    }
+                } else {
+                    content.classList.add('hidden');
+                }
+            }
+        });
 
+        // Se for para a aba de orações, carrega se ainda não foi carregado
+        if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
+            window.carregarOracoes();
+        }
+    };
+
+    // Sub-abas da Liturgia
+    window.switchSubTab = function(subTabName) {
+        if(!cacheLiturgiaDados) return;
+
+        const refEl = document.getElementById('liturgia-texto-referencia');
+        const corpoEl = document.getElementById('liturgia-texto-corpo');
+        const mapeamentoAbas = ['1leitura', 'salmo', '2leitura', 'evangelho'];
+
+        mapeamentoAbas.forEach(aba => {
+            const btn = document.getElementById(`subtab-${aba}`);
+            if(btn) {
+                if(aba === subTabName) btn.classList.add('active-subtab');
+                else btn.classList.remove('active-subtab');
+            }
+        });
+
+        let targetData = null;
+        if(subTabName === '1leitura') targetData = cacheLiturgiaDados.primeiraLeitura;
+        else if(subTabName === 'salmo') targetData = cacheLiturgiaDados.salmo;
+        else if(subTabName === '2leitura') targetData = cacheLiturgiaDados.segundaLeitura;
+        else if(subTabName === 'evangelho') targetData = cacheLiturgiaDados.evangelho;
+
+        if(targetData) {
+            refEl.innerText = targetData.referencia || "";
+            
+            if (subTabName === 'salmo') {
+                let salmoHtml = "";
+                if (targetData.refrao) {
+                    salmoHtml += `<p class="font-bold text-amber-800 dark:text-amber-500 mb-3 bg-amber-500/5 p-2 rounded-lg border-l-2 border-amber-600 italic">Refrão: ${targetData.refrao}</p>`;
+                }
+                
+                if (targetData.texto) {
+                    if (typeof targetData.texto === 'string') {
+                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto}</div>`;
+                    } else if (Array.isArray(targetData.texto)) {
+                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto.join('<br>')}</div>`;
+                    } else {
+                        salmoHtml += `<div class="space-y-2 text-justify">${JSON.stringify(targetData.texto)}</div>`;
+                    }
+                } else {
+                    salmoHtml += "<p class='italic text-slate-400'>Versos não disponíveis.</p>";
+                }
+                corpoEl.innerHTML = salmoHtml;
+            } else {
+                if (targetData.texto) {
+                    if (typeof targetData.texto === 'string') {
+                        corpoEl.innerHTML = `<div>${targetData.texto}</div>`;
+                    } else if (Array.isArray(targetData.texto)) {
+                        corpoEl.innerHTML = targetData.texto.join('<br>');
+                    } else if (typeof targetData.texto === 'object') {
+                        corpoEl.innerHTML = targetData.texto.paragrafo || JSON.stringify(targetData.texto);
+                    } else {
+                        corpoEl.innerHTML = "Texto não disponível.";
+                    }
+                } else {
+                    corpoEl.innerHTML = "Texto não disponível.";
+                }
+            }
+        } else {
+            refEl.innerText = "Não disponível";
+            corpoEl.innerHTML = "Nenhum texto associado a esta aba.";
+        }
+        corpoEl.scrollTop = 0;
+    };
+
+    // --- SISTEMA DE ORAÇÕES (GLOBAL & MINIMIZÁVEL) ---
+    window.oracoesData = null;
+    window.idiomaOracaoAtual = {};
+
+    window.carregarOracoes = async function() {
+        const container = document.getElementById('oracoes-container');
+        if (!container) return;
+
+        if (!window.oracoesData) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 text-slate-400">
+                    <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-600"></i>
+                    <p class="mt-2 text-sm italic font-medium">Carregando orações...</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch('oracoes.json'); 
+                if (!res.ok) throw new Error('Erro ao carregar orações');
+                
+                const json = await res.json();
+                window.oracoesData = json.oracoes;
+            } catch (err) {
+                console.error('Erro ao carregar orações:', err);
+                container.innerHTML = `
+                    <p class="text-center text-red-500 py-6 text-xs font-semibold">
+                        Não foi possível carregar as orações. Verifique o arquivo 'oracoes.json'.
+                    </p>
+                `;
+                return;
+            }
+        }
+
+        window.renderizarOracoes();
+    };
+
+    window.toggleOracao = function(id) {
+        const corpo = document.getElementById(`corpo-oracao-${id}`);
+        const icone = document.getElementById(`icone-oracao-${id}`);
+        if (!corpo || !icone) return;
+
+        const estaOculto = corpo.classList.contains('hidden');
+        if (estaOculto) {
+            corpo.classList.remove('hidden');
+            icone.classList.add('rotate-180');
+        } else {
+            corpo.classList.add('hidden');
+            icone.classList.remove('rotate-180');
+        }
+    };
+
+    window.renderizarOracoes = function() {
+        const container = document.getElementById('oracoes-container');
+        const termoBusca = (document.getElementById('input-busca-oracoes')?.value || '').toLowerCase().trim();
+        if (!container || !window.oracoesData) return;
+
+        container.innerHTML = '';
+
+        const oracoesFiltradas = window.oracoesData.filter(item => {
+            const idioma = window.idiomaOracaoAtual[item.id] || 'pt';
+            const info = item.idiomas[idioma] || item.idiomas['pt'];
+            const titulo = (info.titulo || '').toLowerCase();
+            const texto = (info.texto || '').toLowerCase();
+            return titulo.includes(termoBusca) || texto.includes(termoBusca);
+        });
+
+        if (oracoesFiltradas.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-slate-400 dark:text-zinc-500">
+                    <i class="fa-solid fa-hands-praying text-2xl mb-2"></i>
+                    <p class="text-xs font-medium">Nenhuma oração encontrada para sua busca.</p>
+                </div>`;
+            return;
+        }
+
+        oracoesFiltradas.forEach(item => {
+            const idiomaSalvo = window.idiomaOracaoAtual[item.id] || 'pt';
+            const infoIdioma = item.idiomas[idiomaSalvo] || item.idiomas['pt'];
+
+            let botoesIdiomaHtml = '';
+            Object.keys(item.idiomas).forEach(langKey => {
+                const ativo = langKey === idiomaSalvo;
+                botoesIdiomaHtml += `
+                    <button id="btn-${item.id}-${langKey}" 
+                        onclick="event.stopPropagation(); window.mudarIdiomaOracao('${item.id}', '${langKey}')" 
+                        class="px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
+                            ativo 
+                            ? 'bg-amber-600 text-white shadow-xs' 
+                            : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600'
+                        }">
+                        ${langKey}
+                    </button>
+                `;
+            });
+
+            const card = document.createElement('div');
+            card.className = "rounded-2xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-xs overflow-hidden transition-all hover:border-amber-500/30";
+
+            card.innerHTML = `
+                <div onclick="window.toggleOracao('${item.id}')" class="p-4 flex items-center justify-between cursor-pointer select-none bg-slate-50/50 dark:bg-zinc-800/40 hover:bg-amber-50/40 dark:hover:bg-zinc-800/80 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-hands-praying text-amber-600 dark:text-amber-500 text-sm"></i>
+                        <h3 id="titulo-${item.id}" class="text-xs sm:text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">
+                            ${infoIdioma.titulo}
+                        </h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-1 text-[10px]">
+                            ${botoesIdiomaHtml}
+                        </div>
+                        <i id="icone-oracao-${item.id}" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
+                    </div>
+                </div>
+
+                <div id="corpo-oracao-${item.id}" class="hidden p-5 border-t border-slate-100 dark:border-zinc-800/60 bg-amber-50/20 dark:bg-zinc-900/60">
+                    <p id="texto-${item.id}" class="text-xs sm:text-sm text-slate-700 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-line text-justify italic font-serif">
+                        ${infoIdioma.texto}
+                    </p>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    };
+
+    window.mudarIdiomaOracao = function(id, idioma) {
+        window.idiomaOracaoAtual[id] = idioma;
+        const item = window.oracoesData?.find(o => o.id === id);
+        if (!item || !item.idiomas[idioma]) return;
+
+        const info = item.idiomas[idioma];
+        const elTitulo = document.getElementById(`titulo-${id}`);
+        const elTexto = document.getElementById(`texto-${id}`);
+
+        if (elTitulo) elTitulo.innerText = info.titulo;
+        if (elTexto) elTexto.innerText = info.texto;
+
+        Object.keys(item.idiomas).forEach(langKey => {
+            const btn = document.getElementById(`btn-${id}-${langKey}`);
+            if (btn) {
+                if (langKey === idioma) {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-amber-600 text-white shadow-xs";
+                } else {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600";
+                }
+            }
+        });
+    };
+
+    window.filtrarOracoes = function() {
+        window.renderizarOracoes();
+    };
+
+
+    // -------------------------------------------------------------
+    // 2. CONFIGURAÇÃO DO FIREBASE E INICIALIZAÇÃO
+    // -------------------------------------------------------------
     const firebaseConfig = {
         apiKey: "AIzaSyCwPeLrAtNEO41MZ3yxSuYib2LC0z2dv9U",
         authDomain: "tarcisius-d03d7.firebaseapp.com",
@@ -347,11 +600,7 @@
 
     const app = initializeApp(firebaseConfig); 
     const auth = getAuth(app); 
-    
-    const db = initializeFirestore(app, {
-        experimentalForceLongPolling: true
-    });
-
+    const db = initializeFirestore(app, { experimentalForceLongPolling: true });
     const messaging = getMessaging(app);
 
     const telaLoading = document.getElementById('tela-loading');
@@ -370,7 +619,7 @@
     let usuarioLogadoDados = null; 
     let todasEscalasCache = [];
     let cacheLiturgiaDados = null; 
-    let bibliaDataCache = null; // Guardará os dados locais do arquivo biblia.json
+    let bibliaDataCache = null;
 
     function sincronizarVisualBotao(isDark) {
         if (darkModeThumb) {
@@ -422,7 +671,7 @@
                                 <i class="fa-solid fa-screwdriver-wrench text-2xl animate-bounce"></i>
                             </div>
                             <h1 class="text-base font-black text-white tracking-tight">Manutenção do Sistema</h1>
-                            <p class="text-xs text-stone-400 mt-2 leading-relaxed">O Altaris está passando por otimizações na infraestrutura do presbitério. Voltamos em breve!</p>
+                            <p class="text-xs text-stone-400 mt-2 leading-relaxed">O Altaris está passando por otimizaciones na infraestrutura do presbitério. Voltamos em breve!</p>
                         </div>
                     `;
                     document.body.appendChild(modal);
@@ -835,7 +1084,7 @@
                 if(vagasLivresOuSubstituicoes.length > 0) {
                     let botoesVagasHtml = "";
                     vagasLivresOuSubstituicoes.forEach(v => {
-                        const txtBotao = v.type === 'vazia' ? `Assumir ${v.label} (Vaga Livre)` : `Substituir ${v.quem} em ${v.label}`;
+                        const txtBotao = v.tipo === 'vazia' ? `Assumir ${v.label} (Vaga Livre)` : `Substituir ${v.quem} em ${v.label}`;
                         botoesVagasHtml += `
                             <button onclick="window.assumirVagaEscala('${esc.idDoc}', '${v.funcaoId}', 'Assumir')" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-2.5 py-1.5 rounded-lg font-bold tracking-wide transition-all cursor-pointer text-[10px] uppercase shadow-xs flex items-center gap-1">
                                 <i class="fa-solid fa-plus-circle text-[9px]"></i> ${txtBotao}
@@ -1014,71 +1263,6 @@
         }
     }
 
-    window.switchSubTab = function(subTabName) {
-        if(!cacheLiturgiaDados) return;
-
-        const refEl = document.getElementById('liturgia-texto-referencia');
-        const corpoEl = document.getElementById('liturgia-texto-corpo');
-        const mapeamentoAbas = ['1leitura', 'salmo', '2leitura', 'evangelho'];
-
-        mapeamentoAbas.forEach(aba => {
-            const btn = document.getElementById(`subtab-${aba}`);
-            if(btn) {
-                if(aba === subTabName) btn.classList.add('active-subtab');
-                else btn.classList.remove('active-subtab');
-            }
-        });
-
-        let targetData = null;
-        if(subTabName === '1leitura') targetData = cacheLiturgiaDados.primeiraLeitura;
-        else if(subTabName === 'salmo') targetData = cacheLiturgiaDados.salmo;
-        else if(subTabName === '2leitura') targetData = cacheLiturgiaDados.segundaLeitura;
-        else if(subTabName === 'evangelho') targetData = cacheLiturgiaDados.evangelho;
-
-        if(targetData) {
-            refEl.innerText = targetData.referencia || "";
-            
-            if (subTabName === 'salmo') {
-                let salmoHtml = "";
-                if (targetData.refrao) {
-                    salmoHtml += `<p class="font-bold text-amber-800 dark:text-amber-500 mb-3 bg-amber-500/5 p-2 rounded-lg border-l-2 border-amber-600 italic">Refrão: ${targetData.refrao}</p>`;
-                }
-                
-                if (targetData.texto) {
-                    if (typeof targetData.texto === 'string') {
-                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto}</div>`;
-                    } else if (Array.isArray(targetData.texto)) {
-                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto.join('<br>')}</div>`;
-                    } else {
-                        salmoHtml += `<div class="space-y-2 text-justify">${JSON.stringify(targetData.texto)}</div>`;
-                    }
-                } else {
-                    salmoHtml += "<p class='italic text-slate-400'>Versos não disponíveis.</p>";
-                }
-                corpoEl.innerHTML = salmoHtml;
-            } else {
-                if (targetData.texto) {
-                    if (typeof targetData.texto === 'string') {
-                        corpoEl.innerHTML = `<div>${targetData.texto}</div>`;
-                    } else if (Array.isArray(targetData.texto)) {
-                        corpoEl.innerHTML = targetData.texto.join('<br>');
-                    } else if (typeof targetData.texto === 'object') {
-                        corpoEl.innerHTML = targetData.texto.paragrafo || JSON.stringify(targetData.texto);
-                    } else {
-                        corpoEl.innerHTML = "Texto não disponível.";
-                    }
-                } else {
-                    corpoEl.innerHTML = "Texto não disponível.";
-                }
-            }
-        } else {
-            refEl.innerText = "Não disponível";
-            corpoEl.innerHTML = "Nenhum texto associado a esta aba.";
-        }
-        corpoEl.scrollTop = 0;
-    }
-
-    // --- LEITOR DA BÍBLIA INTEGRADO AO ARQUIVO LOCAL JSON ---
     function inicializarLeitorBiblia() {
         const selectLivro = document.getElementById('select-biblia-livro');
         const inputCapitulo = document.getElementById('input-biblia-capitulo');
@@ -1088,7 +1272,6 @@
         async function carregarBibliaLocal() {
             if (bibliaDataCache) return bibliaDataCache;
             try {
-                // Caso tenha salvado o json como biblia.json no mesmo diretório:
                 const res = await fetch('biblia.json'); 
                 bibliaDataCache = await res.json();
                 return bibliaDataCache;
@@ -1123,10 +1306,7 @@
                 return;
             }
 
-            // Junta os livros do Antigo e Novo Testamento do seu arquivo JSON
             const todosLivros = [...(biblia.antigoTestamento || []), ...(biblia.novoTestamento || [])];
-            
-            // Busca o livro selecionado
             const livroEncontrado = todosLivros.find(l => l.nome.toLowerCase() === livroNome.toLowerCase());
 
             if (!livroEncontrado) {
@@ -1134,7 +1314,6 @@
                 return;
             }
 
-            // Busca o capítulo selecionado
             const capituloEncontrado = livroEncontrado.capitulos.find(c => c.capitulo === capNum);
 
             if (capituloEncontrado && capituloEncontrado.versiculos.length > 0) {
@@ -1166,160 +1345,6 @@
 
         buscarTextoBiblia();
     }
-// --- SISTEMA DE ORAÇÕES (GLOBAL) ---
-window.oracoesData = null;
-    window.idiomaOracaoAtual = {};
-
-    window.carregarOracoes = async function() {
-        const container = document.getElementById('oracoes-container');
-        if (!container) return;
-
-        if (!window.oracoesData) {
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center py-10 text-slate-400">
-                    <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-600"></i>
-                    <p class="mt-2 text-sm italic font-medium">Carregando orações...</p>
-                </div>
-            `;
-
-            try {
-                const res = await fetch('oracoes.json'); 
-                if (!res.ok) throw new Error('Erro ao carregar orações');
-                
-                const json = await res.json();
-                window.oracoesData = json.oracoes;
-            } catch (err) {
-                console.error('Erro ao carregar orações:', err);
-                container.innerHTML = `
-                    <p class="text-center text-red-500 py-6 text-xs font-semibold">
-                        Não foi possível carregar as orações. Verifique o arquivo 'oracoes.json'.
-                    </p>
-                `;
-                return;
-            }
-        }
-
-        window.renderizarOracoes();
-    };
-
-    window.toggleOracao = function(id) {
-        const corpo = document.getElementById(`corpo-oracao-${id}`);
-        const icone = document.getElementById(`icone-oracao-${id}`);
-        if (!corpo || !icone) return;
-
-        const estaOculto = corpo.classList.contains('hidden');
-        if (estaOculto) {
-            corpo.classList.remove('hidden');
-            icone.classList.add('rotate-180');
-        } else {
-            corpo.classList.add('hidden');
-            icone.classList.remove('rotate-180');
-        }
-    };
-
-    window.renderizarOracoes = function() {
-        const container = document.getElementById('oracoes-container');
-        const termoBusca = (document.getElementById('input-busca-oracoes')?.value || '').toLowerCase().trim();
-        if (!container || !window.oracoesData) return;
-
-        container.innerHTML = '';
-
-        const oracoesFiltradas = window.oracoesData.filter(item => {
-            const idioma = window.idiomaOracaoAtual[item.id] || 'pt';
-            const info = item.idiomas[idioma] || item.idiomas['pt'];
-            const titulo = (info.titulo || '').toLowerCase();
-            const texto = (info.texto || '').toLowerCase();
-            return titulo.includes(termoBusca) || texto.includes(termoBusca);
-        });
-
-        if (oracoesFiltradas.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-8 text-slate-400 dark:text-zinc-500">
-                    <i class="fa-solid fa-hands-praying text-2xl mb-2"></i>
-                    <p class="text-xs font-medium">Nenhuma oração encontrada para sua busca.</p>
-                </div>`;
-            return;
-        }
-
-        oracoesFiltradas.forEach(item => {
-            const idiomaSalvo = window.idiomaOracaoAtual[item.id] || 'pt';
-            const infoIdioma = item.idiomas[idiomaSalvo] || item.idiomas['pt'];
-
-            let botoesIdiomaHtml = '';
-            Object.keys(item.idiomas).forEach(langKey => {
-                const ativo = langKey === idiomaSalvo;
-                botoesIdiomaHtml += `
-                    <button id="btn-${item.id}-${langKey}" 
-                        onclick="event.stopPropagation(); window.mudarIdiomaOracao('${item.id}', '${langKey}')" 
-                        class="px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
-                            ativo 
-                            ? 'bg-amber-600 text-white shadow-xs' 
-                            : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600'
-                        }">
-                        ${langKey}
-                    </button>
-                `;
-            });
-
-            const card = document.createElement('div');
-            card.className = "rounded-2xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-xs overflow-hidden transition-all hover:border-amber-500/30";
-
-            card.innerHTML = `
-                <!-- Cabeçalho Clicável (Accordion) -->
-                <div onclick="window.toggleOracao('${item.id}')" class="p-4 flex items-center justify-between cursor-pointer select-none bg-slate-50/50 dark:bg-zinc-800/40 hover:bg-amber-50/40 dark:hover:bg-zinc-800/80 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-hands-praying text-amber-600 dark:text-amber-500 text-sm"></i>
-                        <h3 id="titulo-${item.id}" class="text-xs sm:text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">
-                            ${infoIdioma.titulo}
-                        </h3>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="flex gap-1 text-[10px]">
-                            ${botoesIdiomaHtml}
-                        </div>
-                        <i id="icone-oracao-${item.id}" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
-                    </div>
-                </div>
-
-                <!-- Corpo Oculto por Padrão -->
-                <div id="corpo-oracao-${item.id}" class="hidden p-5 border-t border-slate-100 dark:border-zinc-800/60 bg-amber-50/20 dark:bg-zinc-900/60">
-                    <p id="texto-${item.id}" class="text-xs sm:text-sm text-slate-700 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-line text-justify italic font-serif">
-                        ${infoIdioma.texto}
-                    </p>
-                </div>
-            `;
-
-            container.appendChild(card);
-        });
-    };
-
-    window.mudarIdiomaOracao = function(id, idioma) {
-        window.idiomaOracaoAtual[id] = idioma;
-        const item = window.oracoesData?.find(o => o.id === id);
-        if (!item || !item.idiomas[idioma]) return;
-
-        const info = item.idiomas[idioma];
-        const elTitulo = document.getElementById(`titulo-${id}`);
-        const elTexto = document.getElementById(`texto-${id}`);
-
-        if (elTitulo) elTitulo.innerText = info.titulo;
-        if (elTexto) elTexto.innerText = info.texto;
-
-        Object.keys(item.idiomas).forEach(langKey => {
-            const btn = document.getElementById(`btn-${id}-${langKey}`);
-            if (btn) {
-                if (langKey === idioma) {
-                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-amber-600 text-white shadow-xs";
-                } else {
-                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600";
-                }
-            }
-        });
-    };
-
-    window.filtrarOracoes = function() {
-        window.renderizarOracoes();
-    };
- </script>
+    </script>
 </body>
 </html>
