@@ -417,6 +417,1260 @@
           "nota": "Números 6:24-26 transliterado diretamente do texto aramaico/mosaico."
         }
       }
+    },
+    {
+      "id": "te-deum",
+      "nome_universal": "Te Deum / Thee, O God, We Praise",
+      "idiomas": {
+        "pt": {
+          "titulo": "Te Deum (A Vós, ó Deus, Louvamos)",
+          "texto": "A vós, ó Deus, louvamos, a vós, Senhor, confessamos. A vós, Eterno Pai, toda a terra venera. A vós todos os anjos, a vós os céus e todas as potestades. A vós os querubins e serafins com incessante voz proclamam: Santo, Santo, Santo é o Senhor Deus dos Exércitos."
+        },
+        "la": {
+          "titulo": "Te Deum Laudamus",
+          "texto": "Te Deum laudamus: te Dominum confitemur. Te aeternum Patrem omnis terra veneratur. Tibi omnes Angeli, tibi Caeli et universae Potestates: Tibi Cherubim et Seraphim incessabili voce proclamant: Sanctus, Sanctus, Sanctus Dominus Deus Sabaoth."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração tradicionalmente latina sem tradução direta histórica em aramaico."
+        }
+      }
+    },
+    {
+      "id": "stabat-mater",
+      "nome_universal": "Stabat Mater / Mother Stood",
+      "idiomas": {
+        "pt": {
+          "titulo": "Stabat Mater (Estava a Mãe Dolorosa)",
+          "texto": "Estava a Mãe dolorosa junto à cruz, lacrimosa, enquanto o Filho pendia. Cuja alma gemente, contristada e dolente, uma espada perpassava. Ó quão triste e afita esteve aquela bendita Mãe do Unigênito!"
+        },
+        "la": {
+          "titulo": "Stabat Mater Dolorosa",
+          "texto": "Stabat Mater dolorosa iuxta crucem lacrimosa, dum pendebat Filius. Cuius animam gementem, contristatam et dolentem pertransivit gladius. O quam tristis et afflicta fuit illa benedicta, Mater Unigeniti!"
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Hino medieval ocidental mantido apenas em Português e Latim."
+        }
+      }
+    },
+    {
+      "id": "tantum-ergo",
+      "nome_universal": "Tantum Ergo / Down in Adoration Falling",
+      "idiomas": {
+        "pt": {
+          "titulo": "Tão Sublime Sacramento",
+          "texto": "Tão sublime Sacramento veneremos neste altar, pois a antiga Aliança dá ao Novo o seu lugar. Venha a fé por suplemento os sentidos completar. Ao Pai e ao Filho glória, louvor e jubilação, salvação, poder e bênção pelo século sem fim. Ao Espírito Paráclito um louvor de igual medida. Amém."
+        },
+        "la": {
+          "titulo": "Tantum Ergo Sacramentum",
+          "texto": "Tantum ergo Sacramentum veneremur cernui: et antiquum documentum novo cedat ritui: praestet fides supplementum sensuum defectui. Genitori, Genitoque laus et iubilatio, salus, honor, virtus quoque sit et benedictio: Procedenti ab utroque compar sit laudatio. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Hino eucarístico em Português e Latim."
+        }
+      }
+    },
+    {
+      "id": "pange-lingua",
+      "nome_universal": "Pange Lingua / Sing, My Tongue",
+      "idiomas": {
+        "pt": {
+          "titulo": "Canta, ó Língua",
+          "texto": "Canta, ó língua, o mistério do Corpo glorioso e do Sangue precioso que o Rei das nações, fruto de um ventre generoso, derramou para o resgate do mundo. Dado a nós e nascido para nós de uma Virgem puríssima, habitou no mundo semeando a palavra."
+        },
+        "la": {
+          "titulo": "Pange Lingua Gloriosi",
+          "texto": "Pange, lingua, gloriosi Corporis mysterium, Sanguinisque pretiosi, quem in mundi pretium fructus ventris generosi Rex effudit gentium. Nobis datus, nobis natus ex intacta Virgine, et in mundo conversatus, sparso verbi semine."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Hino latino de Santo Tomás de Aquino."
+        }
+      }
+    },
+    {
+      "id": "panis-angelicus",
+      "nome_universal": "Panis Angelicus / Bread of Angels",
+      "idiomas": {
+        "pt": {
+          "titulo": "Pão dos Anjos",
+          "texto": "O Pão dos anjos torna-se o pão dos homens; o pão do céu põe fim às figuras antigos. Ó coisa admirável! Come o seu Senhor o pobre, o servo e o humilde."
+        },
+        "la": {
+          "titulo": "Panis Angelicus",
+          "texto": "Panis angelicus fit panis hominum; dat panis caelicus figuris terminum: O res mirabilis! Manducat Dominum pauper, servus et humilis."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Trecho do hino Sacris Solemniis em Português e Latim."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-bentode-murd",
+      "nome_universal": "Prayer of Saint Benedict / Oratio Sancti Benedicti",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração do Cruz de São Bento",
+          "texto": "A Cruz Sagrada seja a minha luz, não seja o dragão o meu guia. Retira-te, Satanás! Nunca me aconselhes coisas vãs. É mau o que me ofereces, bebe tu mesmo os teus venenos. Amém."
+        },
+        "la": {
+          "titulo": "Crux Sancti Patris Benedicti",
+          "texto": "Crux Sacra Sit Mihi Lux! Non Draco Sit Mihi Dux! Vade Retro Satana! Nunquam Suade Mihi Vana! Sunt Mala Quae Libas! Ipse Venena Bibas! Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de exorcismo tradicional da medalha de São Bento."
+        }
+      }
+    },
+    {
+      "id": "salve-mãe-santa",
+      "nome_universal": "Hail, Holy Mother / Salve Sancta Parens",
+      "idiomas": {
+        "pt": {
+          "titulo": "Salve, Ó Santa Mãe",
+          "texto": "Salve, ó Santa Mãe, que deste à luz o Rei que governa o céu e a terra pelos séculos dos séculos."
+        },
+        "la": {
+          "titulo": "Salve Sancta Parens",
+          "texto": "Salve, sancta Parens, enixa puerpera Regem, qui caelum terramque regit in saecula saeculorum."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Intróito da Missa Comum de Nossa Senhora."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-jose",
+      "nome_universal": "Prayer to Saint Joseph / Ad Te Beate Ioseph",
+      "idiomas": {
+        "pt": {
+          "titulo": "A Vós, São José",
+          "texto": "A vós, São José, recorremos em nossas tribulações, e, depois de ter implorado o auxílio de vossa Santíssima Esposa, cheios de confiança solicitamos também o vosso patrocínio. Por aquele laço de caridade que vos uniu à Virgem Imaculada, Mãe de Deus, e pelo amor paterno que tivestes ao Menino Jesus, ardentemente vos suplicamos que lanceis um olhar benigno sobre a herança que Jesus Cristo adquiriu com o seu sangue."
+        },
+        "la": {
+          "titulo": "Ad Te Beate Ioseph",
+          "texto": "Ad te, beate Ioseph, in tribulatione nostra confugimus, atque, implorato Sponsae tuae sanctissimae auxilio, patrocinium quoque tuum fidenter exposcimus. Per eam, quaesumus, quae te cum immaculata Virgine Dei Genetrici coniunxit, caritatem, perque paternum, quo Puerum Iesum amplexus es, amorem, ad hereditatem, quam Iesus Christus acqusivit sanguine suo, benignus respicias."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração tradicional a São José Papa Leão XIII."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-antonio",
+      "nome_universal": "Prayer to Saint Anthony / Si Quaeris Miracula",
+      "idiomas": {
+        "pt": {
+          "titulo": "Se Milagres Desejais (Responso de Santo Antônio)",
+          "texto": "Se milagres desejais, recorrei a Santo Antônio; vereis fugir o erro e as hóstes do demônio. Recupera-se o perdido, rompe-se a dura prisão e cede a força do mar a tempestade e o furacão."
+        },
+        "la": {
+          "titulo": "Si Quaeris Miracula",
+          "texto": "Si quaeris miracula, mors, error, calamitas, daemon, lepra fugiunt, aegri surgunt sani. Cedunt mare, vincula, membra resque perditas petunt et accipiunt iuvenes et seni."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Responso franciscano de Santo Antônio de Pádua."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-agostinho",
+      "nome_universal": "Prayer of St. Augustine / Tarde Te Amavi",
+      "idiomas": {
+        "pt": {
+          "titulo": "Tarde Te Amei",
+          "texto": "Tarde te amei, ó beleza tão antiga e tão nova, tarde te amei! Eis que estavas dentro de mim e eu estava fora, e fora te buscava. Estavas comigo e eu não estava contigo. Chamaste, bradaste e rompeste a minha surdez. Brilhaste, resplandeceste e dissipaste a minha cegueira."
+        },
+        "la": {
+          "titulo": "Sero Te Amavi",
+          "texto": "Sero te amavi, pulchritudo tam antiqua et tam nova, sero te amavi! Et ecce intus eras et ego foris, et ibi te quaerebam. Mecum eras, et tecum non eram. Vocasti et clamasti et rupisti surditatem meam; fulsisti, coruscasti et fugasti caecitatem meam."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Excerto famoso das Confissões de Santo Agostinho."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-ignacio-suscipe",
+      "nome_universal": "Take, Lord, and Receive / Suscipe",
+      "idiomas": {
+        "pt": {
+          "titulo": "Tomai e Recebei (Suscipe)",
+          "texto": "Tomai, Senhor, e recebei toda a minha liberdade, a minha memória, o meu entendimento e toda a minha vontade, tudo o que tenho e possuo. Vós mo destes, a vós, Senhor, o restituo. Tudo é vosso, disponde de tudo segundo a vossa vontade. Dai-me apenas o vosso amor e a vossa graça, que isso me basta. Amém."
+        },
+        "la": {
+          "titulo": "Suscipe, Domine",
+          "texto": "Suscipe, Domine, universam meam libertatem. Accipe memoriam, intellectum, atque voluntatem omnem. Quidquid habeo vel possideo mihi tribuisti; id tibi totum restituo, ac tuae prorsus voluntati trado gubernandum. Amorem tui solum cum gratia tua mihi dones, et dives sum satis, nec aliud quidquam ultra posco. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de entrega de Santo Inácio de Loyola."
+        }
+      }
+    },
+    {
+      "id": "ladainha-de-todos-os-santos",
+      "nome_universal": "Litany of the Saints / Litaniae Sanctorum",
+      "idiomas": {
+        "pt": {
+          "titulo": "Invocação Inicial da Ladainha dos Santos",
+          "texto": "Senhor, tende piedade de nós. Cristo, tende piedade de nós. Senhor, tende piedade de nós. Santa Maria, Mãe de Deus, rogai por nós. São Miguel, São Gabriel e São Rafael, rogai por nós. Todos os santos anjos de Deus, rogai por nós."
+        },
+        "la": {
+          "titulo": "Litaniae Sanctorum",
+          "texto": "Kyrie, eleison. Christe, eleison. Kyrie, eleison. Sancta Maria, Mater Dei, ora pro nobis. Sancte Michael, Gabriel et Raphael, orate pro nobis. Omnes sancti Angeli et Archangeli, orate pro nobis."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Abertura da Ladainha dos Santos no Rito Romano."
+        }
+      }
+    },
+    {
+      "id": "venerabilis-barba",
+      "nome_universal": "Prayer Before Holy Communion / Domine Non Sum Dignus",
+      "idiomas": {
+        "pt": {
+          "titulo": "Senhor, Eu Não Sou Digno",
+          "texto": "Senhor, eu não sou digno de que entreis em minha morada, mas dizei uma só palavra e a minha alma será salva."
+        },
+        "la": {
+          "titulo": "Domine, Non Sum Dignus",
+          "texto": "Domine, non sum dignus, ut intres sub tectum meum: sed tantum dic verbo, et sanabitur anima mea."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração Pré-Comunhão extraída de Mateus 8:8."
+        }
+      }
+    },
+    {
+      "id": "oracao-da-manha",
+      "nome_universal": "Morning Offering / Oblatio Matutina",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração da Manhã",
+          "texto": "Ó Jesus, por meio do Coração Imaculado de Maria, eu vos ofereço as minhas orações, trabalhos, alegrias e sofrimentos deste dia, em reparação por nossas ofensas e por todas as intenções do vosso Sagrado Coração. Amém."
+        },
+        "la": {
+          "titulo": "Oblatio Matutina",
+          "texto": "Iesu, per Imaculatum Cor Mariae, offero tibi preces, opera, gaudia et aerumnas huius diei, in satisfactionem pro peccatis nostris et ad omnes intentiones Sacratissimi Cordis tui. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oferecimento da manhã tradicional."
+        }
+      }
+    },
+    {
+      "id": "oracao-da-noite",
+      "nome_universal": "Night Prayer / Preces Nocturnae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração da Noite",
+          "texto": "Senhor Deus, visitai esta casa e afastai dela todas as insídias do inimigo; habitem nela os vossos santos anjos para nos guardar em paz, e a vossa bênção esteja sempre conosco. Por Cristo, Nosso Senhor. Amém."
+        },
+        "la": {
+          "titulo": "Visita, Quaesumus, Domine",
+          "texto": "Visita, quaesumus, Domine, habitationem istam, et omnes insidias inimici ab ea longe repelle: Angeli tui sancti habitent in ea, qui nos in pace custodiant; et benedictio tua sit super nos semper. Per Dominum nostrum Iesum Christum. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de Complietas da Liturgia das Horas."
+        }
+      }
+    },
+    {
+      "id": "oracao-da-refeicao",
+      "nome_universal": "Blessing Before Meals / Benedictio Mensae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Abençoai, Senhor, estes Alimentos",
+          "texto": "Abençoai-nos, Senhor, e a estes vossos dons que vamos receber da vossa generosidade. Por Cristo, Nosso Senhor. Amém."
+        },
+        "la": {
+          "titulo": "Benedictio Mensae",
+          "texto": "Benedic, Domine, nos et haec tua dona, quae de tua largitate sumus sumpturi. Per Christum Dominum nostrum. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Bênção das refeições tradicional."
+        }
+      }
+    },
+    {
+      "id": "oracao-pos-refeicao",
+      "nome_universal": "Grace After Meals / Agimus Tibi Gratias",
+      "idiomas": {
+        "pt": {
+          "titulo": "Agradecimento Após a Refeição",
+          "texto": "Nós vos damos graças, Deus Todo-Poderoso, por todos os vossos benefícios, vós que viveis e reinais pelos séculos dos séculos. Amém."
+        },
+        "la": {
+          "titulo": "Agimus Tibi Gratias",
+          "texto": "Agimus tibi gratias, omnipotens Deus, pro universis beneficiis tuis, qui vivis et regnas in saecula saeculorum. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Ação de graças tradicional pós-refeição."
+        }
+      }
+    },
+    {
+      "id": "confiteor",
+      "nome_universal": "I Confess / Confiteor",
+      "idiomas": {
+        "pt": {
+          "titulo": "Confesso a Deus Todo-Poderoso",
+          "texto": "Confesso a Deus Todo-Poderoso e a vós, irmãos e irmãs, que pequei muitas vezes por pensamentos e palavras, atos e omissões, por minha culpa, minha tão grande culpa. E peço à Virgem Maria, aos anjos e santos e a vós, irmãos e irmãs, que rogueis por mim a Deus, nosso Senhor."
+        },
+        "la": {
+          "titulo": "Confiteor Deo Omnipotenti",
+          "texto": "Confiteor Deo omnipotenti, et vobis fratres, quia peccavi nimis cogitatione, verbo, opere et omissione: mea culpa, mea culpa, mea maxima culpa. Ideo precor beatam Mariam semper Virginem, omnes Angelos et Sanctos, et vos, fratres, orare pro me ad Dominum Deum nostrum."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Ato Penitencial da Missa no Rito Romano."
+        }
+      }
+    },
+    {
+      "id": "gloria-in-excelsis",
+      "nome_universal": "Glory to God in the Highest / Gloria in Excelsis Deo",
+      "idiomas": {
+        "pt": {
+          "titulo": "Glória a Deus nas Alturas",
+          "texto": "Glória a Deus nas alturas, e paz na terra aos homens por Ele amados. Senhor Deus, Rei dos céus, Deus Pai todo-poderoso: nós vos louvamos, nós vos bendizemos, nós vos adoramos, nós vos glorificamos, nós vos damos graças por vossa imensa glória."
+        },
+        "la": {
+          "titulo": "Gloria in Excelsis Deo",
+          "texto": "Gloria in excelsis Deo et in terra pax hominibus bonae voluntatis. Laudamus te, benedicimus te, adoramus te, glorificamus te, gratias agimus tibi propter magnam gloriam tuam, Domine Deus, Rex caelestis, Deus Pater omnipotens."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Hino de Louvor Litúrgico."
+        }
+      }
+    },
+    {
+      "id": "salve-sancta-crux",
+      "nome_universal": "Adoration of the Cross / Adoramus Te Christe",
+      "idiomas": {
+        "pt": {
+          "titulo": "Nós Vos Adoramos, Senhor Jesus Cristo",
+          "texto": "Nós vos adoramos, Senhor Jesus Cristo, e vos bendizemos, porque pela vossa santa cruz remistes o mundo."
+        },
+        "la": {
+          "titulo": "Adoramus Te, Christe",
+          "texto": "Adoramus te, Christe, et benedicimus tibi, quia per sanctam crucem tuam redemisti mundum."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Jaculatória tradicional das Estações da Via Sacra."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-tomas-de-aquino",
+      "nome_universal": "Student's Prayer / Oratio Ante Studium",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de Santo Tomás de Aquino Antes dos Estudos",
+          "texto": "Criador inefável, concedei-me agudeza para entender, capacidade para reter, método e facilidade para aprender, sutileza para interpretar e graça abundante para falar. Instruí o começo, dirigi o progresso e completai o fim. Amém."
+        },
+        "la": {
+          "titulo": "Oratio Ante Studium",
+          "texto": "Ineffabilis Conditor, da mihi intelligendi acumen, retinendi capacitatem, addiscendi modum et facilitatem, interpretandi subtilitatem, loquendi gratiam copiosam. Ingressum instruas, progressum dirigas, egressum compleas. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração dos estudantes por Santo Tomás de Aquino."
+        }
+      }
+    },
+    {
+      "id": "oracao-pela-paz-de-sao-joao-paulo-ii",
+      "nome_universal": "Prayer for Peace / Oratio Pro Pace",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração Pela Paz",
+          "texto": "Deus de nossos pais, grande e misericordioso, Senhor da paz e da vida. Vós tendes projetos de paz e não de aflição, condenais as guerras e abateis o orgulho dos violentos. Enviai o vosso Espírito para renovar a terra. Amém."
+        },
+        "la": {
+          "titulo": "Oratio Pro Pace",
+          "texto": "Deus patrum nostrorum, magne et misericors, Domine pacis et vitae. Tu cogitas cogitationes pacis et non afflictionis, damnas bella et deicis superbiam violentorum. Emitte Spiritum tuum ad renovandam faciem terrae. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Prece contemporânea pela paz."
+        }
+      }
+    },
+    {
+      "id": "requiem-aeternam",
+      "nome_universal": "Eternal Rest / Requiem Aeternam",
+      "idiomas": {
+        "pt": {
+          "titulo": "Dai-lhes o Repouso Eterno",
+          "texto": "Dai-lhes, Senhor, o repouso eterno, e a luz perpétua os ilumine. Descansem em paz. Amém."
+        },
+        "la": {
+          "titulo": "Requiem Aeternam",
+          "texto": "Requiem aeternam dona eis, Domine, et lux perpetua luceat eis. Requiescant in pace. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração pelos fiéis falecidos."
+        }
+      }
+    },
+    {
+      "id": "ave-maris-stella",
+      "nome_universal": "Hail Star of the Sea / Ave Maris Stella",
+      "idiomas": {
+        "pt": {
+          "titulo": "Ave, Estrela do Mar",
+          "texto": "Ave, estrela do mar, Mãe de Deus sagrada, sempre Virgem fecunda, porta do céu feliz! Ouvindo aquele Ave do anjo Gabriel, firmai-nos na paz, mudando o nome de Eva."
+        },
+        "la": {
+          "titulo": "Ave Maris Stella",
+          "texto": "Ave, maris stella, Dei Mater alma, atque semper Virgo, felix caeli porta. Sumens illud Ave Gabrielis ore, funda nos in pace, mutans Evae nomen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Hino mariano de Vésperas."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-estevao",
+      "nome_universal": "Prayer of Saint Stephen / Oratio Sancti Stephani",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de Santo Estêvão",
+          "texto": "Senhor Jesus, recebei o meu espírito. Senhor, não lhes imputeis este pecado. Amém."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Stephani",
+          "texto": "Domine Iesu, suscipe spiritum meum. Domine, ne statuas illis hoc peccatum. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Últimas palavras de Santo Estêvão (Atos 7:59-60)."
+        }
+      }
+    },
+    {
+      "id": "oracao-santa-teresa-de-avila",
+      "nome_universal": "Let Nothing Disturb Thee / St. Teresa's Bookmark",
+      "idiomas": {
+        "pt": {
+          "titulo": "Nada te Turbe",
+          "texto": "Nada te turbe, nada te espante, tudo passa, Deus não muda. A paciência tudo alcança; quem a Deus tem, nada lhe falta: só Deus basta."
+        },
+        "la": {
+          "titulo": "Nihil Te Turbet",
+          "texto": "Nihil te turbet, nihil te terreat. Omnia transeunt, Deus non mutat. Patientia omnia assequitur; qui Deum habet nihil ei deest: solus Deus sufficit."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Famoso poema devocional de Santa Teresa d'Ávila."
+        }
+      }
+    },
+    {
+      "id": "oracao-santa-teresinha",
+      "nome_universal": "St. Therese's Prayer / Oratio Sanctae Teresiae Lexoviensis",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de Santa Teresinha do Menino Jesus",
+          "texto": "Ó Santa Teresinha, fazei cair sobre mim uma chuva de rosas de bênçãos e virtudes, para que eu possa caminhar no caminho da santidade com humildade e inteira confiança no amor de Deus."
+        },
+        "la": {
+          "titulo": "Oratio Sanctae Teresiae",
+          "texto": "Sancta Teresia a Puero Iesu, plue super me pluviam rosarum benedictionum, ut in via sanctitatis cum humilitate et plena fiducia in amore Dei ambulare possim."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Prece à Santa Teresinha de Lisieux."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-patricio",
+      "nome_universal": "Saint Patrick's Breastplate / Lorica Sancti Patricii",
+      "idiomas": {
+        "pt": {
+          "titulo": "Coroa / Escudo de São Patrício",
+          "texto": "Cristo comigo, Cristo à minha frente, Cristo atrás de mim, Cristo em mim, Cristo abaixo de mim, Cristo acima de mim, Cristo à minha direita, Cristo à minha esquerda, Cristo onde quer que eu esteja. Amém."
+        },
+        "la": {
+          "titulo": "Lorica Sancti Patricii",
+          "texto": "Christus mecum, Christus ante me, Christus retro me, Christus in me, Christus sub me, Christus super me, Christus ad dexteram meam, Christus ad sinistram meam, Christus ubique. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de proteção atribuída a São Patrício."
+        }
+      }
+    },
+    {
+      "id": "in-manus-tuas",
+      "nome_universal": "Into Your Hands / In Manus Tuas",
+      "idiomas": {
+        "pt": {
+          "titulo": "Em Vossas Mãos, Senhor",
+          "texto": "Em vossas mãos, Senhor, entrego o meu espírito. Vós nos remistes, Senhor, Deus da verdade."
+        },
+        "la": {
+          "titulo": "In Manus Tuas",
+          "texto": "In manus tuas, Domine, commendo spiritum meum. Redemisti nos, Domine, Deus veritatis."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Responsorio breve do serviço noturno de Complietas."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-peregrino",
+      "nome_universal": "Prayer to St. Peregrine / Oratio Sancti Peregrini",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Peregrino (Padroeiro dos Doentes de Câncer)",
+          "texto": "Ó São Peregrino, a quem chamam de O Trabalhador das Maravilhas por causa dos numerosos milagres que alcançais de Deus, intercedei por mim e por todos os doentes para que sejamos curados no corpo e na alma."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Peregrini",
+          "texto": "Sancte Peregrine, quem Miraculorum Operatorem vocant propter multa stupenda quae a Deo impetras, intercede pro me et pro omnibus aegrotis ut corpore et anima sanemur."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Devoção a São Peregrino Laziosi."
+        }
+      }
+    },
+    {
+      "id": "oracao-sagrado-coracao",
+      "nome_universal": "Sacred Heart Prayer / Actus Consecrationis Sacratissimo Cordi Iesu",
+      "idiomas": {
+        "pt": {
+          "titulo": "Consagração ao Sagrado Coração de Jesus",
+          "texto": "Docíssimo Jesus, Redentor do gênero humano, lançai os vossos olhares sobre nós, prostrados humildemente diante do vosso altar. Somos vossos e vossos queremos ser; e para podermos viver mais intimamente unidos a vós, cada um de nós se consagra espontaneamente ao vosso Sacratíssimo Coração."
+        },
+        "la": {
+          "titulo": "Actus Consecrationis Cordi Iesu",
+          "texto": "Dulcissime Iesu, Redemptor humani generis, respice ad nos ante altare tuum humillime provolutos. Tui sumus, tui esse volumus; quo autem tibi coniunctius vivere possimus, en se cuique hodie Sacratissimo Cordi tuo sponte consecrat."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de consagração de Leão XIII."
+        }
+      }
+    },
+    {
+      "id": "oracao-imaculado-coracao",
+      "nome_universal": "Immaculate Heart Prayer / Actus Consecrationis Imaculato Cordi Mariae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Consagração ao Imaculado Coração de Maria",
+          "texto": "Ó Virgem Maria, Mãe de Deus e nossa Mãe, ao vosso Coração Imaculado nos consagramos em ato de total entrega e doação. Por vosso intermédio, seremos levados a Cristo, vosso Filho e nosso Senhor."
+        },
+        "la": {
+          "titulo": "Actus Consecrationis Cordi Mariae",
+          "texto": "O Virgo Maria, Mater Dei et Mater nostra, Imaculato Cordi tuo nos consecramus in actu totius traditionis et donationis. Per te ad Christum, Filium tuum et Dominum nostrum, adducemur."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de Consagração Mariana."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-pedro",
+      "nome_universal": "Prayer of St. Peter / Oratio Sancti Petri",
+      "idiomas": {
+        "pt": {
+          "titulo": "Tu És o Cristo",
+          "texto": "Tu és o Cristo, o Filho do Deus vivo. Senhor, para quem iremos nós? Tu tens as palavras da vida eterna."
+        },
+        "la": {
+          "titulo": "Tu Es Christus",
+          "texto": "Tu es Christus, Filius Dei vivi. Domine, ad quem ibimus? Verba vitae aeternae habes."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Confissão de Pedro (Mateus 16:16 / João 6:68)."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-expedito",
+      "nome_universal": "Prayer to St. Expedite / Oratio Sancti Expediti",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a Santo Expedito (Causas Urgentes)",
+          "texto": "Meu Santo Expedito das causas justas e urgentes, socorrei-me nesta hora de aflição e desespero. Intercedei por mim junto ao nosso Senhor Jesus Cristo. Ajudai-me a superar estas horas difíceis e protegei-me de tudo o que possa me prejudicar."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Expediti",
+          "texto": "Sancte Expedite, causarum iustarum et urgentium patronē, succurre mihi in hac hora tribulationis. Intercede pro me apud Dominum nostrum Iesum Christum, adiuva me ad superandas has horas difficiles et protege me ab omnibus malis."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Devoção popular a Santo Expedito."
+        }
+      }
+    },
+    {
+      "id": "oracao-santa-rita",
+      "nome_universal": "Prayer to St. Rita / Oratio Sanctae Ritae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a Santa Rita de Cássia (Causas Impossíveis)",
+          "texto": "Ó poderosa Santa Rita, chamada Santa dos Impossíveis, advogada nos casos desesperados, socorrei-me neste momento de aflição. Livrai o meu coração da angústia e restitui a paz ao meu espírito."
+        },
+        "la": {
+          "titulo": "Oratio Sanctae Ritae",
+          "texto": "Sancta Rita, patrona causarum impossibilium et desperatarum, adiuva me in hac tribulatione. Libera cor meum ab angustia et restitue pacem spiritui meo."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração tradicional à Santa Rita de Cássia."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-bras",
+      "nome_universal": "Prayer to St. Blaise / Oratio Sancti Blasii",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de São Brás (Proteção da Garganta)",
+          "texto": "Por intercessão de São Brás, Bispo e Mártir, livre-te Deus dos males da garganta e de qualquer outro mal. Em nome do Pai, do Filho e do Espírito Santo. Amém."
+        },
+        "la": {
+          "titulo": "Benedictio Sancti Blasii",
+          "texto": "Per intercessionem Sancti Blasii, Episcopi et Martyris, liberet te Deus a malo gutturis et a quovise alio malo. In nomine Patris, et Filii, et Spiritus Sancti. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Bênção da garganta de São Brás."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-cristovao",
+      "nome_universal": "Motorist Prayer / Oratio Sancti Christophori",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração do Motorista (São Cristóvão)",
+          "texto": "Concedei-me, Senhor, uma mão firme e um olhar atento, para que nenhum pedestre ou condutor seja vítima de minha falta de atenção. Protegei os que me acompanham e guiai-me em paz aos meus destinos. Amém."
+        },
+        "la": {
+          "titulo": "Oratio Viatoris",
+          "texto": "Da mihi, Domine, manum firmam et oculum vigilem, ne quisquam in itinere mea culpa laedatur. Protege meos comites et me ad finem itineris in pace perduc. Amen."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração dos viajantes sob o patrocínio de São Cristóvão."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-judas-tadeu",
+      "nome_universal": "Prayer to St. Jude / Oratio Sancti Iudae Thaddaei",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Judas Tadeu",
+          "texto": "São Judas Tadeu, glorioso Apóstolo, fiel servo e amigo de Jesus, a Igreja vos honra e invoca universalmente como o patrono dos casos desesperados. Rogai por mim, que estou tão desolado."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Iudae Thaddaei",
+          "texto": "Sancte Iuda Thaddaee, gloriose Apostole, fidelis serve et amice Iesu, Ecclesia te honorat et invocat ut patronum in rebus desperatis. Ora pro me tam desolato."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de intercessão a São Judas Tadeu."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-sebastiao",
+      "nome_universal": "Prayer to St. Sebastian / Oratio Sancti Sebastiani",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Sebastião",
+          "texto": "Glorioso Mártir São Sebastião, defensor da fé e protetor contra as pestes e epidemias, olhai para as nossas necessidades e livrai-nos de todos os males do corpo e da alma."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Sebastiani",
+          "texto": "Gloriose Martyr Sancte Sebastiane, defensor fidei et protector contra pestes et morbos, respice ad necessitates nostras et libera nos ab omnibus malis corporis et animae."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração contra pragas sob intercessão de São Sebastião."
+        }
+      }
+    },
+    {
+      "id": "oracao-santa-luzia",
+      "nome_universal": "Prayer to St. Lucy / Oratio Sanctae Luciae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a Santa Luzia (Protetora dos Olhos)",
+          "texto": "Ó Santa Luzia, que preferistes que vossos olhos fossem furados a renegardes a vossa fé, protegei a minha visão física e espiritual, para que eu veja a glória de Deus em todas as coisas."
+        },
+        "la": {
+          "titulo": "Oratio Sanctae Luciae",
+          "texto": "Sancta Lucia, quae oculos tuos perdi magis quam fidem negare maluisti, protege visum meum corporeum et spiritualem, ut gloriam Dei in omnibus rebus videam."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração à protetora dos olhos."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-caetano",
+      "nome_universal": "Prayer to St. Cajetan / Oratio Sancti Caietani",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Caetano (Padroeiro do Pão e do Trabalho)",
+          "texto": "São Caetano, pai de providência, vós que consolais a todos os que recorrem a vós nas necessidades de trabalho e sustento, alcançai-nos de Deus o pão de cada dia e a graça do trabalho digno."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Caietani",
+          "texto": "Sancte Caietane, pater providentiae, qui omnes ad te recurrentes in necessitatibus panis et laboris consolaris, impetra nobis a Deo panem cotidianum et gratiam honesti laboris."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração a São Caetano para intenção de trabalho."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-bras-bencao",
+      "nome_universal": "Saint Peregrine's Blessing / Benedictio Infirmorum",
+      "idiomas": {
+        "pt": {
+          "titulo": "Bênção dos Enfermos",
+          "texto": "O Senhor Jesus Cristo esteja junto de ti para te defender; esteja dentro de ti para te conservar; esteja à tua frente para te guiar; esteja atrás de ti para te guardar; esteja sobre ti para te abençoar."
+        },
+        "la": {
+          "titulo": "Benedictio Super Aegrotos",
+          "texto": "Dominus Iesus Christus apud te sit ut te defendat; intra te sit ut te conservet; ante te sit ut te ducat; post te sit ut te custodiat; super te sit ut te benedicat."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Fórmula tradicional litúrgica de bênção dos doentes."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-patricio-trindade",
+      "nome_universal": "Invocation of the Trinity / Invocatio Sanctissimae Trinitatis",
+      "idiomas": {
+        "pt": {
+          "titulo": "Invocação da Santíssima Trindade",
+          "texto": "Em nome do Pai, do Filho e do Espírito Santo. Amém. Glória ao Criador, glória ao Redentor, glória ao Santificador. Santíssima Trindade, um só Deus, tende piedade de nós."
+        },
+        "la": {
+          "titulo": "Invocatio Sanctissimae Trinitatis",
+          "texto": "In nomine Patris, et Filii, et Spiritus Sancti. Amen. Gloria Creatori, gloria Redemptori, gloria Sanctificatori. Sanctissima Trinitas, unus Deus, miserere nobis."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Invocação breve trinitária."
+        }
+      }
+    },
+    {
+      "id": "oracao-pela-igreja",
+      "nome_universal": "Prayer for the Church / Oratio Pro Ecclesia",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração Pela Santa Igreja Católica",
+          "texto": "Senhor Jesus Cristo, supremo Pastor da vossa Igreja, abençoai o Papa, os bispos e os sacerdotes. Guardai a vossa Igreja na unidade, na verdade e na caridade perante as adversidades do mundo."
+        },
+        "la": {
+          "titulo": "Oratio Pro Ecclesia",
+          "texto": "Domine Iesu Christe, supreme Pastor Ecclesiae tuae, benedic Papam, Episcopos et Sacerdotes. Custodi Ecclesiam tuam in unitate, veritate et caritate adversus mundi adversitates."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração pelas intenções do Santo Padre e da Igreja."
+        }
+      }
+    },
+    {
+      "id": "oracao-pelas-vocacoes",
+      "nome_universal": "Prayer for Vocations / Oratio Pro Vocationibus",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração Pelas Vocações",
+          "texto": "Jesus, Mestre Divino, que dissestes: 'A messe é grande, mas os trabalhadores são poucos', enviai operários para a vossa messe. Suscitai em nossas famílias vocações santas para o sacerdócio e a vida religiosa."
+        },
+        "la": {
+          "titulo": "Oratio Pro Vocationibus",
+          "texto": "Iesu, Magister Divine, qui dixisti: 'Messis quidem multa, operarii autem pauci', mitte operarios in messem tuam. Excita in familiis nostris sanctas vocationes ad sacerdotium et vitam religiosam."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Prece sacerdotal baseada no Evangelho segundo São Mateus (9:37-38)."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-rosario-misterios",
+      "nome_universal": "Queen of the Most Holy Rosary / Regina Sacratissimi Rosarii",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração Final do Santo Rosário",
+          "texto": "Ó Deus, cujo Filho Único, por sua vida, morte e ressurreição, nos adquiriu os prêmios da salvação eterna, concedei-nos que, meditando estes mistérios no Santíssimo Rosário da Virgem Maria, imitemos o que contêm e alcancemos o que prometem."
+        },
+        "la": {
+          "titulo": "Oratio Post Rosarium",
+          "texto": "Deus, cuius Unigenitus per vitam, mortem et resurrectionem suam nobis salutis aeternae praemia comparavit, concede, quaesumus, ut haec mysteria sacratissimo beatae Mariae Virginis Rosario recolentes, et imitemur quod continent, et quod promittunt assequamur."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de encerramento da recitação do Rosário."
+        }
+      }
+    },
+    {
+      "id": "oracao-via-crucis",
+      "nome_universal": "Way of the Cross / Stationes Viae Crucis",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração Inicial da Via Sacra",
+          "texto": "Senhor meu Jesus Cristo, que fizeste este caminho da cruz por amor de mim, dou-vos graças e renovo o meu propósito de vos seguir fielmente todos os dias da minha vida."
+        },
+        "la": {
+          "titulo": "Oratio Initialis Viae Crucis",
+          "texto": "Domine mi Iesu Christe, qui hanc viam crucis pro amore mei fecisti, gratias tibi ago et propositum meum renovo te fideliter sequendi omnibus diebus vitae meae."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Abertura para o exercício devocional da Via Crucis."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-domingos",
+      "nome_universal": "Prayer of St. Dominic / O Spem Miram",
+      "idiomas": {
+        "pt": {
+          "titulo": "Ó Maravilhosa Esperança (São Domingos)",
+          "texto": "Ó maravilhosa esperança que destes aos que vos choravam na hora da vossa morte, prometendo que lhes seríeis mais útil após a partida. Cumpri, ó Pai, o que dissestes, ajudando-nos com as vossas orações."
+        },
+        "la": {
+          "titulo": "O Spem Miram",
+          "texto": "O spem miram, quam dedisti mortis hora te flentibus, dum post mortem te futurum esse patrem promisit fratribus. Imple, Pater, quod dixisti, nos tuis iuvans precibus."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Antífona dominicana tradicional."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-alberto-magno",
+      "nome_universal": "Prayer of St. Albert the Great / Oratio Sancti Alberti Magni",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de Santo Alberto Magno",
+          "texto": "Senhor Jesus, pedimos-vos a graça de nunca nos afastarmos de vós por causa das ilusões do mundo, mas permanecermos firmes no vosso amor e na busca pela verdade divina."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Alberti Magni",
+          "texto": "Domine Iesu, petimus a te gratiam ut numquam a te recedamus propter mundi illusiones, sed in tuo amore et in veritatis divinae inquisitione firmiter permaneamus."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de iluminação intelectual de Santo Alberto."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-afonso",
+      "nome_universal": "Spiritual Communion / Communio Spiritualis",
+      "idiomas": {
+        "pt": {
+          "titulo": "Comunhão Espiritual (Santo Afonso de Ligório)",
+          "texto": "Meu Jesus, eu creio que estais presente no Santíssimo Sacramento. Amo-vos sobre todas as coisas e desejo receber-vos em minha alma. Já que agora não posso receber-vos sacramentalmente, perdei ao menos espiritualmente o meu coração. Abraço-me a vós como se já estivésseis comigo."
+        },
+        "la": {
+          "titulo": "Actus Communionis Spiritualis",
+          "texto": "Iesu mi, credo te esse praesentem in Sanctissimo Sacramento. Amo te super omnia et desidero te in animam meam. Quoniam nunc te sacramentaliter accipere nequeo, veni saltem spiritualiter in cor meum. Ut iam praesentem te complector."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Ato de Comunhão Espiritual."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-pino-padre-pio",
+      "nome_universal": "Stay with Me, Lord / Padre Pio's Prayer",
+      "idiomas": {
+        "pt": {
+          "titulo": "Ficai Conosco, Senhor (Oração de Padre Pio)",
+          "texto": "Ficai comigo, Senhor, porque preciso da vossa presença para não vos esquecer. Vós sabeis quão facilmente vos abandono. Ficai comigo, Senhor, porque sou fraco e preciso da vossa força para não cair tantas vezes."
+        },
+        "la": {
+          "titulo": "Mane Tecum, Domine",
+          "texto": "Mane mecum, Domine, quia praesentia tua mihi opus est ne te obliviscar. Tu scis quam facile te derelinquam. Mane mecum, Domine, quia infirmus sum et fortitudine tua egeo ne totiens cadam."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração pós-comunhão de São Pio de Pietrelcina."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-bernardo-memorare-curto",
+      "nome_universal": "Prayer to the Blessed Virgin / Sancta Maria Succurre Miseris",
+      "idiomas": {
+        "pt": {
+          "titulo": "Santa Maria, Socorrei os Miseráveis",
+          "texto": "Santa Maria, socorrei os miseráveis, ajudai os fracos, consolai os aflitos, rogai pelo povo, intercedei pelo clero, suplicai pelas mulheres devotas: sintam todos o vosso auxílio, quantos celebram a vossa memória."
+        },
+        "la": {
+          "titulo": "Sancta Maria, Succurre Miseris",
+          "texto": "Sancta Maria, succurre miseris, iuva pusillanimes, refove flebiles, ora pro populo, interveni pro clero, intercede pro devoto femineo sexu: sentiant omnes tuum iuvamen, quicumque celebrant tuam memoriam."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Antífona mariana tradicional."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-lourenco",
+      "nome_universal": "Prayer of St. Lawrence / Oratio Sancti Laurentii",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de São Lourenço",
+          "texto": "Ó Deus Todo-Poderoso, que concedestes ao vosso Mártir São Lourenço superar os fogos dos seus tormentos, concedei-nos a graça de apagar em nós as chamas do pecado."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Laurentii",
+          "texto": "Omnipotens Deus, qui beato Laurentio tormentorum suorum incendia superare tribuisti, concede nobis ut peccatorum nostrorum flammas exstinguamus."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração da festa de São Lourenço Mártir."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-vicente-de-paulo",
+      "nome_universal": "Charity Prayer / Oratio Sancti Vincentii de Paul",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de São Vicente de Paulo (Caridade)",
+          "texto": "Senhor, fazei-nos servos dos pobres com amor e humildade, vendo na pessoa dos necessitados o vosso próprio Filho, Jesus Cristo. Dai-nos um coração sensível ao sofrimento do próximo."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Vincentii de Paul",
+          "texto": "Domine, fac nos servos pauperum cum amore et humilitate, videntes in persona indigentium Filium tuum Iesum Christum. Da nobis cor sensibile ad proximi aerumnas."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração vicentina pelo serviço aos necessitados."
+        }
+      }
+    },
+    {
+      "id": "oracao-santa-barbara",
+      "nome_universal": "Prayer to St. Barbara / Oratio Sanctae Barbarae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a Santa Bárbara (Proteção Contra Tempestades)",
+          "texto": "Santa Bárbara, formosa donzela, livrai-nos dos raios, das tempestades e dos trovões. Protegei as nossas famílias e conduzi-nos em segurança nas intempéries do corpo e da alma."
+        },
+        "la": {
+          "titulo": "Oratio Sanctae Barbarae",
+          "texto": "Sancta Barbara, virgo generosa, libera nos a fulguribus, tempestatibus et tonitribus. Protege familias nostras et perduc nos in salute inter motus mundi."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração de proteção durante tempestades."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-carlos-borromeu",
+      "nome_universal": "Prayer of St. Charles Borromeo / Oratio Sancti Caroli Borromei",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de São Carlos Borromeu",
+          "texto": "Mantende em nós, Senhor, o espírito com que enchestes o Bispo São Carlos Borromeu, para que a vossa Igreja seja continuamente renovada e mostre ao mundo a face de Cristo."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Caroli Borromei",
+          "texto": "Custodi in nobis, Domine, spiritum quo beatum Carolum Episcopum implevisti, ut Ecclesia tua continue renovetur et faciem Christi mundo ostendat."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração pela renovação espiritual e fidelidade."
+        }
+      }
+    },
+    {
+      "id": "oracao-santa-clara",
+      "nome_universal": "Prayer of St. Clare / Oratio Sanctae Clarae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Bênção de Santa Clara",
+          "texto": "O Senhor vos abençoe e vos guarde. Mostre a sua face para vós e tenha misericórdia de vós. Volte o seu olhar para vós e vos dê a paz. O Senhor esteja sempre convosco."
+        },
+        "la": {
+          "titulo": "Benedictio Sanctae Clarae",
+          "texto": "Benedicat tibi Dominus et custodiat te. Ostendat faciem suam tibi et misereatur tui. Convertat vultum suum ad te et det tibi pacem. Dominus sit semper tecum."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Bênção de Santa Clara de Assis."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-filipe-neri",
+      "nome_universal": "Joyful Prayer / Oratio Sancti Philippi Nerii",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de São Filipe Neri (Pela Alegria Cristã)",
+          "texto": "Meu Jesus, dai-me hoje a vossa graça, porque senão eu vos trairei. Concedei-me a verdadeira alegria espiritual que vem do cumprimento da vossa santa vontade."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Philippi Nerii",
+          "texto": "Iesu mi, da mihi hodie gratiam tuam, nam alioquin te prodam. Concede mihi veram laetitiam spiritualem quae ex repletione sanctae voluntatis tuae oritur."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração jaculatória de São Filipe Neri."
+        }
+      }
+    },
+    {
+      "id": "oracao-santo-inacio-alma-mater",
+      "nome_universal": "Prayer for Generosity / Oratio Pro Generositate",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de Santo Inácio Pela Generosidade",
+          "texto": "Ensina-me, Senhor, a ser generoso. A servir-vos como vós mereceis; a dar e não contar o custo; a lutar sem me importar com as feridas; a trabalhar sem procurar descanso; a gastar-me sem esperar outra recompensa senão saber que estou fazendo a vossa vontade."
+        },
+        "la": {
+          "titulo": "Oratio Pro Generositate",
+          "texto": "Doce me, Domine, esse generosum. Servire tibi sicut mereris; dare nec computare pretium; pugnare nec curare vulnera; laborare nec quaerere requiem; me consumere nec aliam mercedem exspectare nisi scire me facere voluntatem tuam."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração inaciana pela generosidade no serviço divino."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-joao-da-cruz",
+      "nome_universal": "Prayer of St. John of the Cross / Oratio Sancti Ioannis a Cruce",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração de São João da Cruz",
+          "texto": "Meu Deus, vossos são os céus e vossa é a terra; meus são os justos e meus os pecadores; os anjos são meus, e a Mãe de Deus e todas as coisas são minhas; e o próprio Deus é meu e para mim, porque Cristo é meu e todo para mim."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Ioannis a Cruce",
+          "texto": "Deus meus, tui sunt caeli et tua est terra; mei sunt iusti et mei peccatores; angeli mei sunt, et Mater Dei et omnia mea sunt; et ipse Deus meus est et pro me, quia Christus meus est et totus pro me."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração da Alma Enamorada de São João da Cruz."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-maximiliano-kolbe",
+      "nome_universal": "Prayer of St. Maximilian Kolbe / Consecratio ad Immaculatam",
+      "idiomas": {
+        "pt": {
+          "titulo": "Consagração de São Maximiliano Kolbe",
+          "texto": "Dignai-vos aceitar o meu louvor, ó Virgem Santíssima. Fazei-me digno de vos louvar com todas as minhas forças. Concedei-me força contra os vossos inimigos e aceitai toda a minha vida em vosso serviço."
+        },
+        "la": {
+          "titulo": "Consecratio ad Immaculatam",
+          "texto": "Dignare me laudare te, Virgo Sacrata. Da mihi virtutem contra hostes tuos. Accipe me totum in servitium tuum ad gloriam Filii tui."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Ato de entrega à Imaculada por São Maximiliano Kolbe."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-bartolomeu",
+      "nome_universal": "Prayer of St. Bartholomew / Oratio Sancti Bartholomaei",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Bartolomeu",
+          "texto": "Fortalecei em nós, Senhor, a fé com que o santo Apóstolo Bartolomeu se aderiu de todo o coração ao vosso Filho, e fazei que a vossa Igreja seja para todos os povos sacramento de salvação."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Bartholomaei",
+          "texto": "Confirma in nobis, Domine, fidem qua beatus Apostolus Bartholomaeus Filio tuo toto corde adhaesit, et praesta ut Ecclesia tua cunctis gentibus salutis sacramentum existat."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Coleta da festa litúrgica de São Bartolomeu."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-lucas",
+      "nome_universal": "Prayer of St. Luke / Oratio Sancti Lucae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Lucas Evangelista",
+          "texto": "Senhor nosso Deus, que escolhestes São Lucas para revelar, pela pregação e pelos escritos, o mistério da vossa predileção pelos pobres, concedei aos que já se gloriam do vosso nome perseverar num só coração e numa só alma."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Lucae",
+          "texto": "Domine Deus noster, qui beatum Lucam elegisti ut praedicatione et scriptis mysterium dilectionis tuae erga pauperes revelaret, concede fidelibus tuis in uno corde et una anima perseverare."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração em honra do autor do Evangelho de São Lucas."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-mateus",
+      "nome_universal": "Prayer of St. Matthew / Oratio Sancti Matthaei",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Mateus Apóstolo",
+          "texto": "Ó Deus, que por uma inefável misericórdia vos dignastes escolher São Mateus para transformá-lo de cobrador de impostos em Apóstolo, concedei-nos, por seu exemplo e intercessão, a graça de seguir-vos sempre."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Matthaei",
+          "texto": "Deus, qui ineffabili misericordia beatum Matthaeum ex publicano Apostolum eligere dignatus es, da nobis, eius exemplo et intercessione, te semper fideliter sequi."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração litúrgica do Apóstolo Mateus."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-marcos",
+      "nome_universal": "Prayer of St. Mark / Oratio Sancti Marci",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São Marcos Evangelista",
+          "texto": "Ó Deus, que glorificastes o vosso Evangelista São Marcos com a graça de pregar o Evangelho, concedei-nos aproveitar de tal modo dos seus ensinamentos que sigamos fielmente os passos de Cristo."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Marci",
+          "texto": "Deus, qui beatum Marcum Evangelistam tuum evangelicae praedicationis gratia sublimasti, concede nobis eius eruditione ita proficere, ut vestigia Christi fideliter sequamur."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Prece da festa de São Marcos."
+        }
+      }
+    },
+    {
+      "id": "oracao-sao-joao-evangelista",
+      "nome_universal": "Prayer of St. John the Apostle / Oratio Sancti Ioannis Evangelistae",
+      "idiomas": {
+        "pt": {
+          "titulo": "Oração a São João Apóstolo e Evangelista",
+          "texto": "Iluminai, Senhor, a vossa Igreja, para que, esclarecida pelos ensinamentos do vosso Apóstolo e Evangelista São João, alcance os dons eternos que prometestes."
+        },
+        "la": {
+          "titulo": "Oratio Sancti Ioannis Evangelistae",
+          "texto": "Ecclesiam tuam, Domine, benignus illustra, ut beati Ioannis Apostoli tui et Evangelistae illuminata doctrinis, ad dona perveniat sempiterna."
+        },
+        "arc": {
+          "titulo": "",
+          "texto": "",
+          "nota": "Oração da celebração do discípulo amado."
+        }
+      }
     }
   ]
 }
