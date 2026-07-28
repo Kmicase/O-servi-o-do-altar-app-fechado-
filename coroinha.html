@@ -1168,146 +1168,158 @@
     }
 // --- SISTEMA DE ORAÇÕES (GLOBAL) ---
 window.oracoesData = null;
+    window.idiomaOracaoAtual = {};
 
-window.carregarOracoes = async function() {
-  const container = document.getElementById('oracoes-container');
-  if (!container) return;
+    window.carregarOracoes = async function() {
+        const container = document.getElementById('oracoes-container');
+        if (!container) return;
 
-  if (!window.oracoesData) {
-    container.innerHTML = `
-      <div class="flex flex-col items-center justify-center py-10 text-slate-400">
-        <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-600"></i>
-        <p class="mt-2 text-sm italic">Carregando orações...</p>
-      </div>
-    `;
+        if (!window.oracoesData) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 text-slate-400">
+                    <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-600"></i>
+                    <p class="mt-2 text-sm italic font-medium">Carregando orações...</p>
+                </div>
+            `;
 
-    try {
-      const res = await fetch('oracoes.json'); 
-      if (!res.ok) throw new Error('Erro ao carregar orações');
-      
-      const json = await res.json();
-      window.oracoesData = json.oracoes;
-    } catch (err) {
-      console.error('Erro:', err);
-      container.innerHTML = `
-        <p class="text-center text-red-500 py-6">
-          Não foi possível carregar as orações. Verifique o arquivo JSON.
-        </p>
-      `;
-      return;
-    }
-  }
+            try {
+                const res = await fetch('oracoes.json'); 
+                if (!res.ok) throw new Error('Erro ao carregar orações');
+                
+                const json = await res.json();
+                window.oracoesData = json.oracoes;
+            } catch (err) {
+                console.error('Erro ao carregar orações:', err);
+                container.innerHTML = `
+                    <p class="text-center text-red-500 py-6 text-xs font-semibold">
+                        Não foi possível carregar as orações. Verifique o arquivo 'oracoes.json'.
+                    </p>
+                `;
+                return;
+            }
+        }
 
-  window.renderizarOracoes('pt');
-};
+        window.renderizarOracoes();
+    };
 
-window.renderizarOracoes = function(idiomaPadrao = 'pt') {
-  const container = document.getElementById('oracoes-container');
-  if (!container || !window.oracoesData) return;
-  
-  container.innerHTML = '';
+    window.toggleOracao = function(id) {
+        const corpo = document.getElementById(`corpo-oracao-${id}`);
+        const icone = document.getElementById(`icone-oracao-${id}`);
+        if (!corpo || !icone) return;
 
-  window.oracoesData.forEach(item => {
-    const infoIdioma = item.idiomas[idiomaPadrao] || item.idiomas['pt'];
+        const estaOculto = corpo.classList.contains('hidden');
+        if (estaOculto) {
+            corpo.classList.remove('hidden');
+            icone.classList.add('rotate-180');
+        } else {
+            corpo.classList.add('hidden');
+            icone.classList.remove('rotate-180');
+        }
+    };
 
-    const card = document.createElement('div');
-    card.className = "p-5 rounded-xl bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 shadow-sm mb-4";
-    
-    card.innerHTML = `
-      <div class="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-zinc-700 pb-2">
-        <h3 id="titulo-${item.id}" class="text-lg font-bold text-slate-800 dark:text-zinc-100">
-          ${infoIdioma.titulo}
-        </h3>
-        
-        <div class="flex gap-1 text-xs">
-          <button id="btn-${item.id}-pt" onclick="window.mudarIdiomaOracao('${item.id}', 'pt')" 
-                  class="btn-lang-${item.id} px-2 py-1 rounded ${idiomaPadrao === 'pt' ? 'bg-amber-600 text-white font-bold' : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300'}">
-            PT
-          </button>
-          <button id="btn-${item.id}-la" onclick="window.mudarIdiomaOracao('${item.id}', 'la')" 
-                  class="btn-lang-${item.id} px-2 py-1 rounded ${idiomaPadrao === 'la' ? 'bg-amber-600 text-white font-bold' : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300'}">
-            LAT
-          </button>
-          <button id="btn-${item.id}-arc" onclick="window.mudarIdiomaOracao('${item.id}', 'arc')" 
-                  class="btn-lang-${item.id} px-2 py-1 rounded ${idiomaPadrao === 'arc' ? 'bg-amber-600 text-white font-bold' : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300'}">
-            ARC
-          </button>
-        </div>
-      </div>
+    window.renderizarOracoes = function() {
+        const container = document.getElementById('oracoes-container');
+        const termoBusca = (document.getElementById('input-busca-oracoes')?.value || '').toLowerCase().trim();
+        if (!container || !window.oracoesData) return;
 
-      <p id="texto-${item.id}" class="text-slate-700 dark:text-zinc-300 leading-relaxed text-justify">
-        ${infoIdioma.texto}
-      </p>
+        container.innerHTML = '';
 
-      ${infoIdioma.nota ? `
-        <p id="nota-${item.id}" class="mt-3 text-xs italic text-slate-500 dark:text-zinc-400 border-t border-slate-200 dark:border-zinc-700 pt-2">
-          📌 ${infoIdioma.nota}
-        </p>
-      ` : `<p id="nota-${item.id}" class="hidden mt-3 text-xs italic text-slate-500 dark:text-zinc-400 border-t border-slate-200 dark:border-zinc-700 pt-2"></p>`}
-    `;
+        const oracoesFiltradas = window.oracoesData.filter(item => {
+            const idioma = window.idiomaOracaoAtual[item.id] || 'pt';
+            const info = item.idiomas[idioma] || item.idiomas['pt'];
+            const titulo = (info.titulo || '').toLowerCase();
+            const texto = (info.texto || '').toLowerCase();
+            return titulo.includes(termoBusca) || texto.includes(termoBusca);
+        });
 
-    container.appendChild(card);
-  });
-};
+        if (oracoesFiltradas.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-slate-400 dark:text-zinc-500">
+                    <i class="fa-solid fa-hands-praying text-2xl mb-2"></i>
+                    <p class="text-xs font-medium">Nenhuma oração encontrada para sua busca.</p>
+                </div>`;
+            return;
+        }
 
-window.mudarIdiomaOracao = function(oracaoId, lang) {
-  if (!window.oracoesData) return;
-  const oracao = window.oracoesData.find(o => o.id === oracaoId);
-  if (!oracao || !oracao.idiomas[lang]) return;
+        oracoesFiltradas.forEach(item => {
+            const idiomaSalvo = window.idiomaOracaoAtual[item.id] || 'pt';
+            const infoIdioma = item.idiomas[idiomaSalvo] || item.idiomas['pt'];
 
-  const dadosLang = oracao.idiomas[lang];
-  
-  const elemTitulo = document.getElementById(`titulo-${oracaoId}`);
-  const elemTexto = document.getElementById(`texto-${oracaoId}`);
-  
-  if (elemTitulo) elemTitulo.innerText = dadosLang.titulo;
-  if (elemTexto) elemTexto.innerText = dadosLang.texto;
-  
-  const elemNota = document.getElementById(`nota-${oracaoId}`);
-  if (elemNota) {
-    if (dadosLang.nota) {
-      elemNota.innerText = `📌 ${dadosLang.nota}`;
-      elemNota.classList.remove('hidden');
-    } else {
-      elemNota.classList.add('hidden');
-    }
-  }
+            let botoesIdiomaHtml = '';
+            Object.keys(item.idiomas).forEach(langKey => {
+                const ativo = langKey === idiomaSalvo;
+                botoesIdiomaHtml += `
+                    <button id="btn-${item.id}-${langKey}" 
+                        onclick="event.stopPropagation(); window.mudarIdiomaOracao('${item.id}', '${langKey}')" 
+                        class="px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
+                            ativo 
+                            ? 'bg-amber-600 text-white shadow-xs' 
+                            : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600'
+                        }">
+                        ${langKey}
+                    </button>
+                `;
+            });
 
-  const botoes = document.querySelectorAll(`.btn-lang-${oracaoId}`);
-  botoes.forEach(btn => {
-    btn.className = `btn-lang-${oracaoId} px-2 py-1 rounded bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300`;
-  });
+            const card = document.createElement('div');
+            card.className = "rounded-2xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-xs overflow-hidden transition-all hover:border-amber-500/30";
 
-  const btnAtivo = document.getElementById(`btn-${oracaoId}-${lang}`);
-  if (btnAtivo) {
-    btnAtivo.className = `btn-lang-${oracaoId} px-2 py-1 rounded bg-amber-600 text-white font-bold`;
-  }
-};
-          
-    window.switchTab = function (tabName) {
-    document.getElementById('conteudo-escala').className = tabName === 'escala' ? 'space-y-6 block md:col-span-2' : 'hidden';
-    document.getElementById('conteudo-avisos').className = tabName === 'avisos' ? 'space-y-4 block w-full' : 'hidden';
-    document.getElementById('conteudo-conteudos').className = tabName === 'conteudos' ? 'space-y-4 block w-full' : 'hidden';
-    document.getElementById('conteudo-liturgia').className = tabName === 'liturgia' ? 'space-y-4 block w-full' : 'hidden';
-    
-    // Adicione esta linha para alternar a exibição da aba de orações:
-    const elOracoes = document.getElementById('conteudo-oracoes');
-    if (elOracoes) elOracoes.className = tabName === 'oracoes' ? 'space-y-4 block w-full' : 'hidden';
+            card.innerHTML = `
+                <!-- Cabeçalho Clicável (Accordion) -->
+                <div onclick="window.toggleOracao('${item.id}')" class="p-4 flex items-center justify-between cursor-pointer select-none bg-slate-50/50 dark:bg-zinc-800/40 hover:bg-amber-50/40 dark:hover:bg-zinc-800/80 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-hands-praying text-amber-600 dark:text-amber-500 text-sm"></i>
+                        <h3 id="titulo-${item.id}" class="text-xs sm:text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">
+                            ${infoIdioma.titulo}
+                        </h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-1 text-[10px]">
+                            ${botoesIdiomaHtml}
+                        </div>
+                        <i id="icone-oracao-${item.id}" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
+                    </div>
+                </div>
 
-    // Dispara a busca da API quando o usuário clica na aba de orações
-    if (tabName === 'oracoes') {
-        carregarOracoes();
-    }
+                <!-- Corpo Oculto por Padrão -->
+                <div id="corpo-oracao-${item.id}" class="hidden p-5 border-t border-slate-100 dark:border-zinc-800/60 bg-amber-50/20 dark:bg-zinc-900/60">
+                    <p id="texto-${item.id}" class="text-xs sm:text-sm text-slate-700 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-line text-justify italic font-serif">
+                        ${infoIdioma.texto}
+                    </p>
+                </div>
+            `;
 
-    const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes'];
-    tabs.forEach(t => {
-            const el = document.getElementById(`tab-${t}`);
-            if(el) {
-                if(t === tabName) el.className = 'active-tab flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer text-slate-500 dark:text-zinc-400';
-                else el.className = 'text-gray-500 flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer dark:text-zinc-500';
+            container.appendChild(card);
+        });
+    };
+
+    window.mudarIdiomaOracao = function(id, idioma) {
+        window.idiomaOracaoAtual[id] = idioma;
+        const item = window.oracoesData?.find(o => o.id === id);
+        if (!item || !item.idiomas[idioma]) return;
+
+        const info = item.idiomas[idioma];
+        const elTitulo = document.getElementById(`titulo-${id}`);
+        const elTexto = document.getElementById(`texto-${id}`);
+
+        if (elTitulo) elTitulo.innerText = info.titulo;
+        if (elTexto) elTexto.innerText = info.texto;
+
+        Object.keys(item.idiomas).forEach(langKey => {
+            const btn = document.getElementById(`btn-${id}-${langKey}`);
+            if (btn) {
+                if (langKey === idioma) {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-amber-600 text-white shadow-xs";
+                } else {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600";
+                }
             }
         });
-    }
+    };
+
+    window.filtrarOracoes = function() {
+        window.renderizarOracoes();
+    };
 </script>
 </body>
 </html>
