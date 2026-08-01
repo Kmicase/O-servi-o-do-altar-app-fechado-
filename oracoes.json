@@ -1303,9 +1303,21 @@
       }
     },
     {
-      "id": "oracao-via-crucis",
-      "nome_universal": "Way of the Cross / Stationes Viae Crucis",
-      "idiomas": {}
+  "id": "oracao-via-crucis",
+  "nome_universal": "Way of the Cross / Stationes Viae Crucis",
+  "idiomas": {
+    "pt": {
+      "titulo": "Via Sacra",
+      "texto": "Nós vos adoramos, Senhor Jesus Cristo, e vos bendizemos. Porque pela vossa santa cruz remistes o mundo."
+    },
+    "la": {
+      "titulo": "Via Crucis",
+      "texto": "Adoramus te, Christe, et benedicimus tibi. Quia per sanctam crucem tuam redemisti mundum."
+    },
+    "arc": {
+      "titulo": "",
+      "texto": "",
+      "nota": "Estações da Via Sacra."
     }
-  ]
+  }
 }
