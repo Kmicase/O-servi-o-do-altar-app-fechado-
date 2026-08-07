@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Snake Arcade Neon Pro</title>
+  <title>Cat Parade Arcade</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Fredoka:wght@600;700&display=swap');
 
@@ -12,6 +12,7 @@
       --neon-cyan: #00f3ff;
       --neon-yellow: #ffe600;
       --neon-green: #00ff66;
+      --neon-orange: #ff9900;
       --bg-dark: #0b0512;
     }
 
@@ -52,10 +53,10 @@
       font-family: 'Black Han Sans', sans-serif;
       font-size: 2rem;
       letter-spacing: 2px;
-      background: linear-gradient(180deg, #fff 30%, var(--neon-green) 100%);
+      background: linear-gradient(180deg, #fff 30%, var(--neon-pink) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 10px rgba(0, 255, 102, 0.5));
+      filter: drop-shadow(0 0 10px rgba(255, 0, 127, 0.5));
       text-transform: uppercase;
     }
 
@@ -81,7 +82,7 @@
       font-weight: bold;
     }
 
-    /* Tela do Jogo */
+    /* Arena do Jogo */
     .game-container {
       position: relative;
       display: flex;
@@ -92,14 +93,14 @@
 
     canvas {
       background: rgba(13, 6, 20, 0.9);
-      border: 3px solid var(--neon-cyan);
+      border: 3px solid var(--neon-pink);
       border-radius: 15px;
-      box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
       max-width: 92vw;
       max-height: 42vh;
     }
 
-    /* Controles Virtuais Touch Reposicionados e Ampliados */
+    /* Controles Virtuais Touch Ampliados */
     .controls-wrapper {
       width: 100%;
       display: flex;
@@ -118,7 +119,7 @@
 
     .btn-arrow {
       background: rgba(255, 255, 255, 0.12);
-      border: 2px solid var(--neon-cyan);
+      border: 2px solid var(--neon-pink);
       color: #fff;
       font-size: 1.8rem;
       border-radius: 18px;
@@ -126,13 +127,13 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 243, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
       transition: background 0.08s, transform 0.08s;
       -webkit-tap-highlight-color: transparent;
     }
 
     .btn-arrow:active {
-      background: var(--neon-cyan);
+      background: var(--neon-pink);
       color: #000;
       transform: scale(0.9);
     }
@@ -157,11 +158,11 @@
 
     .modal-box {
       background: rgba(255, 255, 255, 0.05);
-      border: 3px solid var(--neon-pink);
+      border: 3px solid var(--neon-yellow);
       padding: 25px 20px;
       border-radius: 30px;
       text-align: center;
-      box-shadow: 0 0 50px rgba(255, 0, 127, 0.4);
+      box-shadow: 0 0 50px rgba(255, 230, 0, 0.4);
       max-width: 380px;
       width: 90%;
     }
@@ -169,8 +170,8 @@
     .modal-box h2 {
       font-family: 'Black Han Sans', sans-serif;
       font-size: 2.2rem;
-      color: var(--neon-pink);
-      text-shadow: 0 0 20px var(--neon-pink);
+      color: var(--neon-yellow);
+      text-shadow: 0 0 20px var(--neon-yellow);
       margin-bottom: 8px;
     }
 
@@ -206,10 +207,10 @@
     }
 
     .btn-diff.active {
-      border-color: var(--neon-yellow);
-      background: var(--neon-yellow);
-      color: #000;
-      box-shadow: 0 0 12px var(--neon-yellow);
+      border-color: var(--neon-pink);
+      background: var(--neon-pink);
+      color: #fff;
+      box-shadow: 0 0 12px var(--neon-pink);
     }
 
     .btn-start {
@@ -234,10 +235,10 @@
 <body>
 
   <header>
-    <h1>SNAKE ARCADE</h1>
+    <h1>CAT PARADE 🐱</h1>
     <div class="hud">
-      <div class="hud-box">PONTOS: <span id="score">0</span></div>
-      <div class="hud-box">RECORDE: <span id="highscore">0</span></div>
+      <div class="hud-box">GATINHOS: <span id="score">1</span></div>
+      <div class="hud-box">RECORDE: <span id="highscore">1</span></div>
     </div>
   </header>
 
@@ -245,7 +246,7 @@
     <canvas id="gameCanvas" width="360" height="360"></canvas>
   </div>
 
-  <!-- Controles Virtuais Elevados -->
+  <!-- Controles Virtuais para Celular -->
   <div class="controls-wrapper">
     <div class="controls">
       <button class="btn-arrow btn-up" onclick="changeDir('UP')">▲</button>
@@ -258,11 +259,11 @@
   <!-- Modal Inicial / Game Over / Dificuldade -->
   <div class="modal" id="gameModal">
     <div class="modal-box">
-      <h2 id="modalTitle">SNAKE NEON</h2>
-      <p id="modalSub" style="font-size: 1rem; color: #ccc;">Escolha a velocidade antes de jogar:</p>
+      <h2 id="modalTitle">CAT PARADE 🐾</h2>
+      <p id="modalSub" style="font-size: 1rem; color: #ccc;">Pegue os peixinhos para formar uma caravana de gatinhos!</p>
       
       <div class="diff-selector">
-        <div class="diff-label">DIFICULDADE</div>
+        <div class="diff-label">VELOCIDADE</div>
         <div class="diff-buttons">
           <button class="btn-diff active" onclick="setDifficulty('easy', this)">FÁCIL</button>
           <button class="btn-diff" onclick="setDifficulty('medium', this)">MÉDIO</button>
@@ -279,39 +280,47 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    const gridSize = 18;
+    const gridSize = 20; // Blocos levemente maiores para detalhar os gatos
     const tileCount = canvas.width / gridSize;
 
-    let snake = [];
+    // Cores para variarmos as raças/cores dos gatinhos na caravana
+    const catColors = [
+      '#ff9900', // Laranja (Laranjinha)
+      '#333333', // Preto/Cinza
+      '#ffffff', // Branco
+      '#ff007f', // Rosa Neon
+      '#ffe600', // Amarelo
+      '#00f3ff'  // Ciano
+    ];
+
+    let cats = []; // Array onde cada item é um gatinho da fila
     let food = { x: 0, y: 0 };
     let dx = gridSize;
     let dy = 0;
     let nextDx = gridSize;
     let nextDy = 0;
-    let score = 0;
-    let highScore = localStorage.getItem('snake_highscore') || 0;
+    let score = 1;
+    let highScore = localStorage.getItem('cat_highscore') || 1;
     let gameLoop = null;
 
-    // Configurações de Dificuldade (Velocidade em ms)
+    // Dificuldades (Velocidade em ms)
     const difficulties = {
       easy: 160,
       medium: 110,
       hard: 75,
       insane: 45
     };
-    let currentDifficulty = 'easy';
     let baseSpeed = difficulties.easy;
 
     document.getElementById('highscore').textContent = highScore;
 
     function setDifficulty(diff, btn) {
-      currentDifficulty = diff;
       baseSpeed = difficulties[diff];
       document.querySelectorAll('.btn-diff').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
 
-    // Sintetizador de Áudio
+    // Efeitos Sonoros
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
@@ -322,17 +331,19 @@
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
-      if (type === 'eat') {
+      if (type === 'meow') {
+        // Miau agudo e rápido
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(320, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(680, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
+        osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.18);
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.18);
       } else if (type === 'over') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+        osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(70, audioCtx.currentTime + 0.3);
         gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
         osc.start(); osc.stop(audioCtx.currentTime + 0.3);
@@ -342,17 +353,16 @@
     function startGame() {
       document.getElementById('gameModal').style.display = 'none';
       
-      snake = [
-        { x: 10 * gridSize, y: 10 * gridSize },
-        { x: 9 * gridSize, y: 10 * gridSize },
-        { x: 8 * gridSize, y: 10 * gridSize }
+      // Começa com 1 gatinho líder
+      cats = [
+        { x: 9 * gridSize, y: 9 * gridSize, color: catColors[0] }
       ];
 
       dx = gridSize;
       dy = 0;
       nextDx = gridSize;
       nextDy = 0;
-      score = 0;
+      score = 1;
       document.getElementById('score').textContent = score;
 
       spawnFood();
@@ -365,8 +375,8 @@
       food.x = Math.floor(Math.random() * tileCount) * gridSize;
       food.y = Math.floor(Math.random() * tileCount) * gridSize;
 
-      snake.forEach(segment => {
-        if (segment.x === food.x && segment.y === food.y) {
+      cats.forEach(cat => {
+        if (cat.x === food.x && cat.y === food.y) {
           spawnFood();
         }
       });
@@ -376,46 +386,147 @@
       dx = nextDx;
       dy = nextDy;
 
-      const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+      const head = { 
+        x: cats[0].x + dx, 
+        y: cats[0].y + dy,
+        color: cats[0].color 
+      };
 
-      // Colisão Paredes
+      // Colisão com as Paredes
       if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
         gameOver();
         return;
       }
 
-      // Colisão Corpo
-      for (let i = 0; i < snake.length; i++) {
-        if (head.x === snake[i].x && head.y === snake[i].y) {
+      // Colisão com os outros Gatinhos da Fila
+      for (let i = 0; i < cats.length; i++) {
+        if (head.x === cats[i].x && head.y === cats[i].y) {
           gameOver();
           return;
         }
       }
 
-      snake.unshift(head);
+      cats.unshift(head);
 
-      // Comer Comida
+      // Pegou o Peixinho?
       if (head.x === food.x && head.y === food.y) {
-        playSound('eat');
-        score += 10;
+        playSound('meow');
+        score += 1;
         document.getElementById('score').textContent = score;
 
         if (score > highScore) {
           highScore = score;
-          localStorage.setItem('snake_highscore', highScore);
+          localStorage.setItem('cat_highscore', highScore);
           document.getElementById('highscore').textContent = highScore;
         }
 
+        // Atribui uma cor diferente para cada novo gatinho que entra na caravana
+        const newCatColor = catColors[(cats.length) % catColors.length];
+        cats[cats.length - 1].color = newCatColor;
+
         spawnFood();
       } else {
-        snake.pop();
+        cats.pop(); // Mantém o tamanho se não comeu
       }
 
       draw();
     }
 
+    // Função para Desenhar um Gatinho Completo no Gridded Canvas
+    function drawCat(x, y, color, isLeader, catDx, catDy) {
+      const radius = 5;
+
+      // Corpo/Cabeça do Gatinho
+      ctx.fillStyle = color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = isLeader ? 10 : 4;
+
+      ctx.beginPath();
+      ctx.roundRect(x + 1, y + 1, gridSize - 2, gridSize - 2, radius);
+      ctx.fill();
+
+      // Orelhas de Gato (Triângulos no topo)
+      ctx.beginPath();
+      // Orelha Esquerda
+      ctx.moveTo(x + 2, y + 4);
+      ctx.lineTo(x + 6, y - 3);
+      ctx.lineTo(x + 8, y + 4);
+      // Orelha Direita
+      ctx.moveTo(x + gridSize - 8, y + 4);
+      ctx.lineTo(x + gridSize - 6, y - 3);
+      ctx.lineTo(x + gridSize - 2, y + 4);
+      ctx.fill();
+
+      // Rosto do Gatinho (Olhos, Focinho e Bigodes)
+      ctx.shadowBlur = 0;
+      
+      // Olhos
+      ctx.fillStyle = (color === '#333333') ? '#ffe600' : '#000000'; // Olho amarelo se o gato for preto
+      
+      let e1X = x + 5, e1Y = y + 7;
+      let e2X = x + 13, e2Y = y + 7;
+
+      // Ajusta olhar baseado na direção se for o líder
+      if (isLeader) {
+        if (catDx > 0) { e1X += 2; e2X += 2; }
+        else if (catDx < 0) { e1X -= 2; e2X -= 2; }
+        else if (catDy > 0) { e1Y += 2; e2Y += 2; }
+        else if (catDy < 0) { e1Y -= 2; e2Y -= 2; }
+      }
+
+      ctx.beginPath();
+      ctx.arc(e1X, e1Y, 1.8, 0, Math.PI * 2);
+      ctx.arc(e2X, e2Y, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Focinho Rosa
+      ctx.fillStyle = '#ff007f';
+      ctx.beginPath();
+      ctx.arc(x + 9.5, y + 11, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Bigodinhos do Gatinho
+      ctx.strokeStyle = (color === '#333333' || color === '#ff007f') ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)';
+      ctx.lineWidth = 1;
+
+      // Lado Esquerdo
+      ctx.beginPath(); ctx.moveTo(x + 1, y + 10); ctx.lineTo(x + 5, y + 11); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x + 1, y + 13); ctx.lineTo(x + 5, y + 12); ctx.stroke();
+
+      // Lado Direito
+      ctx.beginPath(); ctx.moveTo(x + gridSize - 1, y + 10); ctx.lineTo(x + gridSize - 5, y + 11); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x + gridSize - 1, y + 13); ctx.lineTo(x + gridSize - 5, y + 12); ctx.stroke();
+    }
+
+    // Desenha o Peixinho (Comida)
+    function drawFish(x, y) {
+      ctx.fillStyle = '#00f3ff';
+      ctx.shadowColor = '#00f3ff';
+      ctx.shadowBlur = 12;
+
+      // Corpo do peixe
+      ctx.beginPath();
+      ctx.ellipse(x + 9, y + 10, 6, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Rabo do peixe
+      ctx.beginPath();
+      ctx.moveTo(x + 14, y + 10);
+      ctx.lineTo(x + 18, y + 6);
+      ctx.lineTo(x + 18, y + 14);
+      ctx.closePath();
+      ctx.fill();
+
+      // Olho do peixe
+      ctx.fillStyle = '#000';
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.arc(x + 6, y + 9, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     function draw() {
-      // Fundo limpo
+      // Fundo Escuro
       ctx.fillStyle = '#0d0614';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -426,58 +537,13 @@
         ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
       }
 
-      // Comida (Orb Neon com brilho)
-      ctx.fillStyle = '#ff007f';
-      ctx.shadowColor = '#ff007f';
-      ctx.shadowBlur = 14;
-      ctx.beginPath();
-      ctx.arc(food.x + gridSize / 2, food.y + gridSize / 2, gridSize / 2 - 2, 0, Math.PI * 2);
-      ctx.fill();
+      // Desenha a Comida (Peixe)
+      drawFish(food.x, food.y);
 
-      // Desenho da Cobra Estilizada
-      snake.forEach((segment, index) => {
-        const x = segment.x;
-        const y = segment.y;
-        const isHead = index === 0;
-
-        if (isHead) {
-          // Cabeça Arredondada
-          ctx.fillStyle = '#ffe600';
-          ctx.shadowColor = '#ffe600';
-          ctx.shadowBlur = 12;
-
-          ctx.beginPath();
-          ctx.roundRect(x + 1, y + 1, gridSize - 2, gridSize - 2, 8);
-          ctx.fill();
-
-          // Olhos da Cobrinha baseados na direção
-          ctx.fillStyle = '#000';
-          let eye1X = x + 5, eye1Y = y + 5;
-          let eye2X = x + 12, eye2Y = y + 5;
-
-          if (dx > 0) { eye1X = x + 12; eye1Y = y + 4; eye2X = x + 12; eye2Y = y + 12; }
-          else if (dx < 0) { eye1X = x + 4; eye1Y = y + 4; eye2X = x + 4; eye2Y = y + 12; }
-          else if (dy > 0) { eye1X = x + 4; eye1Y = y + 12; eye2X = x + 12; eye2Y = y + 12; }
-          
-          ctx.beginPath();
-          ctx.arc(eye1X, eye1Y, 2, 0, Math.PI * 2);
-          ctx.arc(eye2X, eye2Y, 2, 0, Math.PI * 2);
-          ctx.fill();
-
-        } else {
-          // Corpo com efeito de degradação suave e cantos redondos
-          const alpha = Math.max(0.3, 1 - (index / snake.length) * 0.7);
-          ctx.fillStyle = `rgba(0, 255, 102, ${alpha})`;
-          ctx.shadowColor = '#00ff66';
-          ctx.shadowBlur = 6;
-
-          const sizeFactor = Math.max(12, gridSize - (index * 0.3));
-          const offset = (gridSize - sizeFactor) / 2;
-
-          ctx.beginPath();
-          ctx.roundRect(x + offset, y + offset, sizeFactor, sizeFactor, 5);
-          ctx.fill();
-        }
+      // Desenha Todos os Gatinhos da Fila
+      cats.forEach((cat, index) => {
+        const isLeader = (index === 0);
+        drawCat(cat.x, cat.y, cat.color, isLeader, dx, dy);
       });
 
       ctx.shadowBlur = 0;
@@ -524,8 +590,8 @@
       playSound('over');
       clearInterval(gameLoop);
 
-      document.getElementById('modalTitle').textContent = 'GAME OVER!';
-      document.getElementById('modalSub').innerHTML = `Pontuação: <strong style="color:var(--neon-yellow);">${score}</strong>`;
+      document.getElementById('modalTitle').textContent = 'FIM DA PARADA!';
+      document.getElementById('modalSub').innerHTML = `Caravana Final: <strong style="color:var(--neon-yellow);">${score} Gatinhos 🐾</strong>`;
       document.getElementById('gameModal').style.display = 'flex';
     }
   </script>
