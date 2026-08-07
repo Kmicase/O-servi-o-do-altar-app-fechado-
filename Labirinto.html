@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Labirinto do Coroinha</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #d4af37;
+      --bg: #f4f6f9;
+      --wall: #34495e;
+      --path: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 15px;
+    }
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 1.6rem;
+    }
+
+    .level-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-level {
+      padding: 8px 16px;
+      border: 2px solid var(--primary);
+      background-color: transparent;
+      color: var(--primary);
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-level.active, .btn-level:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    .instructions {
+      font-size: 0.9rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Container do Tabuleiro */
+    #maze-container {
+      display: grid;
+      gap: 2px;
+      background-color: var(--wall);
+      border: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 2px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .cell {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      user-select: none;
+    }
+
+    .wall { background-color: var(--wall); }
+    .path { background-color: var(--path); }
+
+    /* Mensagem de Vitória */
+    .win-message {
+      display: none;
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #27ae60;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Controles virtuais para celular */
+    .mobile-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 50px);
+      grid-template-rows: repeat(3, 50px);
+      gap: 5px;
+      margin-top: 15px;
+    }
+
+    .btn-dir {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-dir:active {
+      background-color: var(--accent);
+    }
+
+    #btn-up { grid-column: 2; grid-row: 1; }
+    #btn-left { grid-column: 1; grid-row: 2; }
+    #btn-right { grid-column: 3; grid-row: 2; }
+    #btn-down { grid-column: 2; grid-row: 3; }
+
+    .btn-reset {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Caminho do Altar</h1>
+
+  <div class="level-selector">
+    <button class="btn-level active" onclick="changeLevel('easy')">Fácil (Coroinha)</button>
+    <button class="btn-level" onclick="changeLevel('medium')">Médio (Cerimoniário)</button>
+    <button class="btn-level" onclick="changeLevel('hard')">Difícil (Acólito)</button>
+  </div>
+
+  <div class="instructions" id="instructions">
+    Guie o coroinha 🚶‍♂️ até a vela 🕯️ e depois até o Altar ⛪!
+  </div>
+
+  <div id="maze-container"></div>
+
+  <div class="win-message" id="win-message">
+    Parabéns! Você acendeu as velas e chegou ao Altar a tempo da missa! ⛪🎉
+  </div>
+
+  <!-- Controles Celular -->
+  <div class="mobile-controls">
+    <button class="btn-dir" id="btn-up" onclick="movePlayer(0, -1)">▲</button>
+    <button class="btn-dir" id="btn-left" onclick="movePlayer(-1, 0)">◀</button>
+    <button class="btn-dir" id="btn-right" onclick="movePlayer(1, 0)">▶</button>
+    <button class="btn-dir" id="btn-down" onclick="movePlayer(0, 1)">▼</button>
+  </div>
+
+  <button class="btn-reset" onclick="initGame()">Reiniciar Fase</button>
+
+  <script>
+    // 0 = Caminho, 1 = Parede
+    const maps = {
+      easy: {
+        cols: 7, rows: 7,
+        grid: [
+          [0,0,1,1,1,1,1],
+          [1,0,0,0,1,0,1],
+          [1,1,1,0,1,0,1],
+          [1,0,0,0,0,0,1],
+          [1,0,1,1,1,0,1],
+          [1,0,0,0,1,0,0],
+          [1,1,1,1,1,1,0]
+        ],
+        item: {x: 5, y: 1},
+        goal: {x: 6, y: 6}
+      },
+      medium: {
+        cols: 9, rows: 9,
+        grid: [
+          [0,0,0,1,1,1,1,1,1],
+          [1,1,0,1,0,0,0,0,1],
+          [1,0,0,0,0,1,1,0,1],
+          [1,0,1,1,0,1,0,0,1],
+          [1,0,0,1,0,0,0,1,1],
+          [1,1,0,1,1,1,0,1,1],
+          [1,0,0,0,0,1,0,0,1],
+          [1,0,1,1,0,0,1,0,0],
+          [1,1,1,1,1,1,1,1,0]
+        ],
+        item: {x: 4, y: 1},
+        goal: {x: 8, y: 8}
+      },
+      hard: {
+        cols: 11, rows: 11,
+        grid: [
+          [0,0,1,1,1,1,1,1,1,1,1],
+          [1,0,0,0,0,0,1,0,0,0,1],
+          [1,1,1,1,1,0,1,0,1,0,1],
+          [1,0,0,0,1,0,0,0,1,0,1],
+          [1,0,1,0,1,1,1,1,1,0,1],
+          [1,0,1,0,0,0,0,0,0,0,1],
+          [1,0,1,1,1,1,1,0,1,1,1],
+          [1,0,0,0,0,0,1,0,0,0,1],
+          [1,1,1,1,1,0,1,1,1,0,1],
+          [1,0,0,0,0,0,0,0,1,0,0],
+          [1,1,1,1,1,1,1,1,1,1,0]
+        ],
+        item: {x: 9, y: 1},
+        goal: {x: 10, y: 9}
+      }
+    };
+
+    let currentLevel = 'easy';
+    let playerPos = { x: 0, y: 0 };
+    let hasItem = false;
+    let gameWon = false;
+
+    function changeLevel(level) {
+      currentLevel = level;
+      document.querySelectorAll('.btn-level').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      initGame();
+    }
+
+    function initGame() {
+      const map = maps[currentLevel];
+      playerPos = { x: 0, y: 0 };
+      hasItem = false;
+      gameWon = false;
+
+      document.getElementById('win-message').style.display = 'none';
+      document.getElementById('instructions').textContent = 'Guie o coroinha 🚶‍♂️ até a vela 🕯️ e depois até o Altar ⛪!';
+
+      renderBoard();
+    }
+
+    function renderBoard() {
+      const map = maps[currentLevel];
+      const container = document.getElementById('maze-container');
+      
+      container.style.gridTemplateColumns = `repeat(${map.cols}, 32px)`;
+      container.innerHTML = '';
+
+      for (let r = 0; r < map.rows; r++) {
+        for (let c = 0; c < map.cols; c++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+
+          if (map.grid[r][c] === 1) {
+            cell.classList.add('wall');
+          } else {
+            cell.classList.add('path');
+
+            if (c === playerPos.x && r === playerPos.y) {
+              cell.textContent = '🚶‍♂️';
+            } else if (!hasItem && c === map.item.x && r === map.item.y) {
+              cell.textContent = '🕯️';
+            } else if (c === map.goal.x && r === map.goal.y) {
+              cell.textContent = '⛪';
+            }
+          }
+
+          container.appendChild(cell);
+        }
+      }
+    }
+
+    function movePlayer(dx, dy) {
+      if (gameWon) return;
+
+      const map = maps[currentLevel];
+      const newX = playerPos.x + dx;
+      const newY = playerPos.y + dy;
+
+      // Verifica limite do mapa
+      if (newX < 0 || newX >= map.cols || newY < 0 || newY >= map.rows) return;
+
+      // Verifica se é parede
+      if (map.grid[newY][newX] === 1) return;
+
+      // Move jogador
+      playerPos.x = newX;
+      playerPos.y = newY;
+
+      // Pegou o item?
+      if (!hasItem && playerPos.x === map.item.x && playerPos.y === map.item.y) {
+        hasItem = true;
+        document.getElementById('instructions').textContent = 'Excelente! Agora vá até o Altar ⛪!';
+      }
+
+      // Chegou no objetivo?
+      if (playerPos.x === map.goal.x && playerPos.y === map.goal.y) {
+        if (hasItem) {
+          gameWon = true;
+          document.getElementById('win-message').style.display = 'block';
+        } else {
+          document.getElementById('instructions').textContent = 'Você precisa pegar a vela 🕯️ antes de ir ao Altar!';
+        }
+      }
+
+      renderBoard();
+    }
+
+    // Suporte às setas do teclado
+    window.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowUp': movePlayer(0, -1); break;
+        case 'ArrowDown': movePlayer(0, 1); break;
+        case 'ArrowLeft': movePlayer(-1, 0); break;
+        case 'ArrowRight': movePlayer(1, 0); break;
+      }
+    });
+
+    initGame();
+  </script>
+</body>
+</html>
