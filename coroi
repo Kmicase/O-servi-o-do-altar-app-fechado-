@@ -8,33 +8,657 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style type="text/tailwindcss">
-        @theme { --animate-pulse: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @theme {
+            --animate-pulse: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
         @custom-variant dark (&:where(.dark, .dark *));
 
-        .bg-sacro-dourado { background-color: #f8fafc; background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjYjQ1MzA5IiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iZG9uZSIgcj0iNiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNjAiIHI9IjYiLz48Y2lyY2xlIGN4PSIyMCIgY3k9IjQwIiAgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjEiLz48cGF0aCB dPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4="); }
-        .dark .bg-sacro-dourado { background-color: #09090b; background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjZDk3NzA2IiBmaWxsLW9wYWNpdHk9IjAuMDciPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDQwek02NSAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMjAiIHI9IjYiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjYwIiByPSI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSI0MCIgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjEiLz48cGF0aCBkPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4="); }
-        .active-tab { border-bottom: 3px solid #dc2626; color: #dc2626; font-weight: 800; }
-        .dark .active-tab { border-bottom: 3px solid #ef4444; color: #ef4444; }
-        .active-subtab { background-color: #f3f4f6; color: #1f2937; font-weight: 700; }
-        .dark .active-subtab { background-color: #27272a; color: #f4f4f5; }
+        /* Fundo Litúrgico - Padrão Sacro */
+        .bg-sacro-dourado {
+            background-color: #f8fafc;
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjYjQ1MzA5IiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iZG9uZSIgcj0iNiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNjAxIiByPSI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSI0MCIgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeD0iNDAiIHI9IjEiLz48cGF0aCB dPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4=");
+        }
+
+        .dark .bg-sacro-dourado {
+            background-color: #09090b;
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjZDk3NzA2IiBmaWxsLW9wYWNpdHk9IjAuMDciPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDQwek02NSAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMjAiIHI9IjYiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjYwIiByPSI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSI0MCIgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeD0iNDAiIHI9IjEiLz48cGF0aCBkPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4=");
+        }
+
+        .active-tab {
+            background-color: #fef2f2;
+            color: #dc2626;
+            font-weight: 800;
+            border-right: 4px solid #dc2626;
+        }
+        .dark .active-tab {
+            background-color: #27272a;
+            color: #ef4444;
+            border-right: 4px solid #ef4444;
+        }
+        .active-subtab {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-weight: 700;
+        }
+        .dark .active-subtab {
+            background-color: #27272a;
+            color: #f4f4f5;
+        }
     </style>
 </head>
 <body class="bg-sacro-dourado font-sans min-h-screen flex flex-col transition-colors duration-500 selection:bg-red-200">
 
-    <main class="max-w-6xl w-full mx-auto p-4 md:p-6 flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Estrutura mantida conforme seu original -->
-        <div id="conteudo-escala" class="space-y-6 block md:col-span-2">
-            <div class="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-100 dark:border-zinc-800">
-                <div id="resultado-escala-geral" class="space-y-5 text-xs"></div>
+    <!-- Tela de Manutenção -->
+    <div id="tela-manutencao" class="fixed inset-0 bg-slate-50 dark:bg-zinc-950 z-55 flex flex-col items-center justify-center p-6 text-center hidden">
+        <div class="w-16 h-16 bg-amber-500/10 dark:bg-amber-500/5 text-amber-600 rounded-2xl flex items-center justify-center text-2xl border border-amber-500/20 shadow-xs mb-4 animate-bounce">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+        </div>
+        <h2 class="text-base font-black text-slate-800 dark:text-zinc-100 uppercase tracking-tight">Sistema em Manutenção</h2>
+        <p class="text-xs text-slate-500 dark:text-zinc-400 max-w-sm mt-2 leading-relaxed font-medium">Estamos atualizando os sacrários e arquivos do presbitério. O painel estará disponível novamente em breve.</p>
+    </div>
+
+    <!-- Tela Loading -->
+    <div id="tela-loading" class="fixed inset-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative flex items-center justify-center mb-4">
+            <div class="animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-red-600 border-b-amber-500"></div>
+            <i class="fa-solid fa-cross text-red-600 absolute text-xs"></i>
+        </div>
+        <p class="text-[10px] font-black text-gray-400 dark:text-zinc-500 tracking-widest uppercase animate-pulse">Sincronizando Presbitério...</p>
+    </div>
+
+    <!-- Header Principal -->
+    <header class="bg-gradient-to-r from-red-800 to-red-900 dark:from-zinc-900 dark:to-zinc-900 text-white px-4 py-3 shadow-md sticky top-0 z-40 border-b border-red-900/40 dark:border-zinc-800/80 transition-colors">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="md:hidden p-2 text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 shadow-inner">
+                    <i class="fa-solid fa-church text-amber-400 text-base"></i>
+                </div>
+                <div>
+                    <h2 id="nome-usuario-header" class="text-sm font-black tracking-wide uppercase">Carregando...</h2>
+                    <span id="funcao-usuario-header" class="text-[9px] bg-white/20 dark:bg-zinc-800 px-2 py-0.5 rounded-sm font-bold uppercase tracking-wider block mt-0.5">...</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button id="btn-dark-mode" aria-label="Alternar Tema" class="relative w-12 h-7 bg-red-950/40 dark:bg-zinc-800 rounded-full p-1 cursor-pointer transition-all duration-500 border border-white/5 dark:border-zinc-700/30">
+                    <div id="dark-mode-thumb" class="w-5 h-5 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center shadow-md transform transition-all duration-500 ease-out translate-x-0 dark:translate-x-5">
+                        <i class="fa-solid fa-sun text-amber-500 text-[10px] absolute transition-all duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-180"></i>
+                        <i class="fa-solid fa-moon text-red-500 text-[10px] absolute transition-all duration-500 scale-0 -rotate-180 dark:scale-100 dark:rotate-0"></i>
+                    </div>
+                </button>
+
+                <button id="btn-logout" class="bg-red-950/40 dark:bg-zinc-800/50 hover:bg-red-900 dark:hover:bg-zinc-800 p-2.5 rounded-xl transition-all text-white/90 cursor-pointer border border-white/5 dark:border-zinc-700/20 text-xs flex items-center gap-2 font-bold">
+                    Sair <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
             </div>
         </div>
-    </main>
+    </header>
 
-<script type="module">
+    <!-- Overlay para fechar o menu no mobile -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden transition-opacity"></div>
+
+    <div class="max-w-7xl w-full mx-auto flex flex-1 relative">
+        
+        <!-- SIDEBAR MENU LATERAL -->
+        <aside id="sidebar-menu" class="fixed md:sticky top-[61px] left-0 h-[calc(100vh-61px)] w-64 bg-white dark:bg-zinc-900 border-r border-slate-200/60 dark:border-zinc-800 shadow-lg md:shadow-none z-35 flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 shrink-0">
+            <div class="p-4 border-b border-slate-100 dark:border-zinc-800/60 flex items-center justify-between">
+                <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500">Navegação Principal</span>
+            </div>
+
+            <nav class="p-3 space-y-1.5 flex-1 overflow-y-auto">
+                <button id="tab-escala" onclick="switchTab('escala')" class="active-tab w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-calendar-days text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Escalas</span>
+                </button>
+                <button id="tab-avisos" onclick="switchTab('avisos')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-bullhorn text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Avisos</span>
+                </button>
+                <button id="tab-conteudos" onclick="switchTab('conteudos')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-book-open text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Conteúdos</span>
+                </button>
+                <button id="tab-liturgia" onclick="switchTab('liturgia')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-scroll text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Liturgia</span>
+                </button>
+                <button id="tab-oracoes" onclick="switchTab('oracoes'); if(typeof window.carregarOracoes==='function') window.carregarOracoes();" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-hands-praying text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Orações</span>
+                </button>
+
+                <!-- Nova Aba: JOGOS -->
+                <button id="tab-jogos" onclick="switchTab('jogos')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-gamepad text-sm w-5 text-center text-amber-500"></i> 
+                    <span class="font-bold">Jogos</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-slate-100 dark:border-zinc-800/60 text-center">
+                <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-600">Altaris v2.0 - Presbitério Digital</span>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="flex-1 p-4 md:p-6 z-10 w-full overflow-hidden">
+            
+            <!-- ABA ESCALA -->
+            <div id="conteudo-escala" class="space-y-6 block">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-700 via-amber-500 to-red-600"></div>
+                    
+                    <div class="p-6 border-b border-slate-100 dark:border-zinc-800/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-base font-black text-slate-800 dark:text-zinc-100 tracking-tight">Painel Geral de Escalas</h3>
+                            <p class="text-[11px] text-slate-400 dark:text-zinc-400 font-medium mt-0.5">Confirme sua vaga ou assuma uma escala livre/substituição disponível.</p>
+                        </div>
+                        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider whitespace-nowrap">Data:</span>
+                            <input type="date" id="busca-escala-data" class="w-full sm:w-auto bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700/50 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 outline-none focus:border-red-600 transition-all shadow-xs">
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div id="resultado-escala-geral" class="space-y-5 text-xs">
+                            <p class="text-slate-400 dark:text-zinc-500 italic flex items-center gap-2"><i class="fa-solid fa-circle-notch animate-spin"></i> Buscando informações do dia...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="card-enquete-disponibilidade" class="hidden bg-amber-50/40 dark:bg-amber-950/10 p-6 rounded-3xl border border-amber-200/60 dark:border-amber-900/30 space-y-4 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-amber-500"></div>
+                    <div>
+                        <h3 class="text-sm font-black text-amber-900 dark:text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation text-amber-600 dark:text-amber-500"></i> Enquete de Disponibilidade Mensal</h3>
+                        <p class="text-[11px] text-amber-800/80 dark:text-zinc-400 font-medium mt-0.5">Marque os dias que você pode servir. As opções somem desta lista assim que enviadas.</p>
+                    </div>
+                    <form id="form-responder-enquete" class="space-y-4">
+                        <div id="lista-celebracoes-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-48 overflow-y-auto bg-white dark:bg-zinc-900 p-4 rounded-xl border border-amber-200/50 dark:border-zinc-800/80"></div>
+                        <button type="submit" class="w-full bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white font-bold text-xs py-2.5 rounded-xl transition-all cursor-pointer shadow-xs uppercase tracking-wider">Salvar Disponibilidade</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ABA AVISOS -->
+            <div id="conteudo-avisos" class="space-y-4 hidden w-full">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-500 to-red-600"></div>
+                    <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center gap-2.5">
+                        <i class="fa-solid fa-bullhorn text-amber-600 dark:text-amber-500 text-base"></i>
+                        <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">Mural de Avisos</h3>
+                    </div>
+                    <div id="container-mural-e-penalidades" class="p-5 space-y-3">
+                        <div class="bg-slate-50/70 dark:bg-zinc-800/30 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800/60 hover:border-amber-500/30 transition-all">
+                            <p id="txt-aviso-mural" class="text-xs font-medium text-slate-600 dark:text-zinc-400 whitespace-pre-wrap leading-relaxed">Nenhum comunicado oficial recente.</p>
+                            <span id="data-aviso-mural" class="block text-[9px] font-bold text-slate-400 dark:text-zinc-500 mt-3 text-right tracking-wider">--/--/----</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA CONTEÚDOS -->
+            <div id="conteudo-conteudos" class="space-y-4 hidden w-full">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-700 to-amber-500"></div>
+                    <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center gap-2.5">
+                        <i class="fa-solid fa-book-open text-red-600 dark:text-red-500 text-base"></i>
+                        <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">Materiais de Formação</h3>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div id="wrapper-player-formacao" class="w-full aspect-video rounded-2xl bg-slate-950 overflow-hidden shadow-inner border border-slate-200 dark:border-zinc-800 relative flex flex-col items-center justify-center text-center p-4">
+                            <div id="placeholder-player" class="text-slate-500 dark:text-zinc-500 space-y-2">
+                                <i class="fa-solid fa-clapperboard text-2xl animate-pulse text-red-600/60"></i>
+                                <p class="text-[11px] font-bold uppercase tracking-wider">Nenhum vídeo ativo</p>
+                                <p class="text-[10px] text-slate-400 dark:text-zinc-600 max-w-[200px] mx-auto font-medium leading-tight">Escolha uma das formações em vídeo listadas abaixo para reproduzir.</p>
+                            </div>
+                            <div id="container-midia-player" class="absolute inset-0 hidden w-full h-full"></div>
+                        </div>
+
+                        <div id="lista-materials-formacao" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
+                            <p class="text-xs text-slate-400 dark:text-zinc-500 italic">Buscando conteúdos ativos...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA LITURGIA -->
+            <div id="conteudo-liturgia" class="space-y-4 hidden w-full">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-600 via-red-600 to-amber-500"></div>
+                    <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center justify-between gap-2">
+                        <div class="flex flex-col gap-0.5">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-scroll text-amber-600 dark:text-amber-500 text-sm"></i>
+                                <h3 id="liturgia-semana-titulo" class="text-xs font-black text-slate-800 dark:text-zinc-100 tracking-tight uppercase">Carregando Semana...</h3>
+                            </div>
+                            <span id="liturgia-santo-dia" class="text-[11px] font-bold text-slate-500 dark:text-zinc-400 block pl-5">Buscando Santo do Dia...</span>
+                        </div>
+                        <span id="liturgia-cor-badge" class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 dark:bg-zinc-800 dark:text-zinc-400 self-start">---</span>
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div class="flex bg-slate-100 dark:bg-zinc-800 p-1 rounded-xl text-[10px] font-bold text-slate-500 dark:text-zinc-400">
+                            <button onclick="switchSubTab('1leitura')" id="subtab-1leitura" class="flex-1 py-1.5 text-center rounded-lg cursor-pointer transition-all active-subtab">1ª Leit.</button>
+                            <button onclick="switchSubTab('salmo')" id="subtab-salmo" class="flex-1 py-1.5 text-center rounded-lg cursor-pointer transition-all">Salmo</button>
+                            <button onclick="switchSubTab('2leitura')" id="subtab-2leitura" class="flex-1 py-1.5 text-center rounded-lg cursor-pointer transition-all hidden">2ª Leit.</button>
+                            <button onclick="switchSubTab('evangelho')" id="subtab-evangelho" class="flex-1 py-1.5 text-center rounded-lg cursor-pointer transition-all">Evang.</button>
+                        </div>
+
+                        <div class="bg-amber-50/30 dark:bg-amber-950/10 p-4 rounded-2xl border border-amber-100/50 dark:border-amber-900/20">
+                            <span id="liturgia-texto-referencia" class="block text-[9px] font-black text-amber-700 dark:text-amber-500 uppercase tracking-widest mb-1.5">Carregando...</span>
+                            <div id="liturgia-texto-corpo" class="text-xs text-slate-600 dark:text-zinc-400 font-medium leading-relaxed min-h-48 h-auto max-h-96 overflow-y-auto pr-1 text-justify whitespace-pre-line">
+                                Buscando os textos litúrgicos da mesa da Palavra...
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-100 dark:border-zinc-800/60 pt-4 space-y-3">
+                            <span class="block text-[10px] font-black text-amber-700 dark:text-amber-500 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fa-solid fa-book-bible"></i> Consulta às Sagradas Escrituras
+                            </span>
+                            
+                            <div class="grid grid-cols-3 gap-2">
+                                <select id="select-biblia-livro" class="col-span-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-700 dark:text-zinc-200 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all shadow-xs">
+                                    <option value="Gênesis" selected>Gênesis</option>
+                                    <option value="Êxodo">Êxodo</option>
+                                    <option value="Levítico">Levítico</option>
+                                    <option value="Números">Números</option>
+                                    <option value="Deuteronômio">Deuteronômio</option>
+                                    <option value="Josué">Josué</option>
+                                    <option value="Juízes">Juízes</option>
+                                    <option value="Rute">Rute</option>
+                                    <option value="1 Samuel">1 Samuel</option>
+                                    <option value="2 Samuel">2 Samuel</option>
+                                    <option value="1 Reis">1 Reis</option>
+                                    <option value="2 Reis">2 Reis</option>
+                                    <option value="1 Crônicas">1 Crônicas</option>
+                                    <option value="2 Crônicas">2 Crônicas</option>
+                                    <option value="Esdras">Esdras</option>
+                                    <option value="Neemias">Neemias</option>
+                                    <option value="Ester">Ester</option>
+                                    <option value="Jó">Jó</option>
+                                    <option value="Salmos">Salmos</option>
+                                    <option value="Provérbios">Provérbios</option>
+                                    <option value="Eclesiastes">Eclesiastes</option>
+                                    <option value="Cânticos">Cânticos</option>
+                                    <option value="Isaías">Isaías</option>
+                                    <option value="Jeremias">Jeremias</option>
+                                    <option value="Lamentações">Lamentações</option>
+                                    <option value="Ezequiel">Ezequiel</option>
+                                    <option value="Daniel">Daniel</option>
+                                    <option value="Oséias">Oséias</option>
+                                    <option value="Joel">Joel</option>
+                                    <option value="Amós">Amós</option>
+                                    <option value="Obadias">Obadias</option>
+                                    <option value="Jonas">Jonas</option>
+                                    <option value="Miqueias">Miqueias</option>
+                                    <option value="Naum">Naum</option>
+                                    <option value="Habacuque">Habacuque</option>
+                                    <option value="Sofonias">Sofonias</option>
+                                    <option value="Ageu">Ageu</option>
+                                    <option value="Zacarias">Zacarias</option>
+                                    <option value="Malaquias">Malaquias</option>
+                                    <option value="Mateus">Mateus</option>
+                                    <option value="Marcos">Marcos</option>
+                                    <option value="Lucas">Lucas</option>
+                                    <option value="João">João</option>
+                                    <option value="Atos">Atos</option>
+                                    <option value="Romanos">Romanos</option>
+                                    <option value="1 Coríntios">1 Coríntios</option>
+                                    <option value="2 Coríntios">2 Coríntios</option>
+                                    <option value="Gálatas">Gálatas</option>
+                                    <option value="Efésios">Efésios</option>
+                                    <option value="Filipenses">Filipenses</option>
+                                    <option value="Colossenses">Colossenses</option>
+                                    <option value="1 Tessalonicenses">1 Tessalonicenses</option>
+                                    <option value="2 Tessalonicenses">2 Tessalonicenses</option>
+                                    <option value="1 Timóteo">1 Timóteo</option>
+                                    <option value="2 Timóteo">2 Timóteo</option>
+                                    <option value="Tito">Tito</option>
+                                    <option value="Filemom">Filemom</option>
+                                    <option value="Hebreus">Hebreus</option>
+                                    <option value="Tiago">Tiago</option>
+                                    <option value="1 Pedro">1 Pedro</option>
+                                    <option value="2 Pedro">2 Pedro</option>
+                                    <option value="1 João">1 João</option>
+                                    <option value="2 João">2 João</option>
+                                    <option value="3 João">3 João</option>
+                                    <option value="Judas">Judas</option>
+                                    <option value="Apocalipse">Apocalipse</option>
+                                </select>
+                                <input type="number" id="input-biblia-capitulo" value="1" min="1" max="150" class="bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-700 dark:text-zinc-200 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 text-center shadow-xs" placeholder="Cap.">
+                            </div>
+
+                            <div id="texto-biblia-container" class="w-full h-[320px] overflow-y-auto rounded-2xl border border-slate-100 dark:border-zinc-800/80 bg-linear-to-b from-slate-50/60 to-slate-100/30 dark:from-zinc-950/40 dark:to-zinc-950/20 p-4 space-y-3.5 text-[13px] leading-relaxed text-slate-700 dark:text-zinc-300 scroll-smooth antialiased">
+                                <p class="text-slate-400 dark:text-zinc-500 italic text-center pt-24">Selecione o livro e capítulo para carregar os textos sagrados...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA ORAÇÕES -->
+            <div id="conteudo-oracoes" class="hidden space-y-4 w-full">
+                <div class="px-2 py-4 max-w-4xl mx-auto">
+                    <h2 class="text-xl font-bold text-amber-600 dark:text-amber-400 mb-4 text-center">
+                        Orações Tradicionais
+                    </h2>
+                    <div id="oracoes-container"></div>
+                </div>
+            </div>
+
+            <!-- NOVA ABA: JOGOS -->
+            <div id="conteudo-jogos" class="hidden space-y-4 w-full">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-500 via-red-600 to-amber-500"></div>
+                    <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-gamepad text-amber-600 dark:text-amber-500 text-base"></i>
+                            <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">Jogos e Recreação</h3>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Repositório</span>
+                    </div>
+                    <div class="p-6">
+                        <div id="container-jogos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            
+                            <!-- Card Exemplo de Jogo do Repositório -->
+                            <div class="bg-slate-50 dark:bg-zinc-800/40 rounded-2xl border border-slate-200/80 dark:border-zinc-800 p-4 flex flex-col justify-between hover:border-amber-500/40 transition-all group">
+                                <div>
+                                    <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600 dark:text-amber-400 mb-3 text-lg group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-puzzle-piece"></i>
+                                    </div>
+                                    <h4 class="text-xs font-black text-slate-800 dark:text-zinc-100 uppercase tracking-wide">Quiz de Liturgia</h4>
+                                    <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 leading-relaxed font-medium">Teste seus conhecimentos sobre as vestes, objetos sacros e o ano litúrgico.</p>
+                                </div>
+                                <button onclick="alert('Iniciando o Quiz...')" class="mt-4 w-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2 rounded-xl transition-all cursor-pointer shadow-xs flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-play text-[10px]"></i> Jogar Agora
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SCRIPTS MÓDULOS E LÓGICA DO FIREBASE -->
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, updateDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeFirestore, doc, updateDoc, setDoc, getDoc, collection, onSnapshot, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
+    // Toggle da Sidebar no Mobile
+    window.toggleSidebar = function() {
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (!sidebar || !overlay) return;
+        
+        const isOpen = !sidebar.classList.contains('-translate-x-full');
+        if (isOpen) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        } else {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+    };
+
+    // Navegação por Abas Gerais com a nova aba 'jogos'
+    window.switchTab = function(tabName) {
+        const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes', 'jogos'];
+        
+        tabs.forEach(tab => {
+            const tabBtn = document.getElementById(`tab-${tab}`);
+            const content = document.getElementById(`conteudo-${tab}`);
+            
+            if (tabBtn) {
+                if (tab === tabName) tabBtn.classList.add('active-tab');
+                else tabBtn.classList.remove('active-tab');
+            }
+            
+            if (content) {
+                if (tab === tabName) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            }
+        });
+
+        // Fechar sidebar no mobile após escolher uma aba
+        if (window.innerWidth < 768) {
+            const sidebar = document.getElementById('sidebar-menu');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Se for para a aba de orações, carrega se ainda não foi carregado
+        if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
+            window.carregarOracoes();
+        }
+    };
+
+    // Sub-abas da Liturgia
+    window.switchSubTab = function(subTabName) {
+        if(!cacheLiturgiaDados) return;
+
+        const refEl = document.getElementById('liturgia-texto-referencia');
+        const corpoEl = document.getElementById('liturgia-texto-corpo');
+        const mapeamentoAbas = ['1leitura', 'salmo', '2leitura', 'evangelho'];
+
+        mapeamentoAbas.forEach(aba => {
+            const btn = document.getElementById(`subtab-${aba}`);
+            if(btn) {
+                if(aba === subTabName) btn.classList.add('active-subtab');
+                else btn.classList.remove('active-subtab');
+            }
+        });
+
+        let targetData = null;
+        if(subTabName === '1leitura') targetData = cacheLiturgiaDados.primeiraLeitura;
+        else if(subTabName === 'salmo') targetData = cacheLiturgiaDados.salmo;
+        else if(subTabName === '2leitura') targetData = cacheLiturgiaDados.segundaLeitura;
+        else if(subTabName === 'evangelho') targetData = cacheLiturgiaDados.evangelho;
+
+        if(targetData) {
+            refEl.innerText = targetData.referencia || "";
+            
+            if (subTabName === 'salmo') {
+                let salmoHtml = "";
+                if (targetData.refrao) {
+                    salmoHtml += `<p class="font-bold text-amber-800 dark:text-amber-500 mb-3 bg-amber-500/5 p-2 rounded-lg border-l-2 border-amber-600 italic">Refrão: ${targetData.refrao}</p>`;
+                }
+                
+                if (targetData.texto) {
+                    if (typeof targetData.texto === 'string') {
+                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto}</div>`;
+                    } else if (Array.isArray(targetData.texto)) {
+                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto.join('<br>')}</div>`;
+                    } else {
+                        salmoHtml += `<div class="space-y-2 text-justify">${JSON.stringify(targetData.texto)}</div>`;
+                    }
+                } else {
+                    salmoHtml += "<p class='italic text-slate-400'>Versos não disponíveis.</p>";
+                }
+                corpoEl.innerHTML = salmoHtml;
+            } else {
+                if (targetData.texto) {
+                    if (typeof targetData.texto === 'string') {
+                        corpoEl.innerHTML = `<div>${targetData.texto}</div>`;
+                    } else if (Array.isArray(targetData.texto)) {
+                        corpoEl.innerHTML = targetData.texto.join('<br>');
+                    } else if (typeof targetData.texto === 'object') {
+                        corpoEl.innerHTML = targetData.texto.paragrafo || JSON.stringify(targetData.texto);
+                    } else {
+                        corpoEl.innerHTML = "Texto não disponível.";
+                    }
+                } else {
+                    corpoEl.innerHTML = "Texto não disponível.";
+                }
+            }
+        } else {
+            refEl.innerText = "Não disponível";
+            corpoEl.innerHTML = "Nenhum texto associado a esta aba.";
+        }
+        corpoEl.scrollTop = 0;
+    };
+
+    // --- SISTEMA DE ORAÇÕES ---
+    window.oracoesData = null;
+    window.idiomaOracaoAtual = {};
+
+    window.carregarOracoes = async function() {
+        const container = document.getElementById('oracoes-container');
+        if (!container) return;
+
+        if (!window.oracoesData) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 text-slate-400">
+                    <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-600"></i>
+                    <p class="mt-2 text-sm italic font-medium">Carregando orações...</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch('oracoes.json'); 
+                if (!res.ok) throw new Error('Erro ao carregar orações');
+                
+                const json = await res.json();
+                window.oracoesData = json.oracoes;
+            } catch (err) {
+                console.error('Erro ao carregar orações:', err);
+                container.innerHTML = `
+                    <p class="text-center text-red-500 py-6 text-xs font-semibold">
+                        Não foi possível carregar as orações. Verifique o arquivo 'oracoes.json'.
+                    </p>
+                `;
+                return;
+            }
+        }
+
+        window.renderizarOracoes();
+    };
+
+    window.toggleOracao = function(id) {
+        const corpo = document.getElementById(`corpo-oracao-${id}`);
+        const icone = document.getElementById(`icone-oracao-${id}`);
+        if (!corpo || !icone) return;
+
+        const estaOculto = corpo.classList.contains('hidden');
+        if (estaOculto) {
+            corpo.classList.remove('hidden');
+            icone.classList.add('rotate-180');
+        } else {
+            corpo.classList.add('hidden');
+            icone.classList.remove('rotate-180');
+        }
+    };
+
+    window.renderizarOracoes = function() {
+        const container = document.getElementById('oracoes-container');
+        const termoBusca = (document.getElementById('input-busca-oracoes')?.value || '').toLowerCase().trim();
+        if (!container || !window.oracoesData) return;
+
+        container.innerHTML = '';
+
+        const oracoesFiltradas = window.oracoesData.filter(item => {
+            const idioma = window.idiomaOracaoAtual[item.id] || 'pt';
+            const info = item.idiomas[idioma] || item.idiomas['pt'];
+            const titulo = (info.titulo || '').toLowerCase();
+            const texto = (info.texto || '').toLowerCase();
+            return titulo.includes(termoBusca) || texto.includes(termoBusca);
+        });
+
+        if (oracoesFiltradas.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-slate-400 dark:text-zinc-500">
+                    <i class="fa-solid fa-hands-praying text-2xl mb-2"></i>
+                    <p class="text-xs font-medium">Nenhuma oração encontrada para sua busca.</p>
+                </div>`;
+            return;
+        }
+
+        oracoesFiltradas.forEach(item => {
+            const idiomaSalvo = window.idiomaOracaoAtual[item.id] || 'pt';
+            const infoIdioma = item.idiomas[idiomaSalvo] || item.idiomas['pt'];
+
+            let botoesIdiomaHtml = '';
+            Object.keys(item.idiomas).forEach(langKey => {
+                const ativo = langKey === idiomaSalvo;
+                botoesIdiomaHtml += `
+                    <button id="btn-${item.id}-${langKey}" 
+                        onclick="event.stopPropagation(); window.mudarIdiomaOracao('${item.id}', '${langKey}')" 
+                        class="px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
+                            ativo 
+                            ? 'bg-amber-600 text-white shadow-xs' 
+                            : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600'
+                        }">
+                        ${langKey}
+                    </button>
+                `;
+            });
+
+            const card = document.createElement('div');
+            card.className = "rounded-2xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-xs overflow-hidden transition-all hover:border-amber-500/30 mb-3";
+
+            card.innerHTML = `
+                <div onclick="window.toggleOracao('${item.id}')" class="p-4 flex items-center justify-between cursor-pointer select-none bg-slate-50/50 dark:bg-zinc-800/40 hover:bg-amber-50/40 dark:hover:bg-zinc-800/80 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-hands-praying text-amber-600 dark:text-amber-500 text-sm"></i>
+                        <h3 id="titulo-${item.id}" class="text-xs sm:text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">
+                            ${infoIdioma.titulo}
+                        </h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-1 text-[10px]">
+                            ${botoesIdiomaHtml}
+                        </div>
+                        <i id="icone-oracao-${item.id}" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
+                    </div>
+                </div>
+
+                <div id="corpo-oracao-${item.id}" class="hidden p-5 border-t border-slate-100 dark:border-zinc-800/60 bg-amber-50/20 dark:bg-zinc-900/60">
+                    <p id="texto-${item.id}" class="text-xs sm:text-sm text-slate-700 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-line text-justify italic font-serif">
+                        ${infoIdioma.texto}
+                    </p>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    };
+
+    window.mudarIdiomaOracao = function(id, idioma) {
+        window.idiomaOracaoAtual[id] = idioma;
+        const item = window.oracoesData?.find(o => o.id === id);
+        if (!item || !item.idiomas[idioma]) return;
+
+        const info = item.idiomas[idioma];
+        const elTitulo = document.getElementById(`titulo-${id}`);
+        const elTexto = document.getElementById(`texto-${id}`);
+
+        if (elTitulo) elTitulo.innerText = info.titulo;
+        if (elTexto) elTexto.innerText = info.texto;
+
+        Object.keys(item.idiomas).forEach(langKey => {
+            const btn = document.getElementById(`btn-${id}-${langKey}`);
+            if (btn) {
+                if (langKey === idioma) {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-amber-600 text-white shadow-xs";
+                } else {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600";
+                }
+            }
+        });
+    };
+
+    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyCwPeLrAtNEO41MZ3yxSuYib2LC0z2dv9U",
         authDomain: "tarcisius-d03d7.firebaseapp.com",
@@ -46,80 +670,154 @@
 
     const app = initializeApp(firebaseConfig); 
     const auth = getAuth(app); 
-    const db = getFirestore(app);
+    const db = initializeFirestore(app, { experimentalForceLongPolling: true });
+    const messaging = getMessaging(app);
+
+    const telaLoading = document.getElementById('tela-loading');
+    const nomeUsuarioHeader = document.getElementById('nome-usuario-header');
+    const funcaoUsuarioHeader = document.getElementById('funcao-usuario-header');
+    const cardEnqueteDisponibilidade = document.getElementById('card-enquete-disponibilidade');
+    const listaCelebracoesCheckboxes = document.getElementById('lista-celebracoes-checkboxes');
+    const formResponderEnquete = document.getElementById('form-responder-enquete');
+    const btnLogout = document.getElementById('btn-logout');
+    const buscaEscalaData = document.getElementById('busca-escala-data');
+    const resultadoEscalaGeral = document.getElementById('resultado-escala-geral');
+    const btnDarkMode = document.getElementById('btn-dark-mode');
+    const darkModeThumb = document.getElementById('dark-mode-thumb');
 
     let usuarioLogadoDados = null; 
     let todasEscalasCache = [];
+    let cacheLiturgiaDados = null; 
 
-    // Função global de atualização
-    window.votarPresencaItem = async function(idDocEscala, campoFuncao, novoStatus) {
-        if(!idDocEscala || !campoFuncao) return;
-        const refDoc = doc(db, "escalas", idDocEscala);
-        const dUp = {};
-        dUp[`${campoFuncao}.status`] = novoStatus;
-        try {
-            await updateDoc(refDoc, dUp);
-        } catch (error) {
-            console.error("Erro:", error);
-            alert("Erro ao atualizar status.");
-        }
-    };
-
-    window.assumirVagaEscala = async function(idDocEscala, campoFuncao, operacao) {
-        if(!idDocEscala || !campoFuncao) return;
-        const refDoc = doc(db, "escalas", idDocEscala);
-        const dUp = {};
-        dUp[`${campoFuncao}.status`] = "Confirmado";
-        if (operacao !== 'Voltar') dUp[`${campoFuncao}.nome`] = usuarioLogadoDados.nome;
-        
-        try {
-            await updateDoc(refDoc, dUp);
-            alert("Sucesso!");
-        } catch (error) {
-            alert("Erro ao processar.");
-        }
-    };
-
-    async function verificarFaltasAutomaticas(escalas) {
-        const agora = new Date();
-        const campos = ['altar1', 'altar2', 'altar3', 'altar4', 'altar5', 'altar6', 'turiferario', 'naveteiro'];
-        
-        for (const esc of escalas) {
-            const dataEscala = new Date(`${esc.data}T${esc.horario}:00`);
-            // Tolerância de 60 minutos após o horário
-            if (agora > new Date(dataEscala.getTime() + 60 * 60 * 1000)) {
-                for (const c of campos) {
-                    if (esc[c] && esc[c].status === 'Pendente') {
-                        const dUp = {};
-                        dUp[`${c}.status`] = "Falta";
-                        await updateDoc(doc(db, "escalas", esc.idDoc), dUp);
-                    }
-                }
+    function sincronizarVisualBotao(isDark) {
+        if (darkModeThumb) {
+            if (isDark) {
+                darkModeThumb.classList.remove('translate-x-0');
+                darkModeThumb.classList.add('translate-x-5');
+            } else {
+                darkModeThumb.classList.remove('translate-x-5');
+                darkModeThumb.classList.add('translate-x-0');
             }
+        }
+    }
+
+    const temaSalvo = localStorage.getItem('theme');
+    const prefereSistemaEscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (temaSalvo === 'dark' || (!temaSalvo && prefereSistemaEscuro)) {
+        document.documentElement.classList.add('dark');
+        sincronizarVisualBotao(true);
+    } else {
+        document.documentElement.classList.remove('dark');
+        sincronizarVisualBotao(false);
+    }
+
+    btnDarkMode?.addEventListener('click', () => {
+        const modificadoParaDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', modificadoParaDark ? 'dark' : 'light');
+        sincronizarVisualBotao(modificadoParaDark);
+    });
+
+    function hideLoading() { 
+        if(telaLoading) {
+            telaLoading.classList.add('opacity-0', 'pointer-events-none'); 
         }
     }
 
     onAuthStateChanged(auth, async (user) => {
-        if(user) {
-            const docSnap = await getDoc(doc(db, "usuarios", user.uid));
-            if(docSnap.exists()) { 
-                usuarioLogadoDados = docSnap.data(); 
-                inicializarPainel(); 
+        try {
+            const devSession = sessionStorage.getItem("dev_user");
+            if(devSession) { 
+                usuarioLogadoDados = JSON.parse(devSession); 
+                inicializarPainelAcolito(); 
+            } else if(user) {
+                const docSnap = await getDoc(doc(db, "usuarios", user.uid));
+                if(docSnap.exists()) { 
+                    usuarioLogadoDados = docSnap.data(); 
+                    inicializarPainelAcolito(); 
+                } else { 
+                    signOut(auth); 
+                    window.location.href = "index.html"; 
+                    return;
+                }
+            } else { 
+                window.location.href = "index.html"; 
+                return;
             }
+        } catch (error) {
+            console.error("Erro na autenticação:", error);
+        } fontally {
+            setTimeout(hideLoading, 500);
         }
     });
 
-    function inicializarPainel() {
+    function inicializarPainelAcolito() {
+        if(nomeUsuarioHeader) nomeUsuarioHeader.innerText = usuarioLogadoDados.nome;
+        if(funcaoUsuarioHeader) funcaoUsuarioHeader.innerText = usuarioLogadoDados.funcao;
+
+        if(buscaEscalaData && !buscaEscalaData.value) {
+            buscaEscalaData.value = new Date().toISOString().split('T')[0];
+        }
+
+        ouvirMuralAvisos();
+        ouvirTodasAsEscalas();
+        window.switchTab('escala');
+    }
+
+    if(btnLogout) {
+        btnLogout.addEventListener('click', () => { 
+            sessionStorage.removeItem("dev_user"); 
+            signOut(auth).then(() => window.location.href = "index.html"); 
+        });
+    }
+
+    function ouvirMuralAvisos() {
+        onSnapshot(doc(db, "mural", "aviso_geral"), (snap) => {
+            if(snap.exists()) {
+                document.getElementById('txt-aviso-mural').innerText = snap.data().texto || "";
+                document.getElementById('data-aviso-mural').innerText = snap.data().dataPublicacao || "--/--/----";
+            }
+        });
+    }
+
+    function ouvirTodasAsEscalas() {
         onSnapshot(collection(db, "escalas"), (snap) => {
             todasEscalasCache = [];
             snap.forEach(d => { 
-                const e = d.data(); 
-                e.idDoc = d.id; 
-                todasEscalasCache.push(e); 
+                const esc = d.data(); 
+                esc.idDoc = d.id; 
+                todasEscalasCache.push(esc); 
             });
-            verificarFaltasAutomaticas(todasEscalasCache);
+            renderizarEscalaGeralPorData();
         });
     }
-</script>
+
+    function renderizarEscalaGeralPorData() {
+        if(!resultadoEscalaGeral || !buscaEscalaData) return;
+        const dataAlvo = buscaEscalaData.value;
+        if(!dataAlvo) {
+            resultadoEscalaGeral.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic">Selecione uma data acima para consultar.</p>`;
+            return;
+        }
+
+        const escalasDoDia = todasEscalasCache.filter(e => e.data === dataAlvo);
+        if(escalasDoDia.length === 0) {
+            resultadoEscalaGeral.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic py-6 text-center bg-slate-50/50 dark:bg-zinc-800/10 rounded-2xl border border-dashed border-slate-200 dark:border-zinc-800">Nenhuma celebração ou escala publicada para este dia.</p>`;
+            return;
+        }
+
+        resultadoEscalaGeral.innerHTML = "";
+        escalasDoDia.forEach(esc => {
+            let listaMembrosHtml = "";
+            resultadoEscalaGeral.innerHTML += `
+                <div class="bg-slate-50/60 dark:bg-zinc-800/30 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800">
+                    <h4 class="font-black text-amber-700 dark:text-amber-500 uppercase tracking-wide text-xs mb-1">${esc.titulo || "Celebração"}</h4>
+                    <p class="text-slate-600 dark:text-zinc-300 font-medium text-xs">Horário: ${esc.horario || "--:--"}</p>
+                </div>
+            `;
+        });
+    }
+
+    buscaEscalaData?.addEventListener('change', renderizarEscalaGeralPorData);
+    </script>
 </body>
 </html>
