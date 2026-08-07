@@ -2,365 +2,531 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Classificação Litúrgica - Coroinhas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Desafio Litúrgico - Estilo Kahoot</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap');
+
     :root {
-      --primary: #2c3e50;
-      --accent: #d32f2f; /* Vermelho do topo dos cards */
-      --gold: #d4af37;
-      --bg: #eef2f5;
-      --card-bg: #ffffff;
-      --box-bg: #e0e6ed;
-      --box-border: #a0aec0;
-      --success: #2e7d32;
+      --bg: #46178f;       /* Roxo Kahoot */
+      --red: #e21b3c;      /* Vermelho vibrante */
+      --blue: #1368ce;     /* Azul vibrante */
+      --yellow: #ffa600;   /* Amarelo Ouro */
+      --green: #26890c;    /* Verde Vitória */
+      --white: #ffffff;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Fredoka', cursive, sans-serif;
       user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
       background-color: var(--bg);
-      color: var(--primary);
+      background-image: radial-gradient(circle at 20% 20%, #5c1fb9 0%, var(--bg) 70%);
+      color: var(--white);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       min-height: 100vh;
-      padding: 20px;
+      padding: 15px;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* Cabeçalho do Jogo */
+    header {
+      text-align: center;
+      margin-top: 5px;
     }
 
     h1 {
-      font-size: 1.6rem;
-      margin-bottom: 5px;
-      text-align: center;
+      font-size: 2.2rem;
+      color: var(--yellow);
+      text-shadow: 3px 3px 0px #000, -2px -2px 0px #000;
+      letter-spacing: 1px;
     }
 
-    p.subtitle {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 20px;
-      text-align: center;
+    .scoreboard {
+      display: flex;
+      gap: 15px;
+      margin-top: 8px;
+      justify-content: center;
     }
 
-    /* Área Central de Cartões */
-    .cards-container {
+    .badge {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    }
+
+    .badge span {
+      color: var(--yellow);
+      font-weight: bold;
+    }
+
+    /* Arena do Jogo */
+    .game-arena {
       position: relative;
       width: 100%;
-      max-width: 320px;
-      height: 140px;
-      margin-bottom: 30px;
+      max-width: 900px;
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Caixas de Destino (Estilo Botoes do Kahoot) */
+    .boxes-container {
+      display: flex;
+      width: 100%;
+      gap: 15px;
+      justify-content: space-between;
+    }
+
+    .drop-zone {
+      flex: 1;
+      height: 160px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 12px;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.3);
+      transition: transform 0.15s ease, filter 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .drop-zone.left {
+      background-color: var(--red);
+      border: 4px solid #ff5d75;
+    }
+
+    .drop-zone.right {
+      background-color: var(--blue);
+      border: 4px solid #4d9eff;
+    }
+
+    .drop-zone.drag-over {
+      transform: scale(1.04);
+      filter: brightness(1.2);
+    }
+
+    .drop-zone h2 {
+      font-size: 1.3rem;
+      text-shadow: 2px 2px 0 #000;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .drop-zone .icon {
+      font-size: 2rem;
+    }
+
+    /* Deck / Cartão Flutuante */
+    .deck-area {
+      position: relative;
+      width: 100%;
+      height: 180px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Estilo do Cartão (Igual à imagem) */
     .card {
       position: absolute;
-      width: 280px;
-      padding: 18px 15px 15px 15px;
-      background-color: var(--card-bg);
-      border-radius: 4px;
-      border-top: 5px solid var(--accent);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 290px;
+      min-height: 110px;
+      background: var(--white);
+      color: #222;
+      border-radius: 16px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #333;
+      font-size: 1.1rem;
+      font-weight: bold;
+      box-shadow: 0 10px 0 #bbb, 0 15px 25px rgba(0,0,0,0.4);
       cursor: grab;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      touch-action: none;
+      z-index: 10;
+      transition: transform 0.05s linear;
     }
 
     .card:active {
       cursor: grabbing;
     }
 
-    .card.selected {
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
-      border-color: var(--gold);
+    /* Animações */
+    @keyframes snapBack {
+      0% { transform: translate(var(--dx), var(--dy)); }
+      100% { transform: translate(0, 0); }
     }
 
-    /* Alça de arraste igual da imagem */
-    .card::after {
-      content: "===";
-      display: block;
-      margin-top: 10px;
-      font-size: 0.7rem;
-      color: #aaa;
-      letter-spacing: -1px;
+    .snap-anim {
+      animation: snapBack 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    /* Caixas de Destino */
-    .boxes-wrapper {
-      display: flex;
-      gap: 20px;
-      width: 100%;
-      max-width: 650px;
-      justify-content: center;
-      flex-wrap: wrap;
+    @keyframes popCorrect {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(0); opacity: 0; }
     }
 
-    .drop-box {
-      flex: 1;
-      min-width: 260px;
-      min-height: 180px;
-      background-color: var(--box-bg);
-      border: 2px dashed var(--box-border);
-      border-radius: 8px;
-      padding: 15px;
-      display: flex;
+    .pop-anim {
+      animation: popCorrect 0.4s ease forwards;
+    }
+
+    /* Modal de Vitória */
+    .win-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
       flex-direction: column;
       align-items: center;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
-
-    .drop-box.hovered {
-      background-color: #d0d7de;
-      border-color: var(--primary);
-    }
-
-    .drop-box h2 {
-      font-size: 1.1rem;
-      color: var(--primary);
-      margin-bottom: 12px;
-      pointer-events: none;
-      text-align: center;
-    }
-
-    .drop-box .placed-cards {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .placed-item {
-      background-color: #fff;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border-left: 4px solid var(--success);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      justify-content: center;
+      z-index: 100;
       animation: fadeIn 0.3s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Placar e Mensagens */
-    .status-bar {
-      margin-top: 20px;
-      font-weight: bold;
-      color: var(--primary);
-    }
-
-    .win-message {
-      display: none;
-      margin-top: 15px;
-      padding: 12px 20px;
-      background-color: var(--success);
-      color: white;
-      border-radius: 6px;
-      font-weight: bold;
+    .win-box {
+      background: var(--white);
+      color: #222;
+      padding: 30px;
+      border-radius: 24px;
       text-align: center;
+      max-width: 350px;
+      box-shadow: 0 12px 0 var(--yellow);
     }
 
-    .btn-reset {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: var(--primary);
-      color: #fff;
+    .win-box h2 {
+      color: var(--green);
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .win-box p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .btn-restart {
+      background: var(--green);
+      color: white;
       border: none;
-      border-radius: 5px;
-      font-weight: bold;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      border-radius: 50px;
       cursor: pointer;
+      box-shadow: 0 6px 0 #1b5e08;
+      transition: transform 0.1s;
     }
 
-    .btn-reset:hover {
-      opacity: 0.9;
+    .btn-restart:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #1b5e08;
+    }
+
+    canvas#confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 101;
     }
   </style>
 </head>
 <body>
 
-  <h1>Classificação Litúrgica</h1>
-  <p class="subtitle">Arraste (ou toque no cartão e depois na caixa) para classificar o momento da Missa:</p>
+  <header>
+    <h1>DESAFIO LITÚRGICO ⛪</h1>
+    <div class="scoreboard">
+      <div class="badge">Pontos: <span id="score">0</span></div>
+      <div class="badge">Combo: <span id="combo">x1</span> 🔥</div>
+      <div class="badge">Restantes: <span id="remaining">0</span></div>
+    </div>
+  </header>
 
-  <!-- Área de Cartões -->
-  <div class="cards-container" id="cards-container"></div>
+  <div class="game-arena">
+    <!-- Caixas Estilo Kahoot -->
+    <div class="boxes-container">
+      <div class="drop-zone left" id="zone-palavra" data-category="palavra">
+        <div class="icon">📖</div>
+        <h2>Liturgia da Palavra</h2>
+      </div>
 
-  <!-- Caixas de Destino -->
-  <div class="boxes-wrapper">
-    <div class="drop-box" data-category="palavra" id="box-palavra">
-      <h2>Liturgia da Palavra</h2>
-      <div class="placed-cards"></div>
+      <div class="drop-zone right" id="zone-eucharistia" data-category="eucharistia">
+        <div class="icon">🍷</div>
+        <h2>Liturgia Eucarística</h2>
+      </div>
     </div>
 
-    <div class="drop-box" data-category="eucharistia" id="box-eucharistia">
-      <h2>Liturgia Eucarística</h2>
-      <div class="placed-cards"></div>
+    <!-- Baralho de Cartas para Arrastar -->
+    <div class="deck-area" id="deck-area"></div>
+  </div>
+
+  <!-- Tela de Vitória -->
+  <div class="win-overlay" id="winOverlay">
+    <div class="win-box">
+      <h2>PARABÉNS! 🎉</h2>
+      <p>Você domina a Santa Missa!</p>
+      <p>Pontuação Final: <strong id="final-score" style="color:var(--blue);">0</strong></p>
+      <button class="btn-restart" onclick="initGame()">Jogar de Novo</button>
     </div>
   </div>
 
-  <div class="status-bar">
-    Restantes: <span id="remaining-count">0</span>
-  </div>
-
-  <div class="win-message" id="win-message">
-    Excelente! Você classificou corretamente todos os momentos da Santa Missa! ⛪🎉
-  </div>
-
-  <button class="btn-reset" onclick="initGame()">Reiniciar Jogo</button>
+  <canvas id="confetti"></canvas>
 
   <script>
-    // Banco de Cartões (Texto + Categoria Correta)
+    // Banco de Perguntas do Grupo
     const cardsData = [
       { text: "Proclamação do Santo Evangelho", category: "palavra" },
-      { text: "Apresentação das Ofertas (Ofertório)", category: "eucharistia" },
+      { text: "Ofertório e Apresentação do Pão e Vinho", category: "eucharistia" },
       { text: "Primeira e Segunda Leitura", category: "palavra" },
       { text: "Oração Eucarística e Consagração", category: "eucharistia" },
-      { text: "Cântico do Salmo Responsorial", category: "palavra" },
+      { text: "Salmo Responsorial", category: "palavra" },
       { text: "Rito da Comunhão", category: "eucharistia" },
-      { text: "Homilia do Padre", category: "palavra" },
-      { text: "Fração do Pão e Agnus Dei (Cordeiro)", category: "eucharistia" }
+      { text: "Homilia do Celebrante", category: "palavra" },
+      { text: "Cordeiro de Deus (Agnus Dei)", category: "eucharistia" }
     ];
 
-    let currentCards = [];
-    let selectedCardElement = null;
+    let cardsStack = [];
+    let score = 0;
+    let combo = 1;
+    let currentCardEl = null;
 
-    function initGame() {
-      const container = document.getElementById('cards-container');
-      container.innerHTML = '';
-      
-      document.querySelectorAll('.placed-cards').forEach(el => el.innerHTML = '');
-      document.getElementById('win-message').style.display = 'none';
+    // Efeitos Sonoros com Web Audio API (Sem dependências externas)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-      // Embaralha as perguntas
-      currentCards = [...cardsData].sort(() => Math.random() - 0.5);
-      updateRemainingCount();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
 
-      // Renderiza o cartão do topo
-      renderTopCard();
+      if (type === 'correct') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.2); // A5
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(130, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      }
     }
 
-    function renderTopCard() {
-      const container = document.getElementById('cards-container');
-      container.innerHTML = '';
+    function initGame() {
+      score = 0;
+      combo = 1;
+      cardsStack = [...cardsData].sort(() => Math.random() - 0.5);
+      
+      updateUI();
+      document.getElementById('winOverlay').style.display = 'none';
+      renderNextCard();
+    }
 
-      if (currentCards.length === 0) {
-        document.getElementById('win-message').style.display = 'block';
+    function updateUI() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('combo').textContent = `x${combo}`;
+      document.getElementById('remaining').textContent = cardsStack.length;
+    }
+
+    function renderNextCard() {
+      const deck = document.getElementById('deck-area');
+      deck.innerHTML = '';
+
+      if (cardsStack.length === 0) {
+        showWinScreen();
         return;
       }
 
-      // Pega o cartão do topo da pilha
-      const item = currentCards[currentCards.length - 1];
+      const item = cardsStack[cardsStack.length - 1];
       const card = document.createElement('div');
       card.classList.add('card');
-      card.setAttribute('draggable', 'true');
       card.textContent = item.text;
       card.dataset.category = item.category;
 
-      // Eventos Drag & Drop (Mouse)
-      card.addEventListener('dragstart', handleDragStart);
-      card.addEventListener('dragend', handleDragEnd);
+      makeCardDraggable(card);
+      deck.appendChild(card);
+      currentCardEl = card;
+    }
 
-      // Evento de Seleção por Toque (Celular)
-      card.addEventListener('click', () => {
-        if (selectedCardElement === card) {
-          card.classList.remove('selected');
-          selectedCardElement = null;
+    // --- LÓGICA DE ARRASTE ULTRA FLUIDO (Pointer Events) ---
+    function makeCardDraggable(card) {
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let currentX = 0, currentY = 0;
+
+      card.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        card.setPointerCapture(e.pointerId);
+        card.classList.remove('snap-anim');
+
+        startX = e.clientX - currentX;
+        startY = e.clientY - currentY;
+      });
+
+      card.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+
+        // Movimentação em tempo real 1:1
+        card.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${currentX * 0.05}deg)`;
+
+        // Checa hover visual nas caixas
+        checkHoverBox(card);
+      });
+
+      card.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        card.releasePointerCapture(e.pointerId);
+
+        // Verifica em qual caixa caiu
+        const targetBox = getDroppedBox(card);
+
+        if (targetBox) {
+          const isCorrect = targetBox.dataset.category === card.dataset.category;
+          
+          if (isCorrect) {
+            handleSuccess(card);
+          } else {
+            handleWrong(card, currentX, currentY);
+            currentX = 0; currentY = 0;
+          }
         } else {
-          if (selectedCardElement) selectedCardElement.classList.remove('selected');
-          card.classList.add('selected');
-          selectedCardElement = card;
+          // Soltou fora: Voltar para o centro com animação de mola
+          card.style.setProperty('--dx', `${currentX}px`);
+          card.style.setProperty('--dy', `${currentY}px`);
+          card.classList.add('snap-anim');
+          card.style.transform = `translate(0px, 0px) rotate(0deg)`;
+          currentX = 0; currentY = 0;
         }
-      });
 
-      container.appendChild(card);
+        clearHoverBoxes();
+      });
     }
 
-    function updateRemainingCount() {
-      document.getElementById('remaining-count').textContent = currentCards.length;
+    function checkHoverBox(card) {
+      const cardRect = card.getBoundingClientRect();
+      const boxes = document.querySelectorAll('.drop-zone');
+
+      boxes.forEach(box => {
+        const boxRect = box.getBoundingClientRect();
+        const overlap = !(cardRect.right < boxRect.left || 
+                          cardRect.left > boxRect.right || 
+                          cardRect.bottom < boxRect.top || 
+                          cardRect.top > boxRect.bottom);
+        
+        if (overlap) box.classList.add('drag-over');
+        else box.classList.remove('drag-over');
+      });
     }
 
-    // --- LÓGICA DE DRAG & DROP ---
-    let draggedCard = null;
-
-    function handleDragStart(e) {
-      draggedCard = this;
-      this.style.opacity = '0.5';
-      e.dataTransfer.setData('text/plain', this.dataset.category);
-    }
-
-    function handleDragEnd() {
-      this.style.opacity = '1';
-      draggedCard = null;
-    }
-
-    // Configura as caixas de destino
-    const boxes = document.querySelectorAll('.drop-box');
-
-    boxes.forEach(box => {
-      box.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        box.classList.add('hovered');
-      });
-
-      box.addEventListener('dragleave', () => {
-        box.classList.remove('hovered');
-      });
-
-      box.addEventListener('drop', (e) => {
-        e.preventDefault();
-        box.classList.remove('hovered');
-        const targetCategory = box.dataset.category;
-
-        if (draggedCard) {
-          processAnswer(draggedCard, targetCategory, box);
-        }
-      });
-
-      // Toque em Celular nas Caixas
-      box.addEventListener('click', () => {
-        if (selectedCardElement) {
-          const targetCategory = box.dataset.category;
-          processAnswer(selectedCardElement, targetCategory, box);
-          selectedCardElement = null;
-        }
-      });
-    });
-
-    function processAnswer(cardEl, targetCategory, boxEl) {
-      const correctCategory = cardEl.dataset.category;
-
-      if (correctCategory === targetCategory) {
-        // Resposta Correta
-        const placedContainer = boxEl.querySelector('.placed-cards');
-        const newItem = document.createElement('div');
-        newItem.classList.add('placed-item');
-        newItem.textContent = cardEl.textContent;
-        placedContainer.appendChild(newItem);
-
-        // Remove do baralho
-        currentCards.pop();
-        updateRemainingCount();
-        renderTopCard();
-      } else {
-        // Resposta Incorreta: Animação de erro (balanço)
-        cardEl.style.transform = 'translateX(10px)';
-        setTimeout(() => cardEl.style.transform = 'translateX(-10px)', 100);
-        setTimeout(() => cardEl.style.transform = 'translateX(0)', 200);
+    function getDroppedBox(card) {
+      const cardRect = card.getBoundingClientRect();
+      const boxes = document.querySelectorAll('.drop-zone');
+      
+      for (let box of boxes) {
+        const boxRect = box.getBoundingClientRect();
+        const overlap = !(cardRect.right < boxRect.left || 
+                          cardRect.left > boxRect.right || 
+                          cardRect.bottom < boxRect.top || 
+                          cardRect.top > boxRect.bottom);
+        if (overlap) return box;
       }
+      return null;
+    }
+
+    function clearHoverBoxes() {
+      document.querySelectorAll('.drop-zone').forEach(b => b.classList.remove('drag-over'));
+    }
+
+    function handleSuccess(card) {
+      playSound('correct');
+      score += 100 * combo;
+      combo += 1;
+      
+      card.classList.add('pop-anim');
+      cardsStack.pop();
+      updateUI();
+
+      setTimeout(() => {
+        renderNextCard();
+      }, 350);
+    }
+
+    function handleWrong(card, x, y) {
+      playSound('wrong');
+      combo = 1; // Reseta combo
+      updateUI();
+
+      // Animação de mola retornando ao centro
+      card.style.setProperty('--dx', `${x}px`);
+      card.style.setProperty('--dy', `${y}px`);
+      card.classList.add('snap-anim');
+      card.style.transform = `translate(0px, 0px) rotate(0deg)`;
+    }
+
+    // --- TELA DE VITÓRIA & CONFETES ---
+    function showWinScreen() {
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('winOverlay').style.display = 'flex';
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = Array.from({ length: 80 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        color: ['#e21b3c', '#1368ce', '#ffa600', '#26890c'][Math.floor(Math.random() * 4)],
+        size: Math.random() * 10 + 5,
+        vy: Math.random() * 5 + 3,
+        vx: Math.random() * 2 - 1
+      }));
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.y += p.vy;
+          p.x += p.vx;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+
+        if (particles.some(p => p.y < canvas.height)) {
+          requestAnimationFrame(render);
+        }
+      }
+      render();
     }
 
     initGame();
