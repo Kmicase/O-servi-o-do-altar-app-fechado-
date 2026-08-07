@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classificação Litúrgica - Coroinhas</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #d32f2f; /* Vermelho do topo dos cards */
+      --gold: #d4af37;
+      --bg: #eef2f5;
+      --card-bg: #ffffff;
+      --box-bg: #e0e6ed;
+      --box-border: #a0aec0;
+      --success: #2e7d32;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    p.subtitle {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Área Central de Cartões */
+    .cards-container {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 140px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Estilo do Cartão (Igual à imagem) */
+    .card {
+      position: absolute;
+      width: 280px;
+      padding: 18px 15px 15px 15px;
+      background-color: var(--card-bg);
+      border-radius: 4px;
+      border-top: 5px solid var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #333;
+      cursor: grab;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:active {
+      cursor: grabbing;
+    }
+
+    .card.selected {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+      border-color: var(--gold);
+    }
+
+    /* Alça de arraste igual da imagem */
+    .card::after {
+      content: "===";
+      display: block;
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: #aaa;
+      letter-spacing: -1px;
+    }
+
+    /* Caixas de Destino */
+    .boxes-wrapper {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      max-width: 650px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .drop-box {
+      flex: 1;
+      min-width: 260px;
+      min-height: 180px;
+      background-color: var(--box-bg);
+      border: 2px dashed var(--box-border);
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .drop-box.hovered {
+      background-color: #d0d7de;
+      border-color: var(--primary);
+    }
+
+    .drop-box h2 {
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .drop-box .placed-cards {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .placed-item {
+      background-color: #fff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-left: 4px solid var(--success);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Placar e Mensagens */
+    .status-bar {
+      margin-top: 20px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .win-message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px 20px;
+      background-color: var(--success);
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .btn-reset {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Classificação Litúrgica</h1>
+  <p class="subtitle">Arraste (ou toque no cartão e depois na caixa) para classificar o momento da Missa:</p>
+
+  <!-- Área de Cartões -->
+  <div class="cards-container" id="cards-container"></div>
+
+  <!-- Caixas de Destino -->
+  <div class="boxes-wrapper">
+    <div class="drop-box" data-category="palavra" id="box-palavra">
+      <h2>Liturgia da Palavra</h2>
+      <div class="placed-cards"></div>
+    </div>
+
+    <div class="drop-box" data-category="eucharistia" id="box-eucharistia">
+      <h2>Liturgia Eucarística</h2>
+      <div class="placed-cards"></div>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    Restantes: <span id="remaining-count">0</span>
+  </div>
+
+  <div class="win-message" id="win-message">
+    Excelente! Você classificou corretamente todos os momentos da Santa Missa! ⛪🎉
+  </div>
+
+  <button class="btn-reset" onclick="initGame()">Reiniciar Jogo</button>
+
+  <script>
+    // Banco de Cartões (Texto + Categoria Correta)
+    const cardsData = [
+      { text: "Proclamação do Santo Evangelho", category: "palavra" },
+      { text: "Apresentação das Ofertas (Ofertório)", category: "eucharistia" },
+      { text: "Primeira e Segunda Leitura", category: "palavra" },
+      { text: "Oração Eucarística e Consagração", category: "eucharistia" },
+      { text: "Cântico do Salmo Responsorial", category: "palavra" },
+      { text: "Rito da Comunhão", category: "eucharistia" },
+      { text: "Homilia do Padre", category: "palavra" },
+      { text: "Fração do Pão e Agnus Dei (Cordeiro)", category: "eucharistia" }
+    ];
+
+    let currentCards = [];
+    let selectedCardElement = null;
+
+    function initGame() {
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+      
+      document.querySelectorAll('.placed-cards').forEach(el => el.innerHTML = '');
+      document.getElementById('win-message').style.display = 'none';
+
+      // Embaralha as perguntas
+      currentCards = [...cardsData].sort(() => Math.random() - 0.5);
+      updateRemainingCount();
+
+      // Renderiza o cartão do topo
+      renderTopCard();
+    }
+
+    function renderTopCard() {
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+
+      if (currentCards.length === 0) {
+        document.getElementById('win-message').style.display = 'block';
+        return;
+      }
+
+      // Pega o cartão do topo da pilha
+      const item = currentCards[currentCards.length - 1];
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.setAttribute('draggable', 'true');
+      card.textContent = item.text;
+      card.dataset.category = item.category;
+
+      // Eventos Drag & Drop (Mouse)
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+
+      // Evento de Seleção por Toque (Celular)
+      card.addEventListener('click', () => {
+        if (selectedCardElement === card) {
+          card.classList.remove('selected');
+          selectedCardElement = null;
+        } else {
+          if (selectedCardElement) selectedCardElement.classList.remove('selected');
+          card.classList.add('selected');
+          selectedCardElement = card;
+        }
+      });
+
+      container.appendChild(card);
+    }
+
+    function updateRemainingCount() {
+      document.getElementById('remaining-count').textContent = currentCards.length;
+    }
+
+    // --- LÓGICA DE DRAG & DROP ---
+    let draggedCard = null;
+
+    function handleDragStart(e) {
+      draggedCard = this;
+      this.style.opacity = '0.5';
+      e.dataTransfer.setData('text/plain', this.dataset.category);
+    }
+
+    function handleDragEnd() {
+      this.style.opacity = '1';
+      draggedCard = null;
+    }
+
+    // Configura as caixas de destino
+    const boxes = document.querySelectorAll('.drop-box');
+
+    boxes.forEach(box => {
+      box.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        box.classList.add('hovered');
+      });
+
+      box.addEventListener('dragleave', () => {
+        box.classList.remove('hovered');
+      });
+
+      box.addEventListener('drop', (e) => {
+        e.preventDefault();
+        box.classList.remove('hovered');
+        const targetCategory = box.dataset.category;
+
+        if (draggedCard) {
+          processAnswer(draggedCard, targetCategory, box);
+        }
+      });
+
+      // Toque em Celular nas Caixas
+      box.addEventListener('click', () => {
+        if (selectedCardElement) {
+          const targetCategory = box.dataset.category;
+          processAnswer(selectedCardElement, targetCategory, box);
+          selectedCardElement = null;
+        }
+      });
+    });
+
+    function processAnswer(cardEl, targetCategory, boxEl) {
+      const correctCategory = cardEl.dataset.category;
+
+      if (correctCategory === targetCategory) {
+        // Resposta Correta
+        const placedContainer = boxEl.querySelector('.placed-cards');
+        const newItem = document.createElement('div');
+        newItem.classList.add('placed-item');
+        newItem.textContent = cardEl.textContent;
+        placedContainer.appendChild(newItem);
+
+        // Remove do baralho
+        currentCards.pop();
+        updateRemainingCount();
+        renderTopCard();
+      } else {
+        // Resposta Incorreta: Animação de erro (balanço)
+        cardEl.style.transform = 'translateX(10px)';
+        setTimeout(() => cardEl.style.transform = 'translateX(-10px)', 100);
+        setTimeout(() => cardEl.style.transform = 'translateX(0)', 200);
+      }
+    }
+
+    initGame();
+  </script>
+</body>
+</html>
