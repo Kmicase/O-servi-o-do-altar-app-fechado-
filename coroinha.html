@@ -303,7 +303,22 @@
     // -------------------------------------------------------------
     // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO (DECLARADAS PRIMEIRO)
     // -------------------------------------------------------------
+    // -------------------------------------------------------------
+// CONTROLE DO MENU LATERAL (SIDEBAR MOBILE)
+// -------------------------------------------------------------
+window.toggleSidebar = function() {
+    const sidebar = document.getElementById('sidebar-menu');
+    const overlay = document.getElementById('sidebar-overlay');
     
+    if (sidebar && overlay) {
+        // Alterna a classe que esconde/mostra a barra lateral no mobile
+        sidebar.classList.toggle('-translate-x-full');
+        sidebar.classList.toggle('translate-x-0');
+        
+        // Alterna o fundo escuro (overlay)
+        overlay.classList.toggle('hidden');
+    }
+};
     // Navegação por Abas Gerais (Mobile e Desktop)
     window.switchTab = function(tabName) {
         const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes'];
