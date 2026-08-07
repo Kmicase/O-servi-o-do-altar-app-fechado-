@@ -265,9 +265,9 @@
       <div class="diff-selector">
         <div class="diff-label">VELOCIDADE</div>
         <div class="diff-buttons">
-          <button class="btn-diff active" onclick="setDifficulty('easy', this)">FÁCIL</button>
+          <button class="btn-diff active" onclick="setDifficulty('easy', this)">LENTO</button>
           <button class="btn-diff" onclick="setDifficulty('medium', this)">MÉDIO</button>
-          <button class="btn-diff" onclick="setDifficulty('hard', this)">HARD</button>
+          <button class="btn-diff" onclick="setDifficulty('hard', this)">RÁPIDO</button>
           <button class="btn-diff" onclick="setDifficulty('insane', this)">INSANO</button>
         </div>
       </div>
@@ -280,12 +280,11 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    const gridSize = 20; // Blocos levemente maiores para detalhar os gatos
+    const gridSize = 20;
     const tileCount = canvas.width / gridSize;
 
-    // Cores para variarmos as raças/cores dos gatinhos na caravana
     const catColors = [
-      '#ff9900', // Laranja (Laranjinha)
+      '#ff9900', // Laranja
       '#333333', // Preto/Cinza
       '#ffffff', // Branco
       '#ff007f', // Rosa Neon
@@ -293,7 +292,7 @@
       '#00f3ff'  // Ciano
     ];
 
-    let cats = []; // Array onde cada item é um gatinho da fila
+    let cats = [];
     let food = { x: 0, y: 0 };
     let dx = gridSize;
     let dy = 0;
@@ -303,12 +302,12 @@
     let highScore = localStorage.getItem('cat_highscore') || 1;
     let gameLoop = null;
 
-    // Dificuldades (Velocidade em ms)
+    // Novas Velocidades Reduzidas (Maior intervalo em ms = Mais lento)
     const difficulties = {
-      easy: 160,
-      medium: 110,
-      hard: 75,
-      insane: 45
+      easy: 260,    // Muito mais lento e tranquilo
+      medium: 180,  // Ritmo moderado
+      hard: 120,    // Agilizado
+      insane: 75    // Rápido
     };
     let baseSpeed = difficulties.easy;
 
@@ -320,7 +319,6 @@
       btn.classList.add('active');
     }
 
-    // Efeitos Sonoros
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
@@ -332,7 +330,6 @@
       gain.connect(audioCtx.destination);
 
       if (type === 'meow') {
-        // Miau agudo e rápido
         osc.type = 'sine';
         osc.frequency.setValueAtTime(600, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
@@ -353,7 +350,6 @@
     function startGame() {
       document.getElementById('gameModal').style.display = 'none';
       
-      // Começa com 1 gatinho líder
       cats = [
         { x: 9 * gridSize, y: 9 * gridSize, color: catColors[0] }
       ];
@@ -392,13 +388,11 @@
         color: cats[0].color 
       };
 
-      // Colisão com as Paredes
       if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
         gameOver();
         return;
       }
 
-      // Colisão com os outros Gatinhos da Fila
       for (let i = 0; i < cats.length; i++) {
         if (head.x === cats[i].x && head.y === cats[i].y) {
           gameOver();
@@ -408,7 +402,6 @@
 
       cats.unshift(head);
 
-      // Pegou o Peixinho?
       if (head.x === food.x && head.y === food.y) {
         playSound('meow');
         score += 1;
@@ -420,23 +413,20 @@
           document.getElementById('highscore').textContent = highScore;
         }
 
-        // Atribui uma cor diferente para cada novo gatinho que entra na caravana
         const newCatColor = catColors[(cats.length) % catColors.length];
         cats[cats.length - 1].color = newCatColor;
 
         spawnFood();
       } else {
-        cats.pop(); // Mantém o tamanho se não comeu
+        cats.pop();
       }
 
       draw();
     }
 
-    // Função para Desenhar um Gatinho Completo no Gridded Canvas
     function drawCat(x, y, color, isLeader, catDx, catDy) {
       const radius = 5;
 
-      // Corpo/Cabeça do Gatinho
       ctx.fillStyle = color;
       ctx.shadowColor = color;
       ctx.shadowBlur = isLeader ? 10 : 4;
@@ -445,28 +435,25 @@
       ctx.roundRect(x + 1, y + 1, gridSize - 2, gridSize - 2, radius);
       ctx.fill();
 
-      // Orelhas de Gato (Triângulos no topo)
+      // Orelhas
       ctx.beginPath();
-      // Orelha Esquerda
       ctx.moveTo(x + 2, y + 4);
       ctx.lineTo(x + 6, y - 3);
       ctx.lineTo(x + 8, y + 4);
-      // Orelha Direita
+
       ctx.moveTo(x + gridSize - 8, y + 4);
       ctx.lineTo(x + gridSize - 6, y - 3);
       ctx.lineTo(x + gridSize - 2, y + 4);
       ctx.fill();
 
-      // Rosto do Gatinho (Olhos, Focinho e Bigodes)
       ctx.shadowBlur = 0;
       
       // Olhos
-      ctx.fillStyle = (color === '#333333') ? '#ffe600' : '#000000'; // Olho amarelo se o gato for preto
+      ctx.fillStyle = (color === '#333333') ? '#ffe600' : '#000000';
       
       let e1X = x + 5, e1Y = y + 7;
       let e2X = x + 13, e2Y = y + 7;
 
-      // Ajusta olhar baseado na direção se for o líder
       if (isLeader) {
         if (catDx > 0) { e1X += 2; e2X += 2; }
         else if (catDx < 0) { e1X -= 2; e2X -= 2; }
@@ -479,37 +466,32 @@
       ctx.arc(e2X, e2Y, 1.8, 0, Math.PI * 2);
       ctx.fill();
 
-      // Focinho Rosa
+      // Focinho
       ctx.fillStyle = '#ff007f';
       ctx.beginPath();
       ctx.arc(x + 9.5, y + 11, 1.2, 0, Math.PI * 2);
       ctx.fill();
 
-      // Bigodinhos do Gatinho
+      // Bigodes
       ctx.strokeStyle = (color === '#333333' || color === '#ff007f') ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)';
       ctx.lineWidth = 1;
 
-      // Lado Esquerdo
       ctx.beginPath(); ctx.moveTo(x + 1, y + 10); ctx.lineTo(x + 5, y + 11); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(x + 1, y + 13); ctx.lineTo(x + 5, y + 12); ctx.stroke();
 
-      // Lado Direito
       ctx.beginPath(); ctx.moveTo(x + gridSize - 1, y + 10); ctx.lineTo(x + gridSize - 5, y + 11); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(x + gridSize - 1, y + 13); ctx.lineTo(x + gridSize - 5, y + 12); ctx.stroke();
     }
 
-    // Desenha o Peixinho (Comida)
     function drawFish(x, y) {
       ctx.fillStyle = '#00f3ff';
       ctx.shadowColor = '#00f3ff';
       ctx.shadowBlur = 12;
 
-      // Corpo do peixe
       ctx.beginPath();
       ctx.ellipse(x + 9, y + 10, 6, 4, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Rabo do peixe
       ctx.beginPath();
       ctx.moveTo(x + 14, y + 10);
       ctx.lineTo(x + 18, y + 6);
@@ -517,7 +499,6 @@
       ctx.closePath();
       ctx.fill();
 
-      // Olho do peixe
       ctx.fillStyle = '#000';
       ctx.shadowBlur = 0;
       ctx.beginPath();
@@ -526,21 +507,17 @@
     }
 
     function draw() {
-      // Fundo Escuro
       ctx.fillStyle = '#0d0614';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Grade sutil ao fundo
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
       for (let i = 0; i < canvas.width; i += gridSize) {
         ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
       }
 
-      // Desenha a Comida (Peixe)
       drawFish(food.x, food.y);
 
-      // Desenha Todos os Gatinhos da Fila
       cats.forEach((cat, index) => {
         const isLeader = (index === 0);
         drawCat(cat.x, cat.y, cat.color, isLeader, dx, dy);
@@ -556,7 +533,6 @@
       if (dir === 'RIGHT' && dx === 0) { nextDx = gridSize; nextDy = 0; }
     }
 
-    // Teclado
     window.addEventListener('keydown', e => {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') changeDir('UP');
       if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') changeDir('DOWN');
@@ -564,7 +540,6 @@
       if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') changeDir('RIGHT');
     });
 
-    // Gesture Swipe Touch
     let touchStartX = 0;
     let touchStartY = 0;
 
