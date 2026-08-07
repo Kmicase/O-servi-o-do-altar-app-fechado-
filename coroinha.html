@@ -321,28 +321,37 @@ window.toggleSidebar = function() {
 };
     // Navegação por Abas Gerais (Mobile e Desktop)
     window.switchTab = function(tabName) {
-        const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes'];
+    const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes', 'jogos'];
+    
+    tabs.forEach(tab => {
+        const tabBtn = document.getElementById(`tab-${tab}`);
+        const content = document.getElementById(`conteudo-${tab}`);
         
-        tabs.forEach(tab => {
-            const tabBtn = document.getElementById(`tab-${tab}`);
-            const content = document.getElementById(`conteudo-${tab}`);
-            
-            if (tabBtn) {
-                if (tab === tabName) tabBtn.classList.add('active-tab');
-                else tabBtn.classList.remove('active-tab');
+        if (tabBtn) {
+            if (tab === tabName) tabBtn.classList.add('active-tab');
+            else tabBtn.classList.remove('active-tab');
+        }
+        
+        if (content) {
+            if (tab === tabName) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.add('hidden');
             }
-            
-            if (content) {
-                if (tab === tabName) {
-                    content.classList.remove('hidden');
-                    if (window.innerWidth < 768 && tab !== 'escala') {
-                        content.classList.remove('hidden', 'md:block');
-                    }
-                } else {
-                    content.classList.add('hidden');
-                }
-            }
-        });
+        }
+    });
+
+    if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
+        window.carregarOracoes();
+    }
+
+    // FECHA O MENU LATERAL NO MOBILE AO CLICAR EM QUALQUER ABA
+    const sidebar = document.getElementById('sidebar-menu');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
+        window.toggleSidebar();
+    }
+};
 
         // Se for para a aba de orações, carrega se ainda não foi carregado
         if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
