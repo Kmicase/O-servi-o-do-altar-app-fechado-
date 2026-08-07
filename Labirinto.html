@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Caminho do Altar - Animado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Caminho do Altar - Ultra Fluido</title>
   <style>
     :root {
-      --primary: #2c3e50;
+      --primary: #1a252f;
       --accent: #d4af37;
-      --bg: #1a252f;
-      --panel: #2c3e50;
+      --bg: #0f171e;
     }
 
     * {
@@ -17,6 +16,8 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
@@ -27,34 +28,34 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 15px;
+      padding: 10px;
+      touch-action: none; /* Previne rolagem de tela no celular */
     }
 
     h1 {
       color: var(--accent);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       text-align: center;
-      font-size: 1.8rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      font-size: 1.6rem;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
     }
 
     .level-selector {
       display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .btn-level {
-      padding: 8px 16px;
+      padding: 6px 14px;
       border: 2px solid var(--accent);
-      background-color: transparent;
+      background: transparent;
       color: #fff;
       border-radius: 20px;
       font-weight: bold;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     .btn-level.active, .btn-level:hover {
@@ -63,99 +64,60 @@
     }
 
     .instructions {
-      font-size: 0.95rem;
-      color: #ecf0f1;
-      margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: #bdc3c7;
+      margin-bottom: 10px;
       text-align: center;
-      font-weight: 500;
     }
 
-    /* Tela de Jogo Canvas */
-    #canvas-container {
+    #game-container {
       position: relative;
-      border: 4px solid var(--accent);
+      border: 3px solid var(--accent);
       border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
       overflow: hidden;
-      background-color: #000;
+      background-color: #050b10;
     }
 
     canvas {
       display: block;
     }
 
-    /* Mensagem de Vitória */
+    /* Modal de Vitória */
     .win-overlay {
       display: none;
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(15, 23, 30, 0.92);
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #fff;
       text-align: center;
       padding: 20px;
-      animation: fadeIn 0.5s ease;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .win-overlay h2 {
       color: var(--accent);
       font-size: 1.8rem;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-
-    /* Controles virtuais (Celular) */
-    .mobile-controls {
-      display: grid;
-      grid-template-columns: repeat(3, 55px);
-      grid-template-rows: repeat(3, 55px);
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .btn-dir {
-      background: var(--panel);
-      color: var(--accent);
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      font-size: 1.3rem;
-      font-weight: bold;
-      cursor: pointer;
-      user-select: none;
-      touch-action: manipulation;
-    }
-
-    .btn-dir:active {
-      background: var(--accent);
-      color: var(--primary);
-    }
-
-    #btn-up { grid-column: 2; grid-row: 1; }
-    #btn-left { grid-column: 1; grid-row: 2; }
-    #btn-right { grid-column: 3; grid-row: 2; }
-    #btn-down { grid-column: 2; grid-row: 3; }
 
     .btn-reset {
       margin-top: 15px;
-      padding: 10px 24px;
+      padding: 10px 22px;
       background-color: var(--accent);
       color: var(--primary);
       border: none;
-      border-radius: 25px;
-      font-size: 1rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .btn-reset:hover {
-      transform: scale(1.05);
     }
   </style>
 </head>
@@ -170,31 +132,24 @@
   </div>
 
   <div class="instructions" id="instructions">
-    Use as **setas do teclado** para guiar o coroinha 🚶‍♂️ até a vela 🕯️ e depois ao Altar ⛪!
+    Use as <b>Teclas de Seta / WASD</b> ou <b>Arraste na tela (Joystick)</b> para andar!
   </div>
 
-  <div id="canvas-container">
+  <div id="game-container">
     <canvas id="gameCanvas" width="384" height="384"></canvas>
+    
     <div class="win-overlay" id="winOverlay">
       <h2>Missa Pronta! 🎉</h2>
-      <p>Você acendeu a vela e chegou ao Altar a tempo!</p>
+      <p>Você acendeu as velas e chegou ao Altar a tempo!</p>
       <button class="btn-reset" onclick="initGame()">Jogar Novamente</button>
     </div>
-  </div>
-
-  <!-- Controles Celular -->
-  <div class="mobile-controls">
-    <button class="btn-dir" id="btn-up">▲</button>
-    <button class="btn-dir" id="btn-left">◀</button>
-    <button class="btn-dir" id="btn-right">▶</button>
-    <button class="btn-dir" id="btn-down">▼</button>
   </div>
 
   <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Configuração dos Níveis (Matriz do Labirinto)
+    // Níveis do Labirinto
     const levels = {
       easy: {
         cols: 6, rows: 6, tileSize: 64,
@@ -206,8 +161,7 @@
           [1,0,1,0,0,0],
           [1,1,1,1,1,0]
         ],
-        item: {x: 3, y: 1},
-        goal: {x: 5, y: 5}
+        item: {x: 3, y: 1}, goal: {x: 5, y: 5}
       },
       medium: {
         cols: 8, rows: 8, tileSize: 48,
@@ -221,8 +175,7 @@
           [1,0,0,0,0,1,0,0],
           [1,1,1,1,1,1,1,0]
         ],
-        item: {x: 4, y: 1},
-        goal: {x: 7, y: 7}
+        item: {x: 4, y: 1}, goal: {x: 7, y: 7}
       },
       hard: {
         cols: 10, rows: 10, tileSize: 38,
@@ -238,29 +191,40 @@
           [1,1,1,1,0,1,1,1,0,0],
           [1,1,1,1,1,1,1,1,1,0]
         ],
-        item: {x: 8, y: 1},
-        goal: {x: 9, y: 9}
+        item: {x: 8, y: 1}, goal: {x: 9, y: 9}
       }
     };
 
     let currentLevelKey = 'easy';
     let currentLevel = levels.easy;
-    
-    // Jogador com Física Suave
+
+    // Física e Vetores do Jogador
     let player = {
       x: 0, y: 0,
+      vx: 0, vy: 0,
       radius: 12,
-      speed: 3,
-      vx: 0, vy: 0
+      maxSpeed: 220, // pixels por segundo
+      accel: 1800,   // taxa de aceleração
+      friction: 0.82 // desaceleração/atrito suave
     };
 
-    let keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+    // Histórico para efeito de rastro (Trail Effect)
+    let trail = [];
+
+    // Estado dos Controles
+    let input = { x: 0, y: 0 };
+    let keys = {};
+    
+    // Joystick Virtual (Touch)
+    let joystick = { active: false, startX: 0, startY: 0, currX: 0, currY: 0 };
+
     let hasItem = false;
     let gameWon = false;
-    let pulseAnim = 0; // Para efeito visual de brilho
+    let lastTime = performance.now();
+    let animTimer = 0;
 
-    function changeLevel(levelKey) {
-      currentLevelKey = levelKey;
+    function changeLevel(key) {
+      currentLevelKey = key;
       document.querySelectorAll('.btn-level').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
       initGame();
@@ -268,97 +232,154 @@
 
     function initGame() {
       currentLevel = levels[currentLevelKey];
-      hasItem = false;
-      gameWon = false;
-
-      // Centraliza e posiciona jogador na posição inicial (0,0)
       const ts = currentLevel.tileSize;
+      
       player.x = ts / 2;
       player.y = ts / 2;
-      player.radius = ts * 0.3;
-      player.speed = ts / 12; // Velocidade proporcional ao mapa
+      player.vx = 0;
+      player.vy = 0;
+      player.radius = ts * 0.28;
+
+      trail = [];
+      hasItem = false;
+      gameWon = false;
 
       document.getElementById('winOverlay').style.display = 'none';
       document.getElementById('instructions').innerHTML = 'Guie o coroinha 🚶‍♂️ até a vela 🕯️ e depois ao Altar ⛪!';
     }
 
-    // Controle de Teclas
-    window.addEventListener('keydown', e => { if (keys.hasOwnProperty(e.key)) keys[e.key] = true; });
-    window.addEventListener('keyup', e => { if (keys.hasOwnProperty(e.key)) keys[e.key] = false; });
+    // --- ENTRADA DE DADOS (Teclado e Touch Joystick) ---
+    window.addEventListener('keydown', e => { keys[e.key] = true; updateKeyboardInput(); });
+    window.addEventListener('keyup', e => { keys[e.key] = false; updateKeyboardInput(); });
 
-    // Suporte aos botões do celular (Toque Contínuo)
-    const bindTouch = (id, key) => {
-      const btn = document.getElementById(id);
-      const start = (e) => { e.preventDefault(); keys[key] = true; };
-      const end = (e) => { e.preventDefault(); keys[key] = false; };
-      btn.addEventListener('mousedown', start);
-      btn.addEventListener('mouseup', end);
-      btn.addEventListener('touchstart', start);
-      btn.addEventListener('touchend', end);
-    };
+    function updateKeyboardInput() {
+      if (joystick.active) return;
+      input.x = 0;
+      input.y = 0;
 
-    bindTouch('btn-up', 'ArrowUp');
-    bindTouch('btn-down', 'ArrowDown');
-    bindTouch('btn-left', 'ArrowLeft');
-    bindTouch('btn-right', 'ArrowRight');
+      if (keys['ArrowLeft'] || keys['a'] || keys['A']) input.x -= 1;
+      if (keys['ArrowRight'] || keys['d'] || keys['D']) input.x += 1;
+      if (keys['ArrowUp'] || keys['w'] || keys['W']) input.y -= 1;
+      if (keys['ArrowDown'] || keys['s'] || keys['S']) input.y += 1;
 
-    // Checagem de Colisão com Paredes
+      // Normaliza vetor diagonal
+      if (input.x !== 0 && input.y !== 0) {
+        input.x *= 0.7071;
+        input.y *= 0.7071;
+      }
+    }
+
+    // Controls de Touch / Joystick dinâmico
+    canvas.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      joystick.active = true;
+      joystick.startX = touch.clientX - rect.left;
+      joystick.startY = touch.clientY - rect.top;
+      joystick.currX = joystick.startX;
+      joystick.currY = joystick.startY;
+    });
+
+    canvas.addEventListener('touchmove', e => {
+      if (!joystick.active) return;
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      joystick.currX = touch.clientX - rect.left;
+      joystick.currY = touch.clientY - rect.top;
+
+      let dx = joystick.currX - joystick.startX;
+      let dy = joystick.currY - joystick.startY;
+      let dist = Math.hypot(dx, dy);
+      let maxRadius = 40;
+
+      if (dist === 0) { input.x = 0; input.y = 0; }
+      else {
+        input.x = (dx / dist) * Math.min(dist / maxRadius, 1);
+        input.y = (dy / dist) * Math.min(dist / maxRadius, 1);
+      }
+    });
+
+    window.addEventListener('touchend', () => {
+      joystick.active = false;
+      input.x = 0;
+      input.y = 0;
+    });
+
+    // --- COLISÕES E FÍSICA ---
     function isWall(x, y) {
       const col = Math.floor(x / currentLevel.tileSize);
       const row = Math.floor(y / currentLevel.tileSize);
-      
       if (col < 0 || col >= currentLevel.cols || row < 0 || row >= currentLevel.rows) return true;
       return currentLevel.grid[row][col] === 1;
     }
 
-    function checkCircleWallCollision(newX, newY) {
+    function checkWallCollision(px, py) {
       const r = player.radius;
-      // Testa os 4 pontos cardeais do círculo do personagem
-      return isWall(newX - r, newY) || isWall(newX + r, newY) || 
-             isWall(newX, newY - r) || isWall(newX, newY + r);
+      return isWall(px - r, py) || isWall(px + r, py) || 
+             isWall(px, py - r) || isWall(px, py + r);
     }
 
-    // Loop Principal de Atualização (60 FPS)
-    function update() {
+    // Loop de Atualização Baseado em Tempo Real (Delta Time)
+    function update(dt) {
       if (gameWon) return;
 
-      pulseAnim += 0.05;
+      animTimer += dt;
 
-      let dx = 0;
-      let dy = 0;
+      // 1. Aceleração Suave
+      player.vx += input.x * player.accel * dt;
+      player.vy += input.y * player.accel * dt;
 
-      if (keys.ArrowUp) dy -= player.speed;
-      if (keys.ArrowDown) dy += player.speed;
-      if (keys.ArrowLeft) dx -= player.speed;
-      if (keys.ArrowRight) dx += player.speed;
+      // 2. Atrito / Desaceleração
+      player.vx *= Math.pow(player.friction, dt * 60);
+      player.vy *= Math.pow(player.friction, dt * 60);
 
-      // Movimento Eixo X
-      if (dx !== 0 && !checkCircleWallCollision(player.x + dx, player.y)) {
-        player.x += dx;
-      }
-      // Movimento Eixo Y
-      if (dy !== 0 && !checkCircleWallCollision(player.x, player.y + dy)) {
-        player.y += dy;
+      // Limita Velocidade Máxima
+      let currentSpeed = Math.hypot(player.vx, player.vy);
+      if (currentSpeed > player.maxSpeed) {
+        player.vx = (player.vx / currentSpeed) * player.maxSpeed;
+        player.vy = (player.vy / currentSpeed) * player.maxSpeed;
       }
 
+      // 3. Sistema de Deslizamento em Paredes (Slide Physics)
+      let nextX = player.x + player.vx * dt;
+      let nextY = player.y + player.vy * dt;
+
+      // Testa eixo X separadamente para permitir deslize em paredes verticais
+      if (!checkWallCollision(nextX, player.y)) {
+        player.x = nextX;
+      } else {
+        player.vx = 0;
+      }
+
+      // Testa eixo Y separadamente para permitir deslize em paredes horizontais
+      if (!checkWallCollision(player.x, nextY)) {
+        player.y = nextY;
+      } else {
+        player.vy = 0;
+      }
+
+      // Rastro de Movimento
+      if (currentSpeed > 20) {
+        trail.push({ x: player.x, y: player.y, alpha: 0.6 });
+        if (trail.length > 8) trail.shift();
+      }
+      trail.forEach(t => t.alpha -= dt * 2);
+
+      // --- CHECAGEM DE OBJETIVOS ---
       const ts = currentLevel.tileSize;
 
-      // Colisão com a Vela 🕯️
-      const itemCenterX = currentLevel.item.x * ts + ts / 2;
-      const itemCenterY = currentLevel.item.y * ts + ts / 2;
-      const distToItem = Math.hypot(player.x - itemCenterX, player.y - itemCenterY);
-
-      if (!hasItem && distToItem < player.radius + ts * 0.3) {
+      // Vela 🕯️
+      const itemX = currentLevel.item.x * ts + ts / 2;
+      const itemY = currentLevel.item.y * ts + ts / 2;
+      if (!hasItem && Math.hypot(player.x - itemX, player.y - itemY) < player.radius + ts * 0.3) {
         hasItem = true;
         document.getElementById('instructions').innerHTML = 'Vela acesa! Agora vá rápido até o Altar ⛪!';
       }
 
-      // Colisão com o Altar ⛪
-      const goalCenterX = currentLevel.goal.x * ts + ts / 2;
-      const goalCenterY = currentLevel.goal.y * ts + ts / 2;
-      const distToGoal = Math.hypot(player.x - goalCenterX, player.y - goalCenterY);
-
-      if (distToGoal < player.radius + ts * 0.3) {
+      // Altar ⛪
+      const goalX = currentLevel.goal.x * ts + ts / 2;
+      const goalY = currentLevel.goal.y * ts + ts / 2;
+      if (Math.hypot(player.x - goalX, player.y - goalY) < player.radius + ts * 0.3) {
         if (hasItem) {
           gameWon = true;
           document.getElementById('winOverlay').style.display = 'flex';
@@ -368,77 +389,112 @@
       }
     }
 
-    // Renderização dos Gráficos
+    // --- RENDERIZAÇÃO GRÁFICA ---
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const ts = currentLevel.tileSize;
 
-      // 1. Desenha o Labirinto (Paredes e Caminho)
+      // 1. Labirinto Estilizado
       for (let r = 0; r < currentLevel.rows; r++) {
         for (let c = 0; c < currentLevel.cols; c++) {
           if (currentLevel.grid[r][c] === 1) {
-            ctx.fillStyle = '#34495e'; // Parede
+            ctx.fillStyle = '#1e2b37';
             ctx.fillRect(c * ts, r * ts, ts, ts);
-            ctx.strokeStyle = '#2c3e50';
+            ctx.strokeStyle = '#0f171e';
             ctx.strokeRect(c * ts, r * ts, ts, ts);
           } else {
-            ctx.fillStyle = '#111a22'; // Piso do caminho
+            ctx.fillStyle = '#0a1017';
             ctx.fillRect(c * ts, r * ts, ts, ts);
           }
         }
       }
 
-      // 2. Desenha a Vela (se não tiver sido coletada)
+      // 2. Vela com Brilho Dinâmico
       if (!hasItem) {
         const ix = currentLevel.item.x * ts + ts / 2;
         const iy = currentLevel.item.y * ts + ts / 2;
-        
-        // Efeito de brilho pulsante em volta da vela
-        const glow = Math.sin(pulseAnim) * 4 + 12;
+        const pulse = Math.sin(animTimer * 5) * 4 + ts * 0.25;
+
+        // Aura amarela
         ctx.beginPath();
-        ctx.arc(ix, iy, glow, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(241, 196, 15, 0.3)';
+        ctx.arc(ix, iy, pulse + 6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.25)';
         ctx.fill();
 
         ctx.font = `${ts * 0.5}px serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText('🕯️', ix, iy);
       }
 
-      // 3. Desenha o Altar
+      // 3. Altar
       const gx = currentLevel.goal.x * ts + ts / 2;
       const gy = currentLevel.goal.y * ts + ts / 2;
       ctx.font = `${ts * 0.6}px serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText('⛪', gx, gy);
 
-      // 4. Desenha o Coroinha (Jogador)
+      // 4. Rastro de Movimento (Trail)
+      trail.forEach(t => {
+        if (t.alpha > 0) {
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, player.radius * 0.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(231, 76, 60, ${t.alpha * 0.4})`;
+          ctx.fill();
+        }
+      });
+
+      // 5. Coroinha (Jogador com luz própria)
+      // Aura ao redor do jogador
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.radius * 1.6, 0, Math.PI * 2);
+      ctx.fillStyle = hasItem ? 'rgba(241, 196, 15, 0.2)' : 'rgba(231, 76, 60, 0.15)';
+      ctx.fill();
+
+      // Corpo
       ctx.beginPath();
       ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-      ctx.fillStyle = '#e74c3c'; // Coroinha de túnica vermelha
+      ctx.fillStyle = '#e74c3c';
       ctx.fill();
       ctx.strokeStyle = '#fff';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Desenha o item na mão do coroinha se já coletado
+      // Item na mão
       if (hasItem) {
         ctx.font = `${ts * 0.35}px serif`;
-        ctx.fillText('🕯️', player.x + 8, player.y - 8);
+        ctx.fillText('🕯️', player.x + player.radius * 0.7, player.y - player.radius * 0.7);
+      }
+
+      // 6. Desenha Joystick Virtual se o toque estiver ativo
+      if (joystick.active) {
+        ctx.beginPath();
+        ctx.arc(joystick.startX, joystick.startY, 40, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(joystick.currX, joystick.currY, 18, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
+        ctx.fill();
       }
     }
 
-    // Loop do Jogo
-    function gameLoop() {
-      update();
+    // --- GAME LOOP PROFISSIONAL (DELTA TIME) ---
+    function gameLoop(now) {
+      let dt = (now - lastTime) / 1000;
+      if (dt > 0.1) dt = 0.1; // Evita saltos grandes se a aba for desfocada
+      lastTime = now;
+
+      update(dt);
       draw();
+
       requestAnimationFrame(gameLoop);
     }
 
     initGame();
-    gameLoop();
+    requestAnimationFrame(gameLoop);
   </script>
 </body>
 </html>
