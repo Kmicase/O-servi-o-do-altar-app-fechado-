@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Super Desafio Litúrgico Arcade</title>
+  <title>Mega Desafio Litúrgico Arcade</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Fredoka:wght@600;700&display=swap');
 
@@ -35,12 +35,11 @@
       align-items: center;
       justify-content: space-between;
       min-height: 100vh;
-      padding: 15px;
+      padding: 10px;
       overflow: hidden;
       touch-action: none;
     }
 
-    /* Animação de tremor na tela quando erra */
     body.shake {
       animation: screenShake 0.3s cubic-bezier(.36,.07,.19,.97) both;
     }
@@ -52,7 +51,6 @@
       40%, 60% { transform: translate3d(6px, 0, 0); }
     }
 
-    /* Canvas para Partículas e Rastros */
     #fx-canvas {
       position: fixed;
       inset: 0;
@@ -60,16 +58,17 @@
       z-index: 99;
     }
 
-    /* Placar Arcade */
     header {
       text-align: center;
       margin-top: 5px;
       z-index: 10;
+      width: 100%;
+      max-width: 900px;
     }
 
     h1 {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       letter-spacing: 2px;
       background: linear-gradient(180deg, #fff 30%, var(--neon-yellow) 100%);
       -webkit-background-clip: text;
@@ -80,17 +79,18 @@
 
     .hud {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-top: 5px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .hud-box {
       background: rgba(255, 255, 255, 0.07);
       border: 2px solid rgba(255, 255, 255, 0.2);
-      padding: 6px 16px;
+      padding: 4px 14px;
       border-radius: 30px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
@@ -100,12 +100,29 @@
       font-weight: bold;
     }
 
+    /* Barra de Progresso */
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+      transition: width 0.3s ease;
+    }
+
     /* Arena do Jogo */
     .arena {
       position: relative;
       width: 100%;
       max-width: 900px;
-      height: 65vh;
+      height: 68vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -113,65 +130,88 @@
       z-index: 10;
     }
 
-    /* Portais de Destino */
+    /* Super Zonas de Soltura (Ocupam toda a metade superior da tela) */
     .portals-container {
       display: flex;
       width: 100%;
-      gap: 20px;
+      height: 60%; /* Expandido para cobrir 60% da área jogável */
+      gap: 15px;
       justify-content: space-between;
     }
 
     .portal {
       flex: 1;
-      height: 170px;
-      border-radius: 24px;
+      height: 100%;
+      border-radius: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 15px;
       position: relative;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
     }
 
     .portal.left {
-      background: radial-gradient(circle, rgba(255, 0, 127, 0.2) 0%, rgba(13, 6, 20, 0.8) 100%);
-      border: 3px solid var(--neon-pink);
-      box-shadow: 0 0 25px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(255, 0, 127, 0.2);
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.15) 0%, rgba(13, 6, 20, 0.7) 100%);
+      border: 3px dashed var(--neon-pink);
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
     }
 
     .portal.right {
-      background: radial-gradient(circle, rgba(0, 243, 255, 0.2) 0%, rgba(13, 6, 20, 0.8) 100%);
-      border: 3px solid var(--neon-cyan);
-      box-shadow: 0 0 25px rgba(0, 243, 255, 0.3), inset 0 0 15px rgba(0, 243, 255, 0.2);
+      background: radial-gradient(circle, rgba(0, 243, 255, 0.15) 0%, rgba(13, 6, 20, 0.7) 100%);
+      border: 3px dashed var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
     }
 
+    /* Animação quando a carta entra na zona (Glow gigante) */
     .portal.drag-hover {
-      transform: scale(1.08);
-      filter: brightness(1.4);
+      transform: scale(1.02);
+      border-style: solid;
+      filter: brightness(1.5);
+    }
+
+    .portal.left.drag-hover {
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.35) 0%, rgba(13, 6, 20, 0.8) 100%);
+      box-shadow: 0 0 40px rgba(255, 0, 127, 0.6);
+    }
+
+    .portal.right.drag-hover {
+      background: radial-gradient(circle, rgba(0, 243, 255, 0.35) 0%, rgba(13, 6, 20, 0.8) 100%);
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.6);
     }
 
     .portal h2 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       text-transform: uppercase;
       text-align: center;
       text-shadow: 0 0 10px currentColor;
+      pointer-events: none;
     }
 
     .portal.left h2 { color: var(--neon-pink); }
     .portal.right h2 { color: var(--neon-cyan); }
 
     .portal .icon {
-      font-size: 2.8rem;
+      font-size: 3.2rem;
       margin-bottom: 5px;
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+      pointer-events: none;
     }
 
-    /* Cartão Flutuante (3D Arcade Pop) */
+    .portal .subtext {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 5px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    /* Cartão Flutuante */
     .deck {
       position: relative;
       width: 100%;
-      height: 190px;
+      height: 35%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -179,20 +219,20 @@
 
     .card {
       position: absolute;
-      width: 300px;
-      min-height: 120px;
+      width: 320px;
+      min-height: 110px;
       background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
       color: #111;
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       box-shadow: 
-        0 10px 0 #b5b5b5,
+        0 8px 0 #b5b5b5,
         0 15px 30px rgba(0, 0, 0, 0.6),
         0 0 20px rgba(255, 255, 255, 0.4);
       cursor: grab;
@@ -205,12 +245,12 @@
       cursor: grabbing;
     }
 
-    /* Modal de Fim de Jogo */
+    /* Modal de Vitória */
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(11, 5, 18, 0.9);
+      background: rgba(11, 5, 18, 0.92);
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -221,15 +261,17 @@
     .modal-box {
       background: rgba(255, 255, 255, 0.05);
       border: 3px solid var(--neon-yellow);
-      padding: 40px;
+      padding: 35px 25px;
       border-radius: 30px;
       text-align: center;
-      box-shadow: 0 0 50px rgba(ffe600, 0.4);
+      box-shadow: 0 0 50px rgba(255, 230, 0, 0.4);
+      max-width: 400px;
+      width: 90%;
     }
 
     .modal-box h2 {
       font-family: 'Black Han Sans', sans-serif;
-      font-size: 3rem;
+      font-size: 2.8rem;
       color: var(--neon-yellow);
       text-shadow: 0 0 20px var(--neon-yellow);
       margin-bottom: 10px;
@@ -239,8 +281,8 @@
       background: var(--neon-green);
       color: #000;
       border: none;
-      padding: 15px 40px;
-      font-size: 1.4rem;
+      padding: 14px 35px;
+      font-size: 1.3rem;
       font-weight: 900;
       border-radius: 50px;
       cursor: pointer;
@@ -265,18 +307,24 @@
       <div class="hud-box">COMBO: <span id="combo" style="color:var(--neon-yellow)">x1</span> 🔥</div>
       <div class="hud-box">RESTANTES: <span id="remaining">0</span></div>
     </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
   </header>
 
   <div class="arena">
+    <!-- As Super Zonas agora ocupam grande parte da metade superior -->
     <div class="portals-container">
       <div class="portal left" id="portal-palavra" data-category="palavra">
         <div class="icon">📖</div>
         <h2>Palavra</h2>
+        <div class="subtext">Solte em qualquer lugar aqui</div>
       </div>
 
       <div class="portal right" id="portal-eucharistia" data-category="eucharistia">
         <div class="icon">🍷</div>
         <h2>Eucaristia</h2>
+        <div class="subtext">Solte em qualquer lugar aqui</div>
       </div>
     </div>
 
@@ -285,30 +333,53 @@
 
   <div class="modal" id="winModal">
     <div class="modal-box">
-      <h2>INCRÍVEL! ⚡</h2>
-      <p style="font-size: 1.3rem;">Você completou o desafio com sucesso!</p>
-      <p style="margin-top: 10px; font-size: 1.5rem;">Pontuação Total: <strong id="final-score" style="color:var(--neon-cyan)">0</strong></p>
+      <h2>MEGAMIND! ⚡</h2>
+      <p style="font-size: 1.2rem;">Você dominou todos os 26 momentos da Santa Missa!</p>
+      <p style="margin-top: 12px; font-size: 1.5rem;">Pontuação Final: <strong id="final-score" style="color:var(--neon-cyan)">0</strong></p>
       <button class="btn-play" onclick="initGame()">JOGAR NOVAMENTE</button>
     </div>
   </div>
 
   <script>
+    // Banco Ampliado com 26 Itens Litúrgicos
     const cardsData = [
-      { text: "Proclamação do Santo Evangelho", category: "palavra" },
-      { text: "Ofertório e Apresentação do Pão e Vinho", category: "eucharistia" },
-      { text: "Primeira e Segunda Leitura", category: "palavra" },
-      { text: "Oração Eucarística e Consagração", category: "eucharistia" },
+      // --- LITURGIA DA PALAVRA ---
+      { text: "Primeira Leitura (Antigo Testamento)", category: "palavra" },
       { text: "Cântico do Salmo Responsorial", category: "palavra" },
-      { text: "Rito da Comunhão", category: "eucharistia" },
-      { text: "Homilia do Celebrante", category: "palavra" },
-      { text: "Cordeiro de Deus (Agnus Dei)", category: "eucharistia" }
+      { text: "Segunda Leitura (Epístolas)", category: "palavra" },
+      { text: "Cântico de Aclamação ao Evangelho (Aleluia)", category: "palavra" },
+      { text: "Proclamação do Santo Evangelho", category: "palavra" },
+      { text: "Homilia / Explicação da Palavra pelo Padre", category: "palavra" },
+      { text: "Profissão de Fé (Oração do Credo)", category: "palavra" },
+      { text: "Oração dos Féis (Preces da Comunidade)", category: "palavra" },
+      { text: "Entrada Solene com o Evangeliário", category: "palavra" },
+      { text: "Incenso sobre o Livro do Evangelho", category: "palavra" },
+      { text: "Silêncio de Meditação após a Homilia", category: "palavra" },
+      { text: "Bênção com o Livro dos Evangelhos", category: "palavra" },
+      { text: "Proclamação das Intenções da Missa", category: "palavra" },
+
+      // --- LITURGIA EUCARÍSTICA ---
+      { text: "Preparação do Altar e Abertura do Corporal", category: "eucharistia" },
+      { text: "Apresentação do Pão na Patena (Ofertório)", category: "eucharistia" },
+      { text: "Mistura da Água no Vinho dentro do Cálice", category: "eucharistia" },
+      { text: "Rito do Lavabo (Padre lava as mãos)", category: "eucharistia" },
+      { text: "Prefácio e Cântico do 'Santo, Santo, Santo'", category: "eucharistia" },
+      { text: "Oração Eucarística e Epiclese (Invocação do Espírito)", category: "eucharistia" },
+      { text: "Consagração do Pão no Corpo de Cristo", category: "eucharistia" },
+      { text: "Consagração do Vinho no Sangue de Cristo", category: "eucharistia" },
+      { text: "Elevação da Hóstia e do Cálice", category: "eucharistia" },
+      { text: "Rezando juntos a Oração do Pai-Nosso", category: "eucharistia" },
+      { text: "Fração do Pão e Cântico do Cordeiro (Agnus Dei)", category: "eucharistia" },
+      { text: "Distribuição da Santa Comunhão aos Féis", category: "eucharistia" },
+      { text: "Purificação dos Vasos Sagrados (Cálice e Galhetas)", category: "eucharistia" }
     ];
 
     let cardsStack = [];
+    let totalInitialCards = 0;
     let score = 0;
     let combo = 1;
 
-    // --- SINTETIZADOR DE ÁUDIO RETRO (Web Audio API) ---
+    // Sintetizador Web Audio API
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
@@ -336,7 +407,7 @@
       }
     }
 
-    // --- SISTEMA DE PARTÍCULAS CANVAS ---
+    // Sistema de Partículas Canvas
     const canvas = document.getElementById('fx-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -349,9 +420,9 @@
     resizeCanvas();
 
     function createExplosion(x, y, color) {
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 45; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 8 + 2;
+        const speed = Math.random() * 9 + 3;
         particles.push({
           x, y,
           vx: Math.cos(angle) * speed,
@@ -382,7 +453,7 @@
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.alpha -= 0.02;
+        p.alpha -= 0.025;
 
         if (p.alpha <= 0) {
           particles.splice(i, 1);
@@ -403,11 +474,12 @@
     }
     loopFX();
 
-    // --- LÓGICA DO JOGO ---
+    // Lógica de Inicialização
     function initGame() {
       score = 0;
       combo = 1;
       cardsStack = [...cardsData].sort(() => Math.random() - 0.5);
+      totalInitialCards = cardsStack.length;
       document.getElementById('winModal').style.display = 'none';
       updateHUD();
       renderCard();
@@ -417,6 +489,9 @@
       document.getElementById('score').textContent = score;
       document.getElementById('combo').textContent = `x${combo}`;
       document.getElementById('remaining').textContent = cardsStack.length;
+      
+      const progressPercent = ((totalInitialCards - cardsStack.length) / totalInitialCards) * 100;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
     }
 
     function renderCard() {
@@ -439,7 +514,7 @@
       deck.appendChild(card);
     }
 
-    // --- FÍSICA E ARRASTE "SQUASH & STRETCH" ---
+    // Arraste com detecção de colisão ampliada
     function bindPhysicsDrag(card) {
       let isDragging = false;
       let startX = 0, startY = 0;
@@ -461,23 +536,17 @@
         curX = e.clientX - startX;
         curY = e.clientY - startY;
 
-        // Cálculo de velocidade para esticar o cartão
         const vx = e.clientX - lastX;
         const vy = e.clientY - lastY;
         lastX = e.clientX;
         lastY = e.clientY;
 
         const speed = Math.sqrt(vx * vx + vy * vy);
-        const stretch = Math.min(speed * 0.005, 0.3);
-        const angle = Math.atan2(vy, vx) * (180 / Math.PI);
+        const stretch = Math.min(speed * 0.005, 0.25);
 
-        // Deforma e rotaciona o cartão com base no movimento
-        card.style.transform = `translate(${curX}px, ${curY}px) rotate(${vx * 0.1}deg) scale(${1 + stretch}, ${1 - stretch})`;
+        card.style.transform = `translate(${curX}px, ${curY}px) rotate(${vx * 0.08}deg) scale(${1 + stretch}, ${1 - stretch})`;
 
-        // Solta partículas no caminho do rastro
         createTrail(e.clientX, e.clientY);
-
-        // Destaque visual dos portais
         checkPortalHover(card);
       });
 
@@ -507,18 +576,15 @@
             combo = 1;
             updateHUD();
 
-            // Tremor de tela
             document.body.classList.add('shake');
             setTimeout(() => document.body.classList.remove('shake'), 300);
 
-            // Reseta posição da carta
             card.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             card.style.transform = `translate(0px, 0px) scale(1, 1)`;
             curX = 0; curY = 0;
             setTimeout(() => card.style.transition = '', 300);
           }
         } else {
-          // Soltou no vazio
           card.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           card.style.transform = `translate(0px, 0px) scale(1, 1)`;
           curX = 0; curY = 0;
@@ -529,22 +595,43 @@
       });
     }
 
+    // Detecção Ultra Forgiativa (Overlapping melhorado)
     function checkPortalHover(card) {
       const cRect = card.getBoundingClientRect();
+      const cardCenterX = cRect.left + cRect.width / 2;
+      const cardCenterY = cRect.top + cRect.height / 2;
+
       document.querySelectorAll('.portal').forEach(p => {
         const pRect = p.getBoundingClientRect();
-        const overlap = !(cRect.right < pRect.left || cRect.left > pRect.right || cRect.bottom < pRect.top || cRect.top > pRect.bottom);
-        if (overlap) p.classList.add('drag-hover');
+        
+        // Colisão aceita se o CENTRO da carta estiver dentro da Super Zona
+        const isCenterInside = (
+          cardCenterX >= pRect.left &&
+          cardCenterX <= pRect.right &&
+          cardCenterY >= pRect.top &&
+          cardCenterY <= pRect.bottom
+        );
+
+        if (isCenterInside) p.classList.add('drag-hover');
         else p.classList.remove('drag-hover');
       });
     }
 
     function getHoveredPortal(card) {
       const cRect = card.getBoundingClientRect();
+      const cardCenterX = cRect.left + cRect.width / 2;
+      const cardCenterY = cRect.top + cRect.height / 2;
+
       for (let p of document.querySelectorAll('.portal')) {
         const pRect = p.getBoundingClientRect();
-        const overlap = !(cRect.right < pRect.left || cRect.left > pRect.right || cRect.bottom < pRect.top || cRect.top > pRect.bottom);
-        if (overlap) return p;
+        if (
+          cardCenterX >= pRect.left &&
+          cardCenterX <= pRect.right &&
+          cardCenterY >= pRect.top &&
+          cardCenterY <= pRect.bottom
+        ) {
+          return p;
+        }
       }
       return null;
     }
