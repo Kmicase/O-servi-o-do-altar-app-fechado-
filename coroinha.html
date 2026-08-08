@@ -16,7 +16,7 @@
         /* Fundo Litúrgico - Padrão Sacro */
         .bg-sacro-dourado {
             background-color: #f8fafc;
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjYjQ1MzA5IiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iZG9uZSIgcj0iNiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNjAxIiByPSI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSI0MCIgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjEiLz48cGF0aCB dPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4=");
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjYjQ1MzA5IiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iZG9uZSIgcj0iNiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNjAxIiByPSI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSI0MCIgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjEiLz48cGF0aCBkPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4=");
         }
 
         .dark .bg-sacro-dourado {
@@ -25,13 +25,15 @@
         }
 
         .active-tab {
-            border-bottom: 3px solid #dc2626;
+            background-color: #fef2f2;
             color: #dc2626;
             font-weight: 800;
+            border-right: 4px solid #dc2626;
         }
         .dark .active-tab {
-            border-bottom: 3px solid #ef4444;
+            background-color: #27272a;
             color: #ef4444;
+            border-right: 4px solid #ef4444;
         }
         .active-subtab {
             background-color: #f3f4f6;
@@ -42,23 +44,11 @@
             background-color: #27272a;
             color: #f4f4f5;
         }
-        @media (max-width: 360px) {
-            html, body {
-                width: 100%;
-                overflow-x: hidden; 
-            }
-            .container, main, section, div {
-                max-width: 100% !important;
-                box-sizing: border-box;
-            }
-            .row, .flex-container, header {
-                flex-direction: column !important;
-            }
-        }
     </style>
 </head>
 <body class="bg-sacro-dourado font-sans min-h-screen flex flex-col transition-colors duration-500 selection:bg-red-200">
 
+    <!-- Tela de Manutenção -->
     <div id="tela-manutencao" class="fixed inset-0 bg-slate-50 dark:bg-zinc-950 z-55 flex flex-col items-center justify-center p-6 text-center hidden">
         <div class="w-16 h-16 bg-amber-500/10 dark:bg-amber-500/5 text-amber-600 rounded-2xl flex items-center justify-center text-2xl border border-amber-500/20 shadow-xs mb-4 animate-bounce">
             <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -67,6 +57,7 @@
         <p class="text-xs text-slate-500 dark:text-zinc-400 max-w-sm mt-2 leading-relaxed font-medium">Estamos atualizando os sacrários e arquivos do presbitério. O painel estará disponível novamente em breve.</p>
     </div>
 
+    <!-- Tela Loading -->
     <div id="tela-loading" class="fixed inset-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-50 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative flex items-center justify-center mb-4">
             <div class="animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-red-600 border-b-amber-500"></div>
@@ -75,9 +66,13 @@
         <p class="text-[10px] font-black text-gray-400 dark:text-zinc-500 tracking-widest uppercase animate-pulse">Sincronizando Presbitério...</p>
     </div>
 
-    <header class="bg-gradient-to-r from-red-800 to-red-900 dark:from-zinc-900 dark:to-zinc-900 text-white px-4 py-4 shadow-md sticky top-0 z-40 border-b border-red-900/40 dark:border-zinc-800/80 transition-colors">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
+    <!-- Header Principal -->
+    <header class="bg-gradient-to-r from-red-800 to-red-900 dark:from-zinc-900 dark:to-zinc-900 text-white px-4 py-3 shadow-md sticky top-0 z-40 border-b border-red-900/40 dark:border-zinc-800/80 transition-colors">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-3">
+                <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="md:hidden p-2 text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
                 <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 shadow-inner">
                     <i class="fa-solid fa-church text-amber-400 text-base"></i>
                 </div>
@@ -102,62 +97,91 @@
         </div>
     </header>
 
-    <nav class="bg-white dark:bg-zinc-900 border-b border-slate-200/60 dark:border-zinc-800 shadow-xs sticky top-[73px] z-30 flex md:hidden transition-colors">
-        <button id="tab-escala" onclick="switchTab('escala')" class="active-tab flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer text-slate-500 dark:text-zinc-400">
-            <i class="fa-solid fa-calendar-days text-sm"></i> <span>Escalas</span>
-        </button>
-        <button id="tab-avisos" onclick="switchTab('avisos')" class="flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer text-slate-500 dark:text-zinc-400">
-            <i class="fa-solid fa-bullhorn text-sm"></i> <span>Avisos</span>
-        </button>
-        <button id="tab-conteudos" onclick="switchTab('conteudos')" class="flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer text-slate-500 dark:text-zinc-400">
-            <i class="fa-solid fa-book-open text-sm"></i> <span>Conteúdos</span>
-        </button>
-        <button id="tab-liturgia" onclick="switchTab('liturgia')" class="flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer text-slate-500 dark:text-zinc-400">
-            <i class="fa-solid fa-scroll text-sm"></i> <span>Liturgia</span>
-        </button>
-    </nav>
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden transition-opacity"></div>
 
-    <main class="max-w-6xl w-full mx-auto p-4 md:p-6 flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 z-10 relative items-start">
+    <div class="max-w-7xl w-full mx-auto flex flex-1 relative">
         
-        <div id="conteudo-escala" class="space-y-6 block md:col-span-2">
-            
-            <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
-                <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-700 via-amber-500 to-red-600"></div>
-                
-                <div class="p-6 border-b border-slate-100 dark:border-zinc-800/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h3 class="text-base font-black text-slate-800 dark:text-zinc-100 tracking-tight">Painel Geral de Escalas</h3>
-                        <p class="text-[11px] text-slate-400 dark:text-zinc-400 font-medium mt-0.5">Confirme sua vaga ou assuma uma escala livre/substituição disponível.</p>
-                    </div>
-                    <div class="flex items-center gap-2.5 w-full sm:w-auto">
-                        <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider whitespace-nowrap">Data:</span>
-                        <input type="date" id="busca-escala-data" class="w-full sm:w-auto bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700/50 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 outline-none focus:border-red-600 transition-all shadow-xs">
-                    </div>
-                </div>
-
-                <div class="p-6">
-                    <div id="resultado-escala-geral" class="space-y-5 text-xs">
-                        <p class="text-slate-400 dark:text-zinc-500 italic flex items-center gap-2"><i class="fa-solid fa-circle-notch animate-spin"></i> Buscando informações do dia...</p>
-                    </div>
-                </div>
+        <!-- SIDEBAR -->
+        <aside id="sidebar-menu" class="fixed md:sticky top-[61px] left-0 h-[calc(100vh-61px)] w-64 bg-white dark:bg-zinc-900 border-r border-slate-200/60 dark:border-zinc-800 shadow-lg md:shadow-none z-35 flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 shrink-0">
+            <div class="p-4 border-b border-slate-100 dark:border-zinc-800/60 flex items-center justify-between">
+                <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500">Navegação Principal</span>
             </div>
 
-            <div id="card-enquete-disponibilidade" class="hidden bg-amber-50/40 dark:bg-amber-950/10 p-6 rounded-3xl border border-amber-200/60 dark:border-amber-900/30 space-y-4 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 inset-x-0 h-1 bg-amber-500"></div>
-                <div>
-                    <h3 class="text-sm font-black text-amber-900 dark:text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation text-amber-600 dark:text-amber-500"></i> Enquete de Disponibilidade Mensal</h3>
-                    <p class="text-[11px] text-amber-800/80 dark:text-zinc-400 font-medium mt-0.5">Marque os dias que você pode servir. As opções somem desta lista assim que enviadas.</p>
+            <nav class="p-3 space-y-1.5 flex-1 overflow-y-auto">
+                <button id="tab-escala" onclick="switchTab('escala')" class="active-tab w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-calendar-days text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Escalas</span>
+                </button>
+                <button id="tab-avisos" onclick="switchTab('avisos')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-bullhorn text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Avisos</span>
+                </button>
+                <button id="tab-conteudos" onclick="switchTab('conteudos')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-book-open text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Conteúdos</span>
+                </button>
+                <button id="tab-liturgia" onclick="switchTab('liturgia')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-scroll text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Liturgia</span>
+                </button>
+                <button id="tab-oracoes" onclick="switchTab('oracoes'); if(typeof window.carregarOracoes==='function') window.carregarOracoes();" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-hands-praying text-sm w-5 text-center"></i> 
+                    <span class="font-bold">Orações</span>
+                </button>
+                <button id="tab-jogos" onclick="switchTab('jogos')" class="w-full px-4 py-3 rounded-xl text-xs flex items-center gap-3 cursor-pointer text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all">
+                    <i class="fa-solid fa-gamepad text-sm w-5 text-center text-amber-500"></i> 
+                    <span class="font-bold">Jogos</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-slate-100 dark:border-zinc-800/60 text-center">
+                <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-600">Altaris v2.0 - Presbitério Digital</span>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="flex-1 p-4 md:p-6 z-10 w-full overflow-hidden">
+
+            <!-- Card de Pesquisa de Disponibilidade -->
+            <div id="card-enquete-disponibilidade" class="mb-6 hidden bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/30 rounded-3xl p-5 shadow-xs">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="fa-solid fa-clipboard-question text-amber-600 dark:text-amber-500"></i>
+                    <h3 class="text-xs font-black uppercase text-amber-900 dark:text-amber-400 tracking-wide">Pesquisa de Disponibilidade Aberta</h3>
                 </div>
-                <form id="form-responder-enquete" class="space-y-4">
-                    <div id="lista-celebracoes-checkboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-48 overflow-y-auto bg-white dark:bg-zinc-900 p-4 rounded-xl border border-amber-200/50 dark:border-zinc-800/80"></div>
-                    <button type="submit" class="w-full bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white font-bold text-xs py-2.5 rounded-xl transition-all cursor-pointer shadow-xs uppercase tracking-wider">Salvar Disponibilidade</button>
+                <form id="form-responder-enquete" class="space-y-3">
+                    <div id="lista-celebracoes-checkboxes" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2 px-4 rounded-xl transition-all cursor-pointer shadow-xs">
+                        Enviar Disponibilidade
+                    </button>
                 </form>
             </div>
-        </div>
-
-        <div class="space-y-6 md:col-span-1 flex flex-col w-full">
             
-            <div id="conteudo-avisos" class="space-y-4 hidden md:block w-full">
+            <!-- ABA ESCALA -->
+            <div id="conteudo-escala" class="space-y-6 block">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-700 via-amber-500 to-red-600"></div>
+                    
+                    <div class="p-6 border-b border-slate-100 dark:border-zinc-800/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h3 class="text-base font-black text-slate-800 dark:text-zinc-100 tracking-tight">Painel Geral de Escalas</h3>
+                            <p class="text-[11px] text-slate-400 dark:text-zinc-400 font-medium mt-0.5">Confirme sua vaga ou assuma uma escala livre/substituição disponível.</p>
+                        </div>
+                        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider whitespace-nowrap">Data:</span>
+                            <input type="date" id="busca-escala-data" class="w-full sm:w-auto bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700/50 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 outline-none focus:border-red-600 transition-all shadow-xs">
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div id="resultado-escala-geral" class="space-y-5 text-xs">
+                            <p class="text-slate-400 dark:text-zinc-500 italic flex items-center gap-2"><i class="fa-solid fa-circle-notch animate-spin"></i> Buscando informações do dia...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA AVISOS -->
+            <div id="conteudo-avisos" class="space-y-4 hidden w-full">
                 <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
                     <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-500 to-red-600"></div>
                     <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center gap-2.5">
@@ -165,7 +189,7 @@
                         <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">Mural de Avisos</h3>
                     </div>
                     <div id="container-mural-e-penalidades" class="p-5 space-y-3">
-                        <div class="bg-slate-50/70 dark:bg-zinc-800/30 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800/60 hover:border-amber-500/30 transition-all">
+                        <div class="bg-slate-50/70 dark:bg-zinc-800/30 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800/60">
                             <p id="txt-aviso-mural" class="text-xs font-medium text-slate-600 dark:text-zinc-400 whitespace-pre-wrap leading-relaxed">Nenhum comunicado oficial recente.</p>
                             <span id="data-aviso-mural" class="block text-[9px] font-bold text-slate-400 dark:text-zinc-500 mt-3 text-right tracking-wider">--/--/----</span>
                         </div>
@@ -173,7 +197,8 @@
                 </div>
             </div>
 
-            <div id="conteudo-conteudos" class="space-y-4 hidden md:block w-full">
+            <!-- ABA CONTEÚDOS -->
+            <div id="conteudo-conteudos" class="space-y-4 hidden w-full">
                 <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
                     <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-700 to-amber-500"></div>
                     <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center gap-2.5">
@@ -197,7 +222,8 @@
                 </div>
             </div>
 
-            <div id="conteudo-liturgia" class="space-y-4 hidden md:block w-full">
+            <!-- ABA LITURGIA -->
+            <div id="conteudo-liturgia" class="space-y-4 hidden w-full">
                 <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-[0_20px_45px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-zinc-800/80 overflow-hidden relative transition-all">
                     <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-600 via-red-600 to-amber-500"></div>
                     <div class="p-5 border-b border-slate-100 dark:border-zinc-800/60 flex items-center justify-between gap-2">
@@ -232,94 +258,337 @@
                             
                             <div class="grid grid-cols-3 gap-2">
                                 <select id="select-biblia-livro" class="col-span-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-700 dark:text-zinc-200 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all shadow-xs">
-                                    <option value="gn">Gênesis</option>
-                                    <option value="ex">Êxodo</option>
-                                    <option value="lv">Levítico</option>
-                                    <option value="nm">Números</option>
-                                    <option value="dt">Deuteronômio</option>
-                                    <option value="js">Josué</option>
-                                    <option value="jz">Juízes</option>
-                                    <option value="rt">Rute</option>
-                                    <option value="1sm">1 Samuel</option>
-                                    <option value="2sm">2 Samuel</option>
-                                    <option value="1rs">1 Reis</option>
-                                    <option value="2rs">2 Reis</option>
-                                    <option value="1cr">1 Crônicas</option>
-                                    <option value="2cr">2 Crônicas</option>
-                                    <option value="ed">Esdras</option>
-                                    <option value="ne">Neemias</option>
-                                    <option value="et">Ester</option>
-                                    <option value="jo">Jó</option>
-                                    <option value="ps">Salmos</option>
-                                    <option value="pv">Provérbios</option>
-                                    <option value="ec">Eclesiastes</option>
-                                    <option value="ct">Cânticos</option>
-                                    <option value="is">Isaías</option>
-                                    <option value="jr">Jeremias</option>
-                                    <option value="lm">Lamentações</option>
-                                    <option value="ez">Ezequiel</option>
-                                    <option value="dn">Daniel</option>
-                                    <option value="os">Oséias</option>
-                                    <option value="jl">Joel</option>
-                                    <option value="am">Amós</option>
-                                    <option value="ob">Obadias</option>
-                                    <option value="jn">Jonas</option>
-                                    <option value="mq">Miqueias</option>
-                                    <option value="na">Naum</option>
-                                    <option value="hc">Habacuque</option>
-                                    <option value="sf">Sofonias</option>
-                                    <option value="ag">Ageu</option>
-                                    <option value="zc">Zacarias</option>
-                                    <option value="ml">Malaquias</option>
-                                    <option value="mt" selected>Mateus</option>
-                                    <option value="mc">Marcos</option>
-                                    <option value="lc">Lucas</option>
-                                    <option value="jhn">João</option>
-                                    <option value="act">Atos</option>
-                                    <option value="rm">Romanos</option>
-                                    <option value="1co">1 Coríntios</option>
-                                    <option value="2co">2 Coríntios</option>
-                                    <option value="gl">Gálatas</option>
-                                    <option value="ef">Efésios</option>
-                                    <option value="fp">Filipenses</option>
-                                    <option value="cl">Colossenses</option>
-                                    <option value="1ts">1 Tessalonicenses</option>
-                                    <option value="2ts">2 Tessalonicenses</option>
-                                    <option value="1tm">1 Timóteo</option>
-                                    <option value="2tm">2 Timóteo</option>
-                                    <option value="tt">Tito</option>
-                                    <option value="fm">Filemom</option>
-                                    <option value="hb">Hebreus</option>
-                                    <option value="tg">Tiago</option>
-                                    <option value="1pe">1 Pedro</option>
-                                    <option value="2pe">2 Pedro</option>
-                                    <option value="1jo">1 João</option>
-                                    <option value="2jo">2 João</option>
-                                    <option value="3jo">3 João</option>
-                                    <option value="jd">Judas</option>
-                                    <option value="ap">Apocalipse</option>
+                                    <option value="Genesis" selected>Gênesis</option>
+                                    <option value="Exodus">Êxodo</option>
+                                    <option value="Leviticus">Levítico</option>
+                                    <option value="Numbers">Números</option>
+                                    <option value="Deuteronomy">Deuteronômio</option>
+                                    <option value="Psalms">Salmos</option>
+                                    <option value="Proverbs">Provérbios</option>
+                                    <option value="Matthew">Mateus</option>
+                                    <option value="Mark">Marcos</option>
+                                    <option value="Luke">Lucas</option>
+                                    <option value="John">João</option>
+                                    <option value="Acts">Atos</option>
+                                    <option value="Romans">Romanos</option>
+                                    <option value="1Corinthians">1 Coríntios</option>
+                                    <option value="Revelation">Apocalipse</option>
                                 </select>
-                                <input type="number" id="input-biblia-capitulo" value="1" min="1" max="150" class="bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-700 dark:text-zinc-200 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 text-center shadow-xs" placeholder="Cap.">
+                                <input type="number" id="input-biblia-capitulo" value="1" min="1" max="150" class="bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-700 dark:text-zinc-200 outline-none focus:border-amber-500 text-center shadow-xs">
                             </div>
 
-                            <div id="texto-biblia-container" class="w-full h-[320px] overflow-y-auto rounded-2xl border border-slate-100 dark:border-zinc-800/80 bg-linear-to-b from-slate-50/60 to-slate-100/30 dark:from-zinc-950/40 dark:to-zinc-950/20 p-4 space-y-3.5 text-[13px] leading-relaxed text-slate-700 dark:text-zinc-300 scroll-smooth antialiased">
-                                <p class="text-slate-400 dark:text-zinc-500 italic text-center pt-24">Selecione o livro e capítulo para carregar os textos sagrados...</p>
+                            <button id="btn-buscar-biblia" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2 rounded-xl transition-all">Buscar Texto</button>
+
+                            <div id="texto-biblia-container" class="w-full h-[280px] overflow-y-auto rounded-2xl border border-slate-100 dark:border-zinc-800/80 bg-slate-50/60 dark:bg-zinc-950/40 p-4 space-y-2 text-xs leading-relaxed text-slate-700 dark:text-zinc-300">
+                                <p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20">Selecione o livro e capítulo e clique em Buscar...</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-        </div>
-    </main>
+
+            <!-- ABA ORAÇÕES -->
+            <div id="conteudo-oracoes" class="hidden space-y-4 w-full">
+                <div class="px-2 py-4 max-w-4xl mx-auto">
+                    <h2 class="text-xl font-bold text-amber-600 dark:text-amber-400 mb-4 text-center">Orações Tradicionais</h2>
+                    <div class="mb-4">
+                        <input type="text" id="input-busca-oracoes" oninput="window.filtrarOracoes()" placeholder="Buscar oração..." class="w-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-4 py-2 text-xs font-medium outline-none focus:border-amber-500 transition-all">
+                    </div>
+                    <div id="oracoes-container" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ABA JOGOS -->
+            <div id="conteudo-jogos" class="hidden space-y-4 w-full">
+                <div class="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-100 dark:border-zinc-800/80">
+                    <h3 class="text-sm font-black text-slate-800 dark:text-zinc-100 uppercase mb-4">Jogos Litúrgicos</h3>
+                    <div class="p-4 bg-amber-50/50 dark:bg-zinc-800/40 rounded-2xl border border-amber-200/50">
+                        <p class="text-xs text-slate-600 dark:text-zinc-400 font-medium">Em breve novas atividades interativas para o grupo!</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
 
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    // MODIFICAÇÃO DE FORÇA DE REDE: Importar initializeFirestore em vez de getFirestore para aplicar Long Polling
-    import { initializeFirestore, doc, updateDoc, setDoc, getDoc, collection, onSnapshot, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeFirestore, doc, updateDoc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
+    // -------------------------------------------------------------
+    // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO
+    // -------------------------------------------------------------
+    
+    // Controle da Sidebar no Mobile
+    window.toggleSidebar = function() {
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebar.classList.toggle('translate-x-0');
+            overlay.classList.toggle('hidden');
+        }
+    };
+
+    // Navegação por Abas Gerais (Mobile e Desktop)
+    window.switchTab = function(tabName) {
+        const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes', 'jogos'];
+        
+        tabs.forEach(tab => {
+            const tabBtn = document.getElementById(`tab-${tab}`);
+            const content = document.getElementById(`conteudo-${tab}`);
+            
+            if (tabBtn) {
+                if (tab === tabName) tabBtn.classList.add('active-tab');
+                else tabBtn.classList.remove('active-tab');
+            }
+            
+            if (content) {
+                if (tab === tabName) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            }
+        });
+
+        if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
+            window.carregarOracoes();
+        }
+
+        // Fechar o menu lateral ao clicar em uma aba no mobile
+        const sidebar = document.getElementById('sidebar-menu');
+        if (sidebar && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
+            window.toggleSidebar();
+        }
+    };
+        
+    // Sub-abas da Liturgia
+    window.switchSubTab = function(subTabName) {
+        if(!cacheLiturgiaDados) return;
+
+        const refEl = document.getElementById('liturgia-texto-referencia');
+        const corpoEl = document.getElementById('liturgia-texto-corpo');
+        const mapeamentoAbas = ['1leitura', 'salmo', '2leitura', 'evangelho'];
+
+        mapeamentoAbas.forEach(aba => {
+            const btn = document.getElementById(`subtab-${aba}`);
+            if(btn) {
+                if(aba === subTabName) btn.classList.add('active-subtab');
+                else btn.classList.remove('active-subtab');
+            }
+        });
+
+        let targetData = null;
+        if(subTabName === '1leitura') targetData = cacheLiturgiaDados.primeiraLeitura;
+        else if(subTabName === 'salmo') targetData = cacheLiturgiaDados.salmo;
+        else if(subTabName === '2leitura') targetData = cacheLiturgiaDados.segundaLeitura;
+        else if(subTabName === 'evangelho') targetData = cacheLiturgiaDados.evangelho;
+
+        if(!refEl || !corpoEl) return;
+
+        if(targetData) {
+            refEl.innerText = targetData.referencia || "";
+            
+            if (subTabName === 'salmo') {
+                let salmoHtml = "";
+                if (targetData.refrao) {
+                    salmoHtml += `<p class="font-bold text-amber-800 dark:text-amber-500 mb-3 bg-amber-500/5 p-2 rounded-lg border-l-2 border-amber-600 italic">Refrão: ${targetData.refrao}</p>`;
+                }
+                
+                if (targetData.texto) {
+                    if (typeof targetData.texto === 'string') {
+                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto}</div>`;
+                    } else if (Array.isArray(targetData.texto)) {
+                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto.join('<br>')}</div>`;
+                    } else {
+                        salmoHtml += `<div class="space-y-2 text-justify">${JSON.stringify(targetData.texto)}</div>`;
+                    }
+                } else {
+                    salmoHtml += "<p class='italic text-slate-400'>Versos não disponíveis.</p>";
+                }
+                corpoEl.innerHTML = salmoHtml;
+            } else {
+                if (targetData.texto) {
+                    if (typeof targetData.texto === 'string') {
+                        corpoEl.innerHTML = `<div>${targetData.texto}</div>`;
+                    } else if (Array.isArray(targetData.texto)) {
+                        corpoEl.innerHTML = targetData.texto.join('<br>');
+                    } else if (typeof targetData.texto === 'object') {
+                        corpoEl.innerHTML = targetData.texto.paragrafo || JSON.stringify(targetData.texto);
+                    } else {
+                        corpoEl.innerHTML = "Texto não disponível.";
+                    }
+                } else {
+                    corpoEl.innerHTML = "Texto não disponível.";
+                }
+            }
+        } else {
+            refEl.innerText = "Não disponível";
+            corpoEl.innerHTML = "Nenhum texto associado a esta aba.";
+        }
+        corpoEl.scrollTop = 0;
+    };
+
+    // --- SISTEMA DE ORAÇÕES (GLOBAL & MINIMIZÁVEL) ---
+    window.oracoesData = null;
+    window.idiomaOracaoAtual = {};
+
+    window.carregarOracoes = async function() {
+        const container = document.getElementById('oracoes-container');
+        if (!container) return;
+
+        if (!window.oracoesData) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 text-slate-400">
+                    <i class="fa-solid fa-circle-notch animate-spin text-2xl text-amber-600"></i>
+                    <p class="mt-2 text-sm italic font-medium">Carregando orações...</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch('oracoes.json'); 
+                if (!res.ok) throw new Error('Erro ao carregar orações');
+                
+                const json = await res.json();
+                window.oracoesData = json.oracoes;
+            } catch (err) {
+                console.error('Erro ao carregar orações:', err);
+                container.innerHTML = `
+                    <p class="text-center text-red-500 py-6 text-xs font-semibold">
+                        Não foi possível carregar as orações. Verifique o arquivo 'oracoes.json'.
+                    </p>
+                `;
+                return;
+            }
+        }
+
+        window.renderizarOracoes();
+    };
+
+    window.toggleOracao = function(id) {
+        const corpo = document.getElementById(`corpo-oracao-${id}`);
+        const icone = document.getElementById(`icone-oracao-${id}`);
+        if (!corpo || !icone) return;
+
+        const estaOculto = corpo.classList.contains('hidden');
+        if (estaOculto) {
+            corpo.classList.remove('hidden');
+            icone.classList.add('rotate-180');
+        } else {
+            corpo.classList.add('hidden');
+            icone.classList.remove('rotate-180');
+        }
+    };
+
+    window.renderizarOracoes = function() {
+        const container = document.getElementById('oracoes-container');
+        const termoBusca = (document.getElementById('input-busca-oracoes')?.value || '').toLowerCase().trim();
+        if (!container || !window.oracoesData) return;
+
+        container.innerHTML = '';
+
+        const oracoesFiltradas = window.oracoesData.filter(item => {
+            const idioma = window.idiomaOracaoAtual[item.id] || 'pt';
+            const info = item.idiomas[idioma] || item.idiomas['pt'];
+            const titulo = (info.titulo || '').toLowerCase();
+            const texto = (info.texto || '').toLowerCase();
+            return titulo.includes(termoBusca) || texto.includes(termoBusca);
+        });
+
+        if (oracoesFiltradas.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-slate-400 dark:text-zinc-500">
+                    <i class="fa-solid fa-hands-praying text-2xl mb-2"></i>
+                    <p class="text-xs font-medium">Nenhuma oração encontrada para sua busca.</p>
+                </div>`;
+            return;
+        }
+
+        oracoesFiltradas.forEach(item => {
+            const idiomaSalvo = window.idiomaOracaoAtual[item.id] || 'pt';
+            const infoIdioma = item.idiomas[idiomaSalvo] || item.idiomas['pt'];
+
+            let botoesIdiomaHtml = '';
+            Object.keys(item.idiomas).forEach(langKey => {
+                const ativo = langKey === idiomaSalvo;
+                botoesIdiomaHtml += `
+                    <button id="btn-${item.id}-${langKey}" 
+                        onclick="event.stopPropagation(); window.mudarIdiomaOracao('${item.id}', '${langKey}')" 
+                        class="px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
+                            ativo 
+                            ? 'bg-amber-600 text-white shadow-xs' 
+                            : 'bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600'
+                        }">
+                        ${langKey}
+                    </button>
+                `;
+            });
+
+            const card = document.createElement('div');
+            card.className = "rounded-2xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 shadow-xs overflow-hidden transition-all hover:border-amber-500/30";
+
+            card.innerHTML = `
+                <div onclick="window.toggleOracao('${item.id}')" class="p-4 flex items-center justify-between cursor-pointer select-none bg-slate-50/50 dark:bg-zinc-800/40 hover:bg-amber-50/40 dark:hover:bg-zinc-800/80 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-hands-praying text-amber-600 dark:text-amber-500 text-sm"></i>
+                        <h3 id="titulo-${item.id}" class="text-xs sm:text-sm font-black text-slate-800 dark:text-zinc-100 tracking-tight">
+                            ${infoIdioma.titulo}
+                        </h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-1 text-[10px]">
+                            ${botoesIdiomaHtml}
+                        </div>
+                        <i id="icone-oracao-${item.id}" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
+                    </div>
+                </div>
+
+                <div id="corpo-oracao-${item.id}" class="hidden p-5 border-t border-slate-100 dark:border-zinc-800/60 bg-amber-50/20 dark:bg-zinc-900/60">
+                    <p id="texto-${item.id}" class="text-xs sm:text-sm text-slate-700 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-line text-justify italic font-serif">
+                        ${infoIdioma.texto}
+                    </p>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    };
+
+    window.mudarIdiomaOracao = function(id, idioma) {
+        window.idiomaOracaoAtual[id] = idioma;
+        const item = window.oracoesData?.find(o => o.id === id);
+        if (!item || !item.idiomas[idioma]) return;
+
+        const info = item.idiomas[idioma];
+        const elTitulo = document.getElementById(`titulo-${id}`);
+        const elTexto = document.getElementById(`texto-${id}`);
+
+        if (elTitulo) elTitulo.innerText = info.titulo;
+        if (elTexto) elTexto.innerText = info.texto;
+
+        Object.keys(item.idiomas).forEach(langKey => {
+            const btn = document.getElementById(`btn-${id}-${langKey}`);
+            if (btn) {
+                if (langKey === idioma) {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-amber-600 text-white shadow-xs";
+                } else {
+                    btn.className = "px-2 py-0.5 rounded-md font-bold uppercase transition-all bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-600";
+                }
+            }
+        });
+    };
+
+    window.filtrarOracoes = function() {
+        window.renderizarOracoes();
+    };
+
+    // -------------------------------------------------------------
+    // 2. CONFIGURAÇÃO DO FIREBASE E INICIALIZAÇÃO
+    // -------------------------------------------------------------
     const firebaseConfig = {
         apiKey: "AIzaSyCwPeLrAtNEO41MZ3yxSuYib2LC0z2dv9U",
         authDomain: "tarcisius-d03d7.firebaseapp.com",
@@ -331,16 +600,10 @@
 
     const app = initializeApp(firebaseConfig); 
     const auth = getAuth(app); 
-    
-    // CONFIGURAÇÃO DO FIRESTORE ATUALIZADA: Forçando o protocolo HTTP tradicional contra o erro ERR_QUIC_PROTOCOL_ERROR
-    const db = initializeFirestore(app, {
-        experimentalForceLongPolling: true
-    });
-
+    const db = initializeFirestore(app, { experimentalForceLongPolling: true });
     const messaging = getMessaging(app);
 
     const telaLoading = document.getElementById('tela-loading');
-    const telaManutencao = document.getElementById('tela-manutencao');
     const nomeUsuarioHeader = document.getElementById('nome-usuario-header');
     const funcaoUsuarioHeader = document.getElementById('funcao-usuario-header');
     const cardEnqueteDisponibilidade = document.getElementById('card-enquete-disponibilidade');
@@ -445,66 +708,50 @@
         }
     });
 
-    // COLOQUEI A CORREÇÃO DO SERVICE WORKER E DO ESCOPO DO GITHUB PAGES NESTA FUNÇÃO:
-async function configurarNotificacoesPush(userUid) {
-    try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            const chavePublicaVapid = "BEJmhfFVnv--4dGBf-MqbzgBNSNudx2mWFSaZaQq4m1X2eotSzS--jeAKx6c_736d6Q5nlHuODVxqWV16l_VvzM";
+    async function configurarNotificacoesPush(userUid) {
+        try {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                const chavePublicaVapid = "BEJmhfFVnv--4dGBf-MqbzgBNSNudx2mWFSaZaQq4m1X2eotSzS--jeAKx6c_736d6Q5nlHuODVxqWV16l_VvzM";
 
-            if ('serviceWorker' in navigator) {
-    // Pegamos o caminho atual do seu site dinamicamente (incluindo o nome do repositório)
-    const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-    const swPath = baseDir + 'firebase-messaging-sw.js';
+                if ('serviceWorker' in navigator) {
+                    const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+                    const swPath = baseDir + 'firebase-messaging-sw.js';
 
-    console.log("Tentando registrar Service Worker em:", swPath);
+                    const registration = await navigator.serviceWorker.register(swPath);
 
-    // Registra apontando direto para a subpasta correta do GitHub Pages
-    const registration = await navigator.serviceWorker.register(swPath);
-    console.log("Service Worker registrado com sucesso no escopo:", registration.scope);
-
-    const tokenAtual = await getToken(messaging, { 
-        vapidKey: chavePublicaVapid,
-        serviceWorkerRegistration: registration
-    });
-                
-                if (tokenAtual) {
-                    await updateDoc(doc(db, "usuarios", userUid), {
-                        fcmToken: tokenAtual
+                    const tokenAtual = await getToken(messaging, { 
+                        vapidKey: chavePublicaVapid,
+                        serviceWorkerRegistration: registration
                     });
-                    console.log("Token salvo com sucesso!");
-
-                    // Coloque a URL do seu worker da Cloudflare abaixo
-                    fetch("https://fcm-helper.SEU_USUARIO.workers.dev/registrar-topico", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            token: tokenAtual,
-                            topico: "acolitos"
-                        })
-                    })
-                    .then(res => console.log("Registrado no tópico com sucesso."))
-                    .catch(err => console.error("Erro no Worker de tópicos:", err));
+                    
+                    if (tokenAtual) {
+                        await updateDoc(doc(db, "usuarios", userUid), {
+                            fcmToken: tokenAtual
+                        });
+                    }
                 }
             }
+        } catch (err) {
+            console.error('Erro ao configurar notificações push: ', err);
         }
-    } catch (err) {
-        console.error('Erro ao configurar notificações push: ', err);
-    }
-} // <--- Certifique-se de que essa chave de fechamento existe!
+    } 
 
-        
     onMessage(messaging, (payload) => {
-        console.log('Mensagem recebida em primeiro plano (painel aberto): ', payload);
-        alert(`${payload.notification.title}\n\n${payload.notification.body}`);
+        if(payload?.notification) {
+            alert(`${payload.notification.title}\n\n${payload.notification.body}`);
+        }
     });
 
     function inicializarPainelAcolito() {
         if(nomeUsuarioHeader) nomeUsuarioHeader.innerText = usuarioLogadoDados.nome;
         if(funcaoUsuarioHeader) funcaoUsuarioHeader.innerText = usuarioLogadoDados.funcao;
 
-        if(buscaEscalaData && !buscaEscalaData.value) {
-            buscaEscalaData.value = new Date().toISOString().split('T')[0];
+        if(buscaEscalaData) {
+            if(!buscaEscalaData.value) {
+                buscaEscalaData.value = new Date().toISOString().split('T')[0];
+            }
+            buscaEscalaData.addEventListener('change', renderizarEscalaGeralPorData);
         }
 
         ouvirMuralAvisos();
@@ -519,14 +766,19 @@ async function configurarNotificacoesPush(userUid) {
     }
 
     if(btnLogout) {
-        btnLogout.addEventListener('click', () => { sessionStorage.removeItem("dev_user"); signOut(auth).then(() => window.location.href = "index.html"); });
+        btnLogout.addEventListener('click', () => { 
+            sessionStorage.removeItem("dev_user"); 
+            signOut(auth).then(() => window.location.href = "index.html"); 
+        });
     }
 
     function ouvirMuralAvisos() {
         onSnapshot(doc(db, "mural", "aviso_geral"), (snap) => {
+            const txtEl = document.getElementById('txt-aviso-mural');
+            const dataEl = document.getElementById('data-aviso-mural');
             if(snap.exists()) {
-                document.getElementById('txt-aviso-mural').innerText = snap.data().texto || "";
-                document.getElementById('data-aviso-mural').innerText = snap.data().dataPublicacao || "--/--/----";
+                if (txtEl) txtEl.innerText = snap.data().texto || "";
+                if (dataEl) dataEl.innerText = snap.data().dataPublicacao || "--/--/----";
             }
         });
     }
@@ -649,29 +901,33 @@ async function configurarNotificacoesPush(userUid) {
         onSnapshot(doc(db, "enquetes", "disponibilidade_atual"), (snap) => {
             if(snap.exists() && snap.data().ativa === true) {
                 const dados = snap.data(); 
-                listaCelebracoesCheckboxes.innerHTML = "";
+                if (listaCelebracoesCheckboxes) listaCelebracoesCheckboxes.innerHTML = "";
                 
-                const minhasEscolhasSalvas = dados.respostas?.[usuarioLogadoDados.nome]?.escolhas || [];
+                const minhasEscolhasSalvas = dados.respostas?.[usuarioLogadoDados?.nome]?.escolhas || [];
                 let opcoesVisiveisCount = 0;
 
-                dados.celebracoes.forEach(cel => {
+                (dados.celebracoes || []).forEach(cel => {
                     if(minhasEscolhasSalvas.includes(cel.idChave)) return;
 
                     opcoesVisiveisCount++;
                     const formatData = cel.data.split('-').reverse().join('/');
-                    listaCelebracoesCheckboxes.innerHTML += `
-                        <label class="flex items-center gap-3 bg-slate-50/50 dark:bg-zinc-800/30 p-2.5 rounded-xl border border-slate-100 dark:border-zinc-800/60 cursor-pointer text-[11px] font-medium text-slate-700 dark:text-zinc-300 hover:bg-amber-50/50 dark:hover:bg-amber-950/20 transition-all">
-                            <input type="checkbox" name="celebracao_resp" value="${cel.idChave}" class="w-4 h-4 accent-amber-700 rounded focus:ring-amber-500">
-                            <div><span class="font-bold text-amber-900 dark:text-amber-500 block">${formatData} - ${cel.horario}</span>${cel.rotulo}</div>
-                        </label>`;
+                    if (listaCelebracoesCheckboxes) {
+                        listaCelebracoesCheckboxes.innerHTML += `
+                            <label class="flex items-center gap-3 bg-slate-50/50 dark:bg-zinc-800/30 p-2.5 rounded-xl border border-slate-100 dark:border-zinc-800/60 cursor-pointer text-[11px] font-medium text-slate-700 dark:text-zinc-300 hover:bg-amber-50/50 dark:hover:bg-amber-950/20 transition-all">
+                                <input type="checkbox" name="celebracao_resp" value="${cel.idChave}" class="w-4 h-4 accent-amber-700 rounded focus:ring-amber-500">
+                                <div><span class="font-bold text-amber-900 dark:text-amber-500 block">${formatData} - ${cel.horario}</span>${cel.rotulo}</div>
+                            </label>`;
+                    }
                 });
 
-                if(opcoesVisiveisCount > 0) {
+                if(opcoesVisiveisCount > 0 && cardEnqueteDisponibilidade) {
                     cardEnqueteDisponibilidade.classList.remove('hidden');
-                } else {
+                } else if(cardEnqueteDisponibilidade) {
                     cardEnqueteDisponibilidade.classList.add('hidden');
                 }
-            } else { cardEnqueteDisponibilidade.classList.add('hidden'); }
+            } else if(cardEnqueteDisponibilidade) { 
+                cardEnqueteDisponibilidade.classList.add('hidden'); 
+            }
         });
     }
 
@@ -694,11 +950,11 @@ async function configurarNotificacoesPush(userUid) {
                 respondidoEm: Date.now()
             };
             await updateDoc(refDoc, atualizacaoEstruturada);
-            cardEnqueteDisponibilidade.classList.add('hidden'); 
+            if (cardEnqueteDisponibilidade) cardEnqueteDisponibilidade.classList.add('hidden'); 
             alert("Sua disponibilidade foi registrada! As opções marcadas saíram da sua lista.");
         } catch (error) {
             await setDoc(refDoc, { respostas: { [usuarioLogadoDados.nome]: { escolhas: listIds, respondidoEm: Date.now() } } }, { merge: true });
-            cardEnqueteDisponibilidade.classList.add('hidden'); 
+            if (cardEnqueteDisponibilidade) cardEnqueteDisponibilidade.classList.add('hidden'); 
             alert("Sua disponibilidade foi registrada! As opções marcadas saíram da sua lista.");
         }
     });
@@ -714,6 +970,36 @@ async function configurarNotificacoesPush(userUid) {
             renderizarEscalaGeralPorData();
         });
     }
+
+    window.votarPresencaItem = async function(idDoc, funcaoId, novoStatus) {
+        try {
+            const refDoc = doc(db, "escalas", idDoc);
+            const updateObj = {};
+            updateObj[`${funcaoId}.status`] = novoStatus;
+            await updateDoc(refDoc, updateObj);
+        } catch(err) {
+            console.error("Erro ao alterar presença:", err);
+            alert("Erro ao salvar sua alteração.");
+        }
+    };
+
+    window.assumirVagaEscala = async function(idDoc, funcaoId, acao) {
+        try {
+            const refDoc = doc(db, "escalas", idDoc);
+            const updateObj = {};
+            if (acao === 'Voltar') {
+                updateObj[`${funcaoId}.status`] = 'Confirmado';
+            } else {
+                updateObj[`${funcaoId}.nome`] = usuarioLogadoDados.nome;
+                updateObj[`${funcaoId}.status`] = 'Confirmado';
+            }
+            await updateDoc(refDoc, updateObj);
+            alert("Escala atualizada com sucesso!");
+        } catch (err) {
+            console.error("Erro ao assumir vaga:", err);
+            alert("Erro ao processar sua solicitação.");
+        }
+    };
 
     function renderizarEscalaGeralPorData() {
         if(!resultadoEscalaGeral || !buscaEscalaData) return;
@@ -828,7 +1114,7 @@ async function configurarNotificacoesPush(userUid) {
                 if(vagasLivresOuSubstituicoes.length > 0) {
                     let botoesVagasHtml = "";
                     vagasLivresOuSubstituicoes.forEach(v => {
-                        const txtBotao = v.type === 'vazia' ? `Assumir ${v.label} (Vaga Livre)` : `Substituir ${v.quem} em ${v.label}`;
+                        const txtBotao = v.tipo === 'vazia' ? `Assumir ${v.label} (Vaga Livre)` : `Substituir ${v.quem} em ${v.label}`;
                         botoesVagasHtml += `
                             <button onclick="window.assumirVagaEscala('${esc.idDoc}', '${v.funcaoId}', 'Assumir')" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-2.5 py-1.5 rounded-lg font-bold tracking-wide transition-all cursor-pointer text-[10px] uppercase shadow-xs flex items-center gap-1">
                                 <i class="fa-solid fa-plus-circle text-[9px]"></i> ${txtBotao}
@@ -837,334 +1123,107 @@ async function configurarNotificacoesPush(userUid) {
 
                     painelAcaoUsuarioHtml = `
                         <div class="bg-blue-50 dark:bg-blue-950/10 border border-blue-100 dark:border-blue-900/30 p-3.5 rounded-2xl mt-2 space-y-2.5 shadow-xs">
-                            <span class="text-blue-900 dark:text-blue-400 font-bold block text-[11px]"><i class="fa-solid fa-hands-helping"></i> Oportunidades de Serviço neste Horário:</span>
+                            <span class="text-blue-900 dark:text-blue-400 font-bold block text-xs">Vagas em Aberto / Pedidos de Substituição:</span>
                             <div class="flex flex-wrap gap-2">${botoesVagasHtml}</div>
                         </div>`;
-                } else {
-                    painelAcaoUsuarioHtml = `
-                        <div class="bg-slate-50 dark:bg-zinc-800/30 text-slate-400 dark:text-zinc-500 p-2.5 rounded-xl text-center text-[11px] font-medium mt-2 border border-slate-100 dark:border-zinc-800/40">
-                            <i class="fa-solid fa-info-circle text-[10px]"></i> Equipe completa. Você não está escalado neste horário.
-                        </div>`;
                 }
             }
 
-            resultadoEscalaGeral.innerHTML += `
-                <div class="border border-slate-100 dark:border-zinc-800/80 rounded-2xl p-4 bg-slate-50/40 dark:bg-zinc-800/20 space-y-3 shadow-xs">
-                    <div class="flex justify-between items-center border-b border-slate-200/60 dark:border-zinc-800 pb-2.5 font-black text-slate-800 dark:text-zinc-100 text-xs sm:text-sm">
-                        <span class="tracking-tight"><i class="fa-solid fa-church text-red-700 dark:text-red-500 mr-1.5 text-xs"></i> ${esc.titulo}</span>
-                        <span class="bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 px-2.5 py-0.5 rounded-lg border border-red-100/60 dark:border-red-900/20 text-xs">${esc.horario}h</span>
+            const cardEscala = document.createElement('div');
+            cardEscala.className = "bg-slate-50/50 dark:bg-zinc-800/30 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800/80 space-y-3";
+            cardEscala.innerHTML = `
+                <div class="flex items-center justify-between border-b border-slate-200/60 dark:border-zinc-800/60 pb-3">
+                    <div>
+                        <span class="text-[10px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest block">${esc.horario || 'Horário indefinido'}</span>
+                        <h4 class="text-xs font-black text-slate-800 dark:text-zinc-100 uppercase tracking-tight">${esc.titulo || 'Missa / Celebração'}</h4>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        ${listaMembrosHtml}
-                    </div>
-                    ${painelAcaoUsuarioHtml}
-                </div>`;
+                    <span class="text-[10px] font-bold bg-white dark:bg-zinc-800 px-2 py-1 rounded-lg border border-slate-200/50 dark:border-zinc-700/50 text-slate-600 dark:text-zinc-400">
+                        ${esc.data.split('-').reverse().join('/')}
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    ${listaMembrosHtml}
+                </div>
+                ${painelAcaoUsuarioHtml}
+            `;
+            resultadoEscalaGeral.appendChild(cardEscala);
         });
     }
 
-    window.votarPresencaItem = async function(idDocEscala, campoFuncao, novoStatus) {
-        if(!idDocEscala || !campoFuncao) {
-            alert("Erro técnico: ID da escala ou função não encontrado.");
-            return;
-        }
-        
-        const refDoc = doc(db, "escalas", idDocEscala);
-        
-        try {
-            const docSnap = await getDoc(refDoc);
-            if (!docSnap.exists()) {
-                alert("Escala não encontrada no servidor.");
-                return;
-            }
-            
-            const dadosAtuais = docSnap.data();
-            const nomeAtual = dadosAtuais[campoFuncao]?.nome || ""; 
-
-            const dUp = {};
-            dUp[campoFuncao] = {
-                nome: nomeAtual,
-                status: novoStatus
-            };
-
-            await updateDoc(refDoc, dUp);
-        } catch (error) {
-            console.error("ERRO COMPLETO DO FIREBASE:", error);
-            alert("Erro no Firebase: " + error.code + " - " + error.message);
-        }
-    };
-
-    window.assumirVagaEscala = async function(idDocEscala, campoFuncao, operacao) {
-        if(!idDocEscala || !campoFuncao) return;
-        const refDoc = doc(db, "escalas", idDocEscala);
-        
-        try {
-            const docSnap = await getDoc(refDoc);
-            if (!docSnap.exists()) {
-                alert("Escala não encontrada.");
-                return;
-            }
-            
-            const dadosAtuais = docSnap.data();
-            const dUp = {};
-
-            if (operacao === 'Voltar') {
-                const nomeAtual = dadosAtuais[campoFuncao]?.nome || usuarioLogadoDados.nome;
-                dUp[campoFuncao] = {
-                    nome: nomeAtual,
-                    status: "Confirmado"
-                };
-                dUp[`${campoFuncao}.substituiuQuem`] = deleteField(); 
-                await updateDoc(refDoc, dUp);
-                alert("Você reassumiu seu posto!");
-            } else {
-                const donoOriginal = dadosAtuais[campoFuncao]?.nome || "";
-                const eraSubstituicao = dadosAtuais[campoFuncao]?.status === "Substituição Solicitada";
-
-                dUp[campoFuncao] = {
-                    nome: usuarioLogadoDados.nome,
-                    status: "Confirmado"
-                };
-
-                if (eraSubstituicao && donoOriginal && donoOriginal !== "A definir") {
-                    dUp[campoFuncao].substituiuQuem = donoOriginal;
-                }
-
-                await updateDoc(refDoc, dUp);
-                alert("Vaga assumida com sucesso!");
-            }
-        } catch (error) {
-            console.error("Erro ao atualizar escala:", error);
-            alert("Erro ao salvar. Tente novamente.");
-        }
-    };
-    
-    buscaEscalaData?.addEventListener('change', renderizarEscalaGeralPorData);
-
+    // --- CARREGAMENTO DA LITURGIA DO DIA ---
     async function carregarLiturgiaDoDia() {
         try {
-            const r = await fetch('https://liturgia.up.railway.app/'); 
-            if (!r.ok) throw new Error();
-            const apiData = await r.json();
+            const res = await fetch("https://liturgia.up.railway.app/");
+            if (!res.ok) throw new Error("Falha ao obter liturgia.");
             
-            if (apiData) {
-                let tituloSemana = apiData.liturgia || "Tempo Litúrgico";
-                let santoDoDia = apiData.data || "Dia (Sem memória litúrgica específica)";
+            const data = await res.json();
+            cacheLiturgiaDados = data;
 
-                cacheLiturgiaDados = {
-                    semanaTitulo: tituloSemana,
-                    cor: apiData.cor,
-                    santo: santoDoDia,
-                    primeiraLeitura: {
-                        referencia: apiData.primeiraLeitura?.referencia || "I Leitura",
-                        texto: apiData.primeiraLeitura?.texto
-                    },
-                    salmo: {
-                        referencia: apiData.salmo?.referencia || "Salmo Responsorial",
-                        refrao: apiData.salmo?.refrao || apiData.salmo?.refrão || "",
-                        texto: apiData.salmo?.texto
-                    },
-                    segundaLeitura: apiData.segundaLeitura ? {
-                        referencia: apiData.segundaLeitura?.referencia || "II Leitura",
-                        texto: apiData.segundaLeitura?.texto
-                    } : null,
-                    evangelho: {
-                        referencia: apiData.evangelho?.referencia || "Evangelho",
-                        texto: apiData.evangelho?.texto
-                    }
-                };
-                
-                const semTituloEl = document.getElementById('liturgia-semana-titulo');
-                if (semTituloEl) semTituloEl.innerText = cacheLiturgiaDados.semanaTitulo;
+            const titEl = document.getElementById('liturgia-semana-titulo');
+            const santoEl = document.getElementById('liturgia-santo-dia');
+            const corBadge = document.getElementById('liturgia-cor-badge');
+            const subtab2Leitura = document.getElementById('subtab-2leitura');
 
-                const santoTxt = document.getElementById('liturgia-santo-dia');
-                if(santoTxt) santoTxt.innerText = cacheLiturgiaDados.santo;
-
-                const colBadge = document.getElementById('liturgia-cor-badge');
-                if(colBadge && cacheLiturgiaDados.cor) {
-                    colBadge.innerText = cacheLiturgiaDados.cor;
-                    const colLow = cacheLiturgiaDados.cor.toLowerCase();
-                    if(colLow.includes('verde')) colBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-400";
-                    else if(colLow.includes('vermelho')) colBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400";
-                    else if(colLow.includes('branco')) colBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-stone-800 dark:bg-stone-800 dark:text-stone-300";
-                    else if(colLow.includes('roxo')) colBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-400";
-                }
-
-                const btn2Leitura = document.getElementById('subtab-2leitura');
-                if(cacheLiturgiaDados.segundaLeitura && cacheLiturgiaDados.segundaLeitura.texto) {
-                    btn2Leitura.classList.remove('hidden');
-                } else {
-                    btn2Leitura.classList.add('hidden');
-                }
-
-                window.switchSubTab('1leitura');
-            } else {
-                throw new Error();
+            if(titEl) titEl.innerText = data.liturgia || "Liturgia Diária";
+            if(santoEl) santoEl.innerText = data.santo || "Sem registro";
+            if(corBadge) {
+                corBadge.innerText = data.cor || "---";
+                if(data.cor?.toLowerCase().includes('verde')) corBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300";
+                else if(data.cor?.toLowerCase().includes('vermelho')) corBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300";
+                else if(data.cor?.toLowerCase().includes('branco')) corBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 dark:bg-zinc-800 dark:text-zinc-200 border border-slate-300/50";
+                else if(data.cor?.toLowerCase().includes('roxo')) corBadge.className = "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300";
             }
-        } catch (e) { 
-            console.error("Erro ao carregar liturgia:", e);
+
+            if (data.segundaLeitura && subtab2Leitura) {
+                subtab2Leitura.classList.remove('hidden');
+            } else if(subtab2Leitura) {
+                subtab2Leitura.classList.add('hidden');
+            }
+
+            window.switchSubTab('1leitura');
+        } catch (e) {
+            console.error("Erro Liturgia API:", e);
             const corpoEl = document.getElementById('liturgia-texto-corpo');
-            if (corpoEl) corpoEl.innerText = "Consulta offline ou instabilidade na API de Liturgias."; 
+            if(corpoEl) corpoEl.innerText = "Não foi possível carregar os textos litúrgicos automaticamente hoje.";
         }
     }
 
-    window.switchSubTab = function(subTabName) {
-        if(!cacheLiturgiaDados) return;
-
-        const refEl = document.getElementById('liturgia-texto-referencia');
-        const corpoEl = document.getElementById('liturgia-texto-corpo');
-        const mapeamentoAbas = ['1leitura', 'salmo', '2leitura', 'evangelho'];
-
-        mapeamentoAbas.forEach(aba => {
-            const btn = document.getElementById(`subtab-${aba}`);
-            if(btn) {
-                if(aba === subTabName) btn.classList.add('active-subtab');
-                else btn.classList.remove('active-subtab');
-            }
-        });
-
-        let targetData = null;
-        if(subTabName === '1leitura') targetData = cacheLiturgiaDados.primeiraLeitura;
-        else if(subTabName === 'salmo') targetData = cacheLiturgiaDados.salmo;
-        else if(subTabName === '2leitura') targetData = cacheLiturgiaDados.segundaLeitura;
-        else if(subTabName === 'evangelho') targetData = cacheLiturgiaDados.evangelho;
-
-        if(targetData) {
-            refEl.innerText = targetData.referencia || "";
-            
-            if (subTabName === 'salmo') {
-                let salmoHtml = "";
-                if (targetData.refrao) {
-                    salmoHtml += `<p class="font-bold text-amber-800 dark:text-amber-500 mb-3 bg-amber-500/5 p-2 rounded-lg border-l-2 border-amber-600 italic">Refrão: ${targetData.refrao}</p>`;
-                }
-                
-                if (targetData.texto) {
-                    if (typeof targetData.texto === 'string') {
-                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto}</div>`;
-                    } else if (Array.isArray(targetData.texto)) {
-                        salmoHtml += `<div class="space-y-2 text-justify">${targetData.texto.join('<br>')}</div>`;
-                    } else {
-                        salmoHtml += `<div class="space-y-2 text-justify">${JSON.stringify(targetData.texto)}</div>`;
-                    }
-                } else {
-                    salmoHtml += "<p class='italic text-slate-400'>Versos não disponíveis.</p>";
-                }
-                corpoEl.innerHTML = salmoHtml;
-            } else {
-                if (targetData.texto) {
-                    if (typeof targetData.texto === 'string') {
-                        corpoEl.innerHTML = `<div>${targetData.texto}</div>`;
-                    } else if (Array.isArray(targetData.texto)) {
-                        corpoEl.innerHTML = targetData.texto.join('<br>');
-                    } else if (typeof targetData.texto === 'object') {
-                        corpoEl.innerHTML = targetData.texto.paragrafo || JSON.stringify(targetData.texto);
-                    } else {
-                        corpoEl.innerHTML = "Texto não disponível.";
-                    }
-                } else {
-                    corpoEl.innerHTML = "Texto não disponível.";
-                }
-            }
-        } else {
-            refEl.innerText = "Não disponível";
-            corpoEl.innerHTML = "Nenhum texto associado a esta aba.";
-        }
-        corpoEl.scrollTop = 0;
-    }
-
+    // --- LEITOR BÍBLICO INTEGRADO ---
     function inicializarLeitorBiblia() {
-        const selectLivro = document.getElementById('select-biblia-livro');
-        const inputCapitulo = document.getElementById('input-biblia-capitulo');
-        
-        if(!selectLivro || !inputCapitulo) return;
+        const btnBuscar = document.getElementById('btn-buscar-biblia');
+        if(!btnBuscar) return;
 
-        const correspondenciaIngles = {
-            "gn": "genesis", "ex": "exodus", "lv": "leviticus", "nm": "numbers", "dt": "deuteronomy",
-            "js": "joshua", "jz": "judges", "rt": "ruth", "1sm": "1samuel", "2sm": "2samuel",
-            "1rs": "1kings", "2rs": "2kings", "1cr": "1chronicles", "2cr": "2chronicles", "ed": "ezra",
-            "ne": "nehemiah", "et": "esther", "jo": "job", "ps": "psalms", "pv": "proverbs",
-            "ec": "ecclesiastes", "ct": "songofsolomon", "is": "isaiah", "jr": "jeremiah", "lm": "lamentations",
-            "ez": "ezequiel", "dn": "daniel", "os": "hosea", "jl": "joel", "am": "amos",
-            "ob": "obadiah", "jn": "jonah", "mq": "micah", "na": "nahum", "hc": "habakkuk",
-            "sf": "zephaniah", "ag": "haggai", "zc": "zechariah", "ml": "malachi", "mt": "matthew",
-            "mc": "mark", "lc": "luke", "jhn": "john", "act": "acts", "rm": "romans",
-            "1co": "1corinthians", "2co": "2corinthians", "gl": "galatians", "ef": "ephesians", "fp": "philippians",
-            "cl": "colossians", "1ts": "1thessalonians", "2ts": "2thessalonians", "1tm": "1timothy", "2tm": "2timothy",
-            "tt": "titus", "fm": "philemon", "hb": "hebrews", "tg": "james", "1pe": "1peter",
-            "2pe": "2peter", "1jo": "1john", "2jo": "2john", "3jo": "3john", "jd": "jude", "ap": "revelation"
-        };
-
-        async function buscarTextoBiblia() {
-            const siglaPt = selectLivro.value;
-            const livreIngles = correspondenciaIngles[siglaPt] || "matthew";
-            const cap = inputCapitulo.value || 1;
+        btnBuscar.addEventListener('click', async () => {
+            const livro = document.getElementById('select-biblia-livro')?.value;
+            const cap = document.getElementById('input-biblia-capitulo')?.value || 1;
             const container = document.getElementById('texto-biblia-container');
-            
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center pt-24 text-slate-400 dark:text-zinc-500">
-                    <i class="fa-solid fa-circle-notch animate-spin text-amber-600 text-lg mb-2"></i>
-                    <p class="italic text-xs font-semibold tracking-wide">Buscando passagens sagradas...</p>
-                </div>`;
-            
+
+            if(!container) return;
+
+            container.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20"><i class="fa-solid fa-circle-notch animate-spin text-amber-600"></i> Buscando capítulo nas Escrituras...</p>`;
+
             try {
-                const res = await fetch(`https://bible-api.com/${livreIngles}+${cap}?translation=almeida`);
-                if(!res.ok) throw new Error();
-                const data = await res.json();
+                const res = await fetch(`https://bible-api.com/${livro}+${cap}?translation=almeida`);
+                if (!res.ok) throw new Error("Erro na API bíblica.");
                 
+                const data = await res.json();
                 if(data.verses && data.verses.length > 0) {
-                    container.innerHTML = "";
+                    let textHtml = `<h4 class="font-black text-amber-800 dark:text-amber-500 uppercase mb-3 text-sm">${data.reference}</h4><div class="space-y-2">`;
                     data.verses.forEach(v => {
-                        container.innerHTML += `
-                            <div class="flex items-start gap-3 p-1.5 rounded-lg hover:bg-slate-200/40 dark:hover:bg-zinc-800/40 transition-all">
-                                <span class="bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-400 text-[10px] font-black h-5 w-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 shadow-xs border border-amber-200/30">
-                                    ${v.verse}
-                                </span>
-                                <p class="text-slate-700 dark:text-zinc-300 font-medium text-justify">
-                                    ${v.text}
-                                </p>
-                            </div>`;
+                        textHtml += `<p><strong class="text-amber-700 dark:text-amber-500 mr-1">${v.verse}.</strong> ${v.text}</p>`;
                     });
-                    container.scrollTop = 0;
+                    textHtml += `</div>`;
+                    container.innerHTML = textHtml;
                 } else {
-                    container.innerHTML = `
-                        <p class="text-slate-400 dark:text-zinc-500 italic text-center pt-24 font-medium">
-                            Nenhum versículo catalogado para este capítulo.
-                        </p>`;
+                    container.innerHTML = `<p class="text-red-500 italic text-center pt-20">Capítulo não encontrado.</p>`;
                 }
-            } catch (error) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center pt-20 text-rose-500 px-4 text-center">
-                        <i class="fa-solid fa-cloud-solitaire text-xl mb-2"></i>
-                        <p class="font-bold text-xs uppercase tracking-wide">Falha na Sincronização</p>
-                        <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-1 font-medium leading-normal">
-                            Não foi possível conectar ao servidor de escrituras. Tente selecionar outro capítulo ou verifique sua conexão.
-                        </p>
-                    </div>`;
-            }
-        }
-
-        selectLivro.addEventListener('change', buscarTextoBiblia);
-        inputCapitulo.addEventListener('input', () => {
-            if(inputCapitulo.value > 0) buscarTextoBiblia();
-        });
-
-        buscarTextoBiblia();
-    }
-
-    window.switchTab = function(tabName) {
-        document.getElementById('conteudo-escala').className = tabName === 'escala' ? 'space-y-6 block md:col-span-2' : 'space-y-6 hidden md:col-span-2';
-        document.getElementById('conteudo-avisos').className = tabName === 'avisos' ? 'space-y-4 block w-full' : 'space-y-4 hidden md:block w-full';
-        document.getElementById('conteudo-conteudos').className = tabName === 'conteudos' ? 'space-y-4 block w-full' : 'space-y-4 hidden md:block w-full';
-        document.getElementById('conteudo-liturgia').className = tabName === 'liturgia' ? 'space-y-4 block w-full' : 'space-y-4 hidden md:block w-full';
-        
-        const tabs = ['escala', 'avisos', 'conteudos', 'liturgia'];
-        tabs.forEach(t => {
-            const el = document.getElementById(`tab-${t}`);
-            if(el) {
-                if(t === tabName) el.className = 'active-tab flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer text-slate-500 dark:text-zinc-400';
-                else el.className = 'text-gray-500 flex-1 py-3.5 text-center text-xs flex flex-col items-center gap-1.5 cursor-pointer dark:text-zinc-500';
+            } catch(err) {
+                console.error("Erro bíblico:", err);
+                container.innerHTML = `<p class="text-red-500 italic text-center pt-20">Não foi possível consultar este trecho no momento.</p>`;
             }
         });
     }
-</script>
+
+    </script>
 </body>
 </html>
