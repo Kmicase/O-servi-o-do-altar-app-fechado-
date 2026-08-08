@@ -301,57 +301,53 @@
     import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
     // -------------------------------------------------------------
-    // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO (DECLARADAS PRIMEIRO)
+    // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO
     // -------------------------------------------------------------
-    // -------------------------------------------------------------
-// CONTROLE DO MENU LATERAL (SIDEBAR MOBILE)
-// -------------------------------------------------------------
-window.toggleSidebar = function() {
-    const sidebar = document.getElementById('sidebar-menu');
-    const overlay = document.getElementById('sidebar-overlay');
     
-    if (sidebar && overlay) {
-        // Alterna a classe que esconde/mostra a barra lateral no mobile
-        sidebar.classList.toggle('-translate-x-full');
-        sidebar.classList.toggle('translate-x-0');
+    // Abrir / Fechar Menu Lateral no Mobile
+    window.toggleSidebar = function() {
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('sidebar-overlay');
         
-        // Alterna o fundo escuro (overlay)
-        overlay.classList.toggle('hidden');
-    }
-};
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebar.classList.toggle('translate-x-0');
+            overlay.classList.toggle('hidden');
+        }
+    };
+
     // Navegação por Abas Gerais (Mobile e Desktop)
     window.switchTab = function(tabName) {
-    const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes', 'jogos'];
-    
-    tabs.forEach(tab => {
-        const tabBtn = document.getElementById(`tab-${tab}`);
-        const content = document.getElementById(`conteudo-${tab}`);
+        const tabs = ['escala', 'avisos', 'conteudos', 'liturgia', 'oracoes', 'jogos'];
         
-        if (tabBtn) {
-            if (tab === tabName) tabBtn.classList.add('active-tab');
-            else tabBtn.classList.remove('active-tab');
-        }
-        
-        if (content) {
-            if (tab === tabName) {
-                content.classList.remove('hidden');
-            } else {
-                content.classList.add('hidden');
+        tabs.forEach(tab => {
+            const tabBtn = document.getElementById(`tab-${tab}`);
+            const content = document.getElementById(`conteudo-${tab}`);
+            
+            if (tabBtn) {
+                if (tab === tabName) tabBtn.classList.add('active-tab');
+                else tabBtn.classList.remove('active-tab');
             }
+            
+            if (content) {
+                if (tab === tabName) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            }
+        });
+
+        if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
+            window.carregarOracoes();
         }
-    });
 
-    if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
-        window.carregarOracoes();
-    }
-
-    // FECHA O MENU LATERAL NO MOBILE AO CLICAR EM QUALQUER ABA
-    const sidebar = document.getElementById('sidebar-menu');
-    const overlay = document.getElementById('sidebar-overlay');
-    if (sidebar && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
-        window.toggleSidebar();
-    }
-};
+        // Fechar o menu lateral ao selecionar uma aba no celular
+        const sidebar = document.getElementById('sidebar-menu');
+        if (sidebar && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
+            window.toggleSidebar();
+        }
+    };
 
         // Se for para a aba de orações, carrega se ainda não foi carregado
         if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
