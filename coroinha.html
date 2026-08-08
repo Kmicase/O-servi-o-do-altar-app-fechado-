@@ -293,7 +293,6 @@
 
         </main>
     </div>
-
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -304,7 +303,7 @@
     // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO
     // -------------------------------------------------------------
     
-    // Abrir / Fechar Menu Lateral no Mobile
+    // Controle da Sidebar no Mobile
     window.toggleSidebar = function() {
         const sidebar = document.getElementById('sidebar-menu');
         const overlay = document.getElementById('sidebar-overlay');
@@ -342,19 +341,13 @@
             window.carregarOracoes();
         }
 
-        // Fechar o menu lateral ao selecionar uma aba no celular
+        // Fechar o menu lateral ao clicar em uma aba no mobile
         const sidebar = document.getElementById('sidebar-menu');
         if (sidebar && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
             window.toggleSidebar();
         }
     };
-
-        // Se for para a aba de orações, carrega se ainda não foi carregado
-        if (tabName === 'oracoes' && typeof window.carregarOracoes === 'function') {
-            window.carregarOracoes();
-        }
-    };
-
+        
     // Sub-abas da Liturgia
     window.switchSubTab = function(subTabName) {
         if(!cacheLiturgiaDados) return;
