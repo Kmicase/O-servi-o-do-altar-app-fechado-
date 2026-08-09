@@ -338,7 +338,7 @@
         const stringMesAno = dataHoje.toISOString().substring(0, 7); // "YYYY-MM"
 
         if(filtroMesMissas) {
-            filtroMesMissas.value = stringMesAno;
+            // Permite carregar todos os meses ao abrir a página
             filtroMesMissas.addEventListener('change', carregarRelatorioMissas);
         }
 
@@ -392,7 +392,8 @@ async function carregarRelatorioMissas() {
             // Tratamento preventivo caso o campo se chame 'data' ou venha na raiz do objeto
             const dataEscalaRaw = scala.data || scala.Date; 
             
-            if(dataEscalaRaw && dataEscalaRaw.startsWith(mesSelecionado)) {
+            // Se nenhum mês estiver selecionado no filtro, consolida todos os meses da base de dados
+            if(dataEscalaRaw && (!mesSelecionado || dataEscalaRaw.startsWith(mesSelecionado))) {
                 
                 // --- AJUSTE CRUCIAL DE FUSO HORÁRIO ---
                 // Forçamos o fuso horário de Brasília (-03:00) na montagem da string para o JS não se perder
@@ -440,8 +441,6 @@ async function carregarRelatorioMissas() {
                                 relatorio[nomeAtual].solicitouSub++;
                             }
                         }
-                        // Opcional: Se quiser computar presença antes da missa acontecer, deixe aqui. 
-                        // Se preferir que só conte presença DEPOIS que a missa passar, comente as 3 linhas abaixo.
                         else if (status === "confirmado" || status === "presente") {
                             if(relatorio[nomeAtual]) {
                                 relatorio[nomeAtual].presencas++;
