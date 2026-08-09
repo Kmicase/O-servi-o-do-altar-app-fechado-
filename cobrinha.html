@@ -213,6 +213,19 @@
       box-shadow: 0 0 12px var(--neon-pink);
     }
 
+    .input-player {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 10px;
+      border-radius: 12px;
+      border: 2px solid var(--neon-cyan);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+    }
+
     .btn-start {
       background: var(--neon-green);
       color: #000;
@@ -222,15 +235,33 @@
       font-weight: 900;
       border-radius: 50px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 15px;
       box-shadow: 0 0 20px var(--neon-green);
       transition: transform 0.1s;
+      width: 100%;
     }
 
     .btn-start:active {
       transform: scale(0.95);
     }
+
+    .btn-ranking {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 8px;
+      display: inline-block;
+      text-decoration: none;
+    }
   </style>
+
+  <!-- Importação do Firebase Config local -->
+  <script type="module" src="config-firebase.js"></script>
 </head>
 <body>
 
@@ -262,7 +293,12 @@
       <h2 id="modalTitle">CAT PARADE 🐾</h2>
       <p id="modalSub" style="font-size: 1rem; color: #ccc;">Pegue os peixinhos para formar uma caravana de gatinhos!</p>
       
-      <div class="diff-selector">
+      <!-- Entrada do Nome do Jogador -->
+      <div id="playerInputContainer" style="margin-top: 10px;">
+        <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nome / Nickname" maxlength="15">
+      </div>
+
+      <div class="diff-selector" id="diffSelector">
         <div class="diff-label">VELOCIDADE</div>
         <div class="diff-buttons">
           <button class="btn-diff active" onclick="setDifficulty('easy', this)">LENTO</button>
@@ -273,10 +309,14 @@
       </div>
 
       <button class="btn-start" onclick="startGame()">JOGAR</button>
+      <br>
+      <a href="ranking.html?jogo=cobrinha" class="btn-ranking">🏆 Ver Ranking Geral</a>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -302,22 +342,27 @@
     let highScore = localStorage.getItem('cat_highscore') || 1;
     let gameLoop = null;
 
-    // Novas Velocidades Reduzidas (Maior intervalo em ms = Mais lento)
+    // Recupera nome anterior se existir
+    const inputPlayer = document.getElementById('playerName');
+    if (localStorage.getItem('user_player_name')) {
+      inputPlayer.value = localStorage.getItem('user_player_name');
+    }
+
     const difficulties = {
-      easy: 260,    // Muito mais lento e tranquilo
-      medium: 180,  // Ritmo moderado
-      hard: 120,    // Agilizado
-      insane: 75    // Rápido
+      easy: 260,
+      medium: 180,
+      hard: 120,
+      insane: 75
     };
     let baseSpeed = difficulties.easy;
 
     document.getElementById('highscore').textContent = highScore;
 
-    function setDifficulty(diff, btn) {
+    window.setDifficulty = function(diff, btn) {
       baseSpeed = difficulties[diff];
       document.querySelectorAll('.btn-diff').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-    }
+    };
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -347,7 +392,10 @@
       }
     }
 
-    function startGame() {
+    window.startGame = function() {
+      const nomeDigitado = inputPlayer.value.trim() || 'Gatinho Anônimo';
+      localStorage.setItem('user_player_name', nomeDigitado);
+
       document.getElementById('gameModal').style.display = 'none';
       
       cats = [
@@ -365,7 +413,7 @@
 
       if (gameLoop) clearInterval(gameLoop);
       gameLoop = setInterval(update, baseSpeed);
-    }
+    };
 
     function spawnFood() {
       food.x = Math.floor(Math.random() * tileCount) * gridSize;
@@ -526,12 +574,12 @@
       ctx.shadowBlur = 0;
     }
 
-    function changeDir(dir) {
+    window.changeDir = function(dir) {
       if (dir === 'UP' && dy === 0) { nextDx = 0; nextDy = -gridSize; }
       if (dir === 'DOWN' && dy === 0) { nextDx = 0; nextDy = gridSize; }
       if (dir === 'LEFT' && dx === 0) { nextDx = -gridSize; nextDy = 0; }
       if (dir === 'RIGHT' && dx === 0) { nextDx = gridSize; nextDy = 0; }
-    }
+    };
 
     window.addEventListener('keydown', e => {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') changeDir('UP');
@@ -561,9 +609,36 @@
       }
     });
 
+    // Função que salva os dados no Firebase Firestore
+    async function salvarPontuacaoFirebase(nome, pontos) {
+      if (!window.db) {
+        console.warn("Instância do Firebase Firestore não carregada.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(window.db, "rankings"), {
+          nome: nome,
+          pontos: pontos,
+          jogo: "cobrinha",
+          avatarSeed: localStorage.getItem('user_avatar_seed') || nome,
+          avatarStyle: localStorage.getItem('user_avatar_style') || 'bottts',
+          data: new Date()
+        });
+        console.log("Pontuação salva com sucesso no Firestore!");
+      } catch (erro) {
+        console.error("Erro ao salvar a pontuação no Firebase: ", erro);
+      }
+    }
+
     function gameOver() {
       playSound('over');
       clearInterval(gameLoop);
+
+      const nomeJogador = localStorage.getItem('user_player_name') || 'Gatinho Anônimo';
+
+      // Envia os dados para a coleção "rankings" no Firebase
+      salvarPontuacaoFirebase(nomeJogador, score);
 
       document.getElementById('modalTitle').textContent = 'FIM DA PARADA!';
       document.getElementById('modalSub').innerHTML = `Caravana Final: <strong style="color:var(--neon-yellow);">${score} Gatinhos 🐾</strong>`;
