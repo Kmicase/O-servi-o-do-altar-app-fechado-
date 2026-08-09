@@ -40,6 +40,25 @@
       text-shadow: 0 2px 6px rgba(0,0,0,0.6);
     }
 
+    .player-setup {
+      margin-bottom: 10px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .input-player {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 2px solid var(--accent);
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 0.9rem;
+      text-align: center;
+      outline: none;
+    }
+
     .level-selector {
       display: flex;
       gap: 8px;
@@ -88,7 +107,7 @@
       display: none;
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 30, 0.92);
+      background: rgba(15, 23, 30, 0.95);
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -108,8 +127,19 @@
       margin-bottom: 8px;
     }
 
+    .win-stats {
+      margin: 10px 0;
+      font-size: 0.95rem;
+      color: #ecf0f1;
+    }
+
+    .win-stats span {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
     .btn-reset {
-      margin-top: 15px;
+      margin-top: 10px;
       padding: 10px 22px;
       background-color: var(--accent);
       color: var(--primary);
@@ -118,17 +148,37 @@
       font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
+      width: 80%;
+    }
+
+    .btn-ranking {
+      margin-top: 8px;
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-block;
     }
   </style>
+
+  <!-- Importação do Firebase Config local -->
+  <script type="module" src="config-firebase.js"></script>
 </head>
 <body>
 
   <h1>Caminho do Altar</h1>
 
+  <div class="player-setup">
+    <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nome / Nickname" maxlength="15">
+  </div>
+
   <div class="level-selector">
-    <button class="btn-level active" onclick="changeLevel('easy')">Fácil (Coroinha)</button>
-    <button class="btn-level" onclick="changeLevel('medium')">Médio (Cerimoniário)</button>
-    <button class="btn-level" onclick="changeLevel('hard')">Difícil (Acólito)</button>
+    <button class="btn-level active" onclick="changeLevel('easy', event)">Fácil (Coroinha)</button>
+    <button class="btn-level" onclick="changeLevel('medium', event)">Médio (Cerimoniário)</button>
+    <button class="btn-level" onclick="changeLevel('hard', event)">Difícil (Acólito)</button>
   </div>
 
   <div class="instructions" id="instructions">
@@ -141,18 +191,36 @@
     <div class="win-overlay" id="winOverlay">
       <h2>Missa Pronta! 🎉</h2>
       <p>Você acendeu as velas e chegou ao Altar a tempo!</p>
+      
+      <div class="win-stats">
+        <p>Tempo: <span id="winTime">0.0</span>s</p>
+        <p>Pontuação: <span id="winScore">0</span> pts</p>
+      </div>
+
       <button class="btn-reset" onclick="initGame()">Jogar Novamente</button>
+      <a href="ranking.html?jogo=labirinto" class="btn-ranking">🏆 Ver Ranking Geral</a>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+
+    const inputPlayer = document.getElementById('playerName');
+    if (localStorage.getItem('user_player_name')) {
+      inputPlayer.value = localStorage.getItem('user_player_name');
+    }
+
+    inputPlayer.addEventListener('change', () => {
+      localStorage.setItem('user_player_name', inputPlayer.value.trim());
+    });
 
     // Níveis do Labirinto
     const levels = {
       easy: {
-        cols: 6, rows: 6, tileSize: 64,
+        cols: 6, rows: 6, tileSize: 64, basePoints: 500,
         grid: [
           [0,0,1,1,1,1],
           [1,0,0,0,1,1],
@@ -164,7 +232,7 @@
         item: {x: 3, y: 1}, goal: {x: 5, y: 5}
       },
       medium: {
-        cols: 8, rows: 8, tileSize: 48,
+        cols: 8, rows: 8, tileSize: 48, basePoints: 1000,
         grid: [
           [0,0,0,1,1,1,1,1],
           [1,1,0,1,0,0,0,1],
@@ -178,7 +246,7 @@
         item: {x: 4, y: 1}, goal: {x: 7, y: 7}
       },
       hard: {
-        cols: 10, rows: 10, tileSize: 38,
+        cols: 10, rows: 10, tileSize: 38, basePoints: 2000,
         grid: [
           [0,0,1,1,1,1,1,1,1,1],
           [1,0,0,0,0,0,1,0,0,1],
@@ -203,34 +271,30 @@
       x: 0, y: 0,
       vx: 0, vy: 0,
       radius: 12,
-      maxSpeed: 220, // pixels por segundo
-      accel: 1800,   // taxa de aceleração
-      friction: 0.82 // desaceleração/atrito suave
+      maxSpeed: 220,
+      accel: 1800,
+      friction: 0.82
     };
 
-    // Histórico para efeito de rastro (Trail Effect)
     let trail = [];
-
-    // Estado dos Controles
     let input = { x: 0, y: 0 };
     let keys = {};
-    
-    // Joystick Virtual (Touch)
     let joystick = { active: false, startX: 0, startY: 0, currX: 0, currY: 0 };
 
     let hasItem = false;
     let gameWon = false;
     let lastTime = performance.now();
+    let startTime = performance.now();
     let animTimer = 0;
 
-    function changeLevel(key) {
+    window.changeLevel = function(key, e) {
       currentLevelKey = key;
       document.querySelectorAll('.btn-level').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      initGame();
-    }
+      if (e && e.target) e.target.classList.add('active');
+      window.initGame();
+    };
 
-    function initGame() {
+    window.initGame = function() {
       currentLevel = levels[currentLevelKey];
       const ts = currentLevel.tileSize;
       
@@ -243,12 +307,13 @@
       trail = [];
       hasItem = false;
       gameWon = false;
+      startTime = performance.now();
 
       document.getElementById('winOverlay').style.display = 'none';
       document.getElementById('instructions').innerHTML = 'Guie o coroinha 🚶‍♂️ até a vela 🕯️ e depois ao Altar ⛪!';
-    }
+    };
 
-    // --- ENTRADA DE DADOS (Teclado e Touch Joystick) ---
+    // --- ENTRADA DE DADOS ---
     window.addEventListener('keydown', e => { keys[e.key] = true; updateKeyboardInput(); });
     window.addEventListener('keyup', e => { keys[e.key] = false; updateKeyboardInput(); });
 
@@ -262,14 +327,13 @@
       if (keys['ArrowUp'] || keys['w'] || keys['W']) input.y -= 1;
       if (keys['ArrowDown'] || keys['s'] || keys['S']) input.y += 1;
 
-      // Normaliza vetor diagonal
       if (input.x !== 0 && input.y !== 0) {
         input.x *= 0.7071;
         input.y *= 0.7071;
       }
     }
 
-    // Controls de Touch / Joystick dinâmico
+    // Touch Joystick
     canvas.addEventListener('touchstart', e => {
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
@@ -319,56 +383,70 @@
              isWall(px, py - r) || isWall(px, py + r);
     }
 
-    // Loop de Atualização Baseado em Tempo Real (Delta Time)
+    // Função para salvar dados no Firebase Firestore
+    async function salvarPontuacaoFirebase(nome, pontos) {
+      if (!window.db) {
+        console.warn("Instância do Firestore não encontrada.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(window.db, "rankings"), {
+          nome: nome,
+          pontos: pontos,
+          jogo: "labirinto",
+          dificuldade: currentLevelKey,
+          avatarSeed: localStorage.getItem('user_avatar_seed') || nome,
+          avatarStyle: localStorage.getItem('user_avatar_style') || 'bottts',
+          data: new Date()
+        });
+        console.log("Pontuação do Labirinto salva no Firebase!");
+      } catch (erro) {
+        console.error("Erro ao salvar pontuação no Firebase: ", erro);
+      }
+    }
+
     function update(dt) {
       if (gameWon) return;
 
       animTimer += dt;
 
-      // 1. Aceleração Suave
       player.vx += input.x * player.accel * dt;
       player.vy += input.y * player.accel * dt;
 
-      // 2. Atrito / Desaceleração
       player.vx *= Math.pow(player.friction, dt * 60);
       player.vy *= Math.pow(player.friction, dt * 60);
 
-      // Limita Velocidade Máxima
       let currentSpeed = Math.hypot(player.vx, player.vy);
       if (currentSpeed > player.maxSpeed) {
         player.vx = (player.vx / currentSpeed) * player.maxSpeed;
         player.vy = (player.vy / currentSpeed) * player.maxSpeed;
       }
 
-      // 3. Sistema de Deslizamento em Paredes (Slide Physics)
       let nextX = player.x + player.vx * dt;
       let nextY = player.y + player.vy * dt;
 
-      // Testa eixo X separadamente para permitir deslize em paredes verticais
       if (!checkWallCollision(nextX, player.y)) {
         player.x = nextX;
       } else {
         player.vx = 0;
       }
 
-      // Testa eixo Y separadamente para permitir deslize em paredes horizontais
       if (!checkWallCollision(player.x, nextY)) {
         player.y = nextY;
       } else {
         player.vy = 0;
       }
 
-      // Rastro de Movimento
       if (currentSpeed > 20) {
         trail.push({ x: player.x, y: player.y, alpha: 0.6 });
         if (trail.length > 8) trail.shift();
       }
       trail.forEach(t => t.alpha -= dt * 2);
 
-      // --- CHECAGEM DE OBJETIVOS ---
       const ts = currentLevel.tileSize;
 
-      // Vela 🕯️
+      // Vela
       const itemX = currentLevel.item.x * ts + ts / 2;
       const itemY = currentLevel.item.y * ts + ts / 2;
       if (!hasItem && Math.hypot(player.x - itemX, player.y - itemY) < player.radius + ts * 0.3) {
@@ -376,25 +454,36 @@
         document.getElementById('instructions').innerHTML = 'Vela acesa! Agora vá rápido até o Altar ⛪!';
       }
 
-      // Altar ⛪
+      // Altar (Vitória)
       const goalX = currentLevel.goal.x * ts + ts / 2;
       const goalY = currentLevel.goal.y * ts + ts / 2;
       if (Math.hypot(player.x - goalX, player.y - goalY) < player.radius + ts * 0.3) {
         if (hasItem) {
           gameWon = true;
+
+          const tempoSegundos = ((performance.now() - startTime) / 1000).toFixed(1);
+          const pontosCalculados = Math.max(10, Math.floor(currentLevel.basePoints - tempoSegundos * 15));
+          
+          const nomeJogador = inputPlayer.value.trim() || 'Anônimo';
+          localStorage.setItem('user_player_name', nomeJogador);
+
+          document.getElementById('winTime').textContent = tempoSegundos;
+          document.getElementById('winScore').textContent = pontosCalculados;
           document.getElementById('winOverlay').style.display = 'flex';
+
+          // Envia a pontuação para o Firebase
+          salvarPontuacaoFirebase(nomeJogador, pontosCalculados);
+
         } else {
           document.getElementById('instructions').innerHTML = '<span style="color:#e74c3c;">Pegue a vela 🕯️ primeiro!</span>';
         }
       }
     }
 
-    // --- RENDERIZAÇÃO GRÁFICA ---
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const ts = currentLevel.tileSize;
 
-      // 1. Labirinto Estilizado
       for (let r = 0; r < currentLevel.rows; r++) {
         for (let c = 0; c < currentLevel.cols; c++) {
           if (currentLevel.grid[r][c] === 1) {
@@ -409,13 +498,11 @@
         }
       }
 
-      // 2. Vela com Brilho Dinâmico
       if (!hasItem) {
         const ix = currentLevel.item.x * ts + ts / 2;
         const iy = currentLevel.item.y * ts + ts / 2;
         const pulse = Math.sin(animTimer * 5) * 4 + ts * 0.25;
 
-        // Aura amarela
         ctx.beginPath();
         ctx.arc(ix, iy, pulse + 6, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(212, 175, 55, 0.25)';
@@ -426,14 +513,12 @@
         ctx.fillText('🕯️', ix, iy);
       }
 
-      // 3. Altar
       const gx = currentLevel.goal.x * ts + ts / 2;
       const gy = currentLevel.goal.y * ts + ts / 2;
       ctx.font = `${ts * 0.6}px serif`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText('⛪', gx, gy);
 
-      // 4. Rastro de Movimento (Trail)
       trail.forEach(t => {
         if (t.alpha > 0) {
           ctx.beginPath();
@@ -443,14 +528,11 @@
         }
       });
 
-      // 5. Coroinha (Jogador com luz própria)
-      // Aura ao redor do jogador
       ctx.beginPath();
       ctx.arc(player.x, player.y, player.radius * 1.6, 0, Math.PI * 2);
       ctx.fillStyle = hasItem ? 'rgba(241, 196, 15, 0.2)' : 'rgba(231, 76, 60, 0.15)';
       ctx.fill();
 
-      // Corpo
       ctx.beginPath();
       ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
       ctx.fillStyle = '#e74c3c';
@@ -459,13 +541,11 @@
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Item na mão
       if (hasItem) {
         ctx.font = `${ts * 0.35}px serif`;
         ctx.fillText('🕯️', player.x + player.radius * 0.7, player.y - player.radius * 0.7);
       }
 
-      // 6. Desenha Joystick Virtual se o toque estiver ativo
       if (joystick.active) {
         ctx.beginPath();
         ctx.arc(joystick.startX, joystick.startY, 40, 0, Math.PI * 2);
@@ -481,10 +561,9 @@
       }
     }
 
-    // --- GAME LOOP PROFISSIONAL (DELTA TIME) ---
     function gameLoop(now) {
       let dt = (now - lastTime) / 1000;
-      if (dt > 0.1) dt = 0.1; // Evita saltos grandes se a aba for desfocada
+      if (dt > 0.1) dt = 0.1;
       lastTime = now;
 
       update(dt);
@@ -493,7 +572,7 @@
       requestAnimationFrame(gameLoop);
     }
 
-    initGame();
+    window.initGame();
     requestAnimationFrame(gameLoop);
   </script>
 </body>
