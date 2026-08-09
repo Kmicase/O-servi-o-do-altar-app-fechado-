@@ -37,6 +37,27 @@
       font-size: 1.6rem;
     }
 
+    /* Identificação do Jogador */
+    .player-setup {
+      margin-bottom: 12px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .input-player {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 2px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+      font-size: 0.9rem;
+      text-align: center;
+      outline: none;
+      font-weight: 600;
+    }
+
     /* Controles de Nível */
     .level-selector {
       display: flex;
@@ -142,7 +163,7 @@
       background-color: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 20px;
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
@@ -156,39 +177,80 @@
     .win-message {
       display: none;
       margin-top: 15px;
-      padding: 10px 15px;
+      padding: 15px;
       background-color: #27ae60;
       color: white;
-      border-radius: 5px;
+      border-radius: 8px;
       font-weight: bold;
       text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .win-stats {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      color: #f1f2f6;
+    }
+
+    .btn-ranking {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #ffffff;
+      color: #27ae60;
+      border: none;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
     }
   </style>
+
+  <!-- Importação do Firebase Config local -->
+  <script type="module" src="config-firebase.js"></script>
 </head>
 <body>
 
   <h1>Memória Litúrgica</h1>
 
+  <div class="player-setup">
+    <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nome / Nickname" maxlength="15">
+  </div>
+
   <div class="level-selector">
-    <button class="btn-level active" onclick="changeLevel('easy')">Fácil (Coroinha)</button>
-    <button class="btn-level" onclick="changeLevel('medium')">Médio (Cerimoniário)</button>
-    <button class="btn-level" onclick="changeLevel('hard')">Difícil (Acólito)</button>
+    <button class="btn-level active" onclick="changeLevel('easy', event)">Fácil (Coroinha)</button>
+    <button class="btn-level" onclick="changeLevel('medium', event)">Médio (Cerimoniário)</button>
+    <button class="btn-level" onclick="changeLevel('hard', event)">Difícil (Acólito)</button>
   </div>
 
   <div class="stats">
     <div>Jogadas: <span id="moves">0</span></div>
-    <div>Pares: <span id="matches">0</span>/<span id="total-matches">6</span></div>
+    <div>Pares: <span id="matches">0</span>/<span id="total-matches">3</span></div>
   </div>
 
   <div class="game-board board-easy" id="board"></div>
 
   <div class="win-message" id="win-message">
-    Parabéns! Você concluiu o nível! 🎉
+    <p>Parabéns! Você concluiu o nível! 🎉</p>
+    <div class="win-stats">Pontuação: <span id="winScore">0</span> pts</div>
+    <a href="ranking.html?jogo=memoria" class="btn-ranking">🏆 Ver Ranking Geral</a>
   </div>
 
   <button class="btn-reset" onclick="initGame()">Reiniciar Nível</button>
 
-  <script>
+  <script type="module">
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Entrada do Nome do Jogador
+    const inputPlayer = document.getElementById('playerName');
+    if (localStorage.getItem('user_player_name')) {
+      inputPlayer.value = localStorage.getItem('user_player_name');
+    }
+
+    inputPlayer.addEventListener('change', () => {
+      localStorage.setItem('user_player_name', inputPlayer.value.trim());
+    });
+
     // Banco completo de objetos litúrgicos
     const allItems = [
       { name: 'Cálice', icon: '🍷' },
@@ -203,11 +265,11 @@
       { name: 'Túnica', icon: '🥋' }
     ];
 
-    // Configuração dos Níveis
+    // Configuração dos Níveis com Pontuação Base
     const levels = {
-      easy: { count: 3, gridClass: 'board-easy' },     // 3 pares (6 cartas)
-      medium: { count: 6, gridClass: 'board-medium' }, // 6 pares (12 cartas)
-      hard: { count: 8, gridClass: 'board-hard' }      // 8 pares (16 cartas)
+      easy: { count: 3, gridClass: 'board-easy', basePoints: 500 },     // 3 pares (6 cartas)
+      medium: { count: 6, gridClass: 'board-medium', basePoints: 1000 }, // 6 pares (12 cartas)
+      hard: { count: 8, gridClass: 'board-hard', basePoints: 1800 }      // 8 pares (16 cartas)
     };
 
     let currentLevel = 'easy';
@@ -217,17 +279,16 @@
     let moves = 0;
     let lockBoard = false;
 
-    function changeLevel(level) {
+    window.changeLevel = function(level, e) {
       currentLevel = level;
       
-      // Atualiza os botões ativos
       document.querySelectorAll('.btn-level').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      if (e && e.target) e.target.classList.add('active');
 
-      initGame();
-    }
+      window.initGame();
+    };
 
-    function initGame() {
+    window.initGame = function() {
       const board = document.getElementById('board');
       const config = levels[currentLevel];
       
@@ -266,7 +327,7 @@
         card.addEventListener('click', flipCard);
         board.appendChild(card);
       });
-    }
+    };
 
     function flipCard() {
       if (lockBoard) return;
@@ -277,6 +338,28 @@
 
       if (flippedCards.length === 2) {
         checkMatch();
+      }
+    }
+
+    async function salvarPontuacaoFirebase(nome, pontos) {
+      if (!window.db) {
+        console.warn("Instância do Firestore não encontrada.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(window.db, "rankings"), {
+          nome: nome,
+          pontos: pontos,
+          jogo: "memoria",
+          dificuldade: currentLevel,
+          avatarSeed: localStorage.getItem('user_avatar_seed') || nome,
+          avatarStyle: localStorage.getItem('user_avatar_style') || 'bottts',
+          data: new Date()
+        });
+        console.log("Pontuação da Memória salva no Firebase!");
+      } catch (erro) {
+        console.error("Erro ao salvar pontuação no Firebase: ", erro);
       }
     }
 
@@ -295,7 +378,18 @@
         flippedCards = [];
 
         if (matchedPairs === levels[currentLevel].count) {
+          const config = levels[currentLevel];
+          const minMovesNeeded = config.count;
+          const extraMoves = Math.max(0, moves - minMovesNeeded);
+          const finalScore = Math.max(10, config.basePoints - (extraMoves * 40));
+
+          const nomeJogador = inputPlayer.value.trim() || 'Anônimo';
+          localStorage.setItem('user_player_name', nomeJogador);
+
+          document.getElementById('winScore').textContent = finalScore;
           document.getElementById('win-message').style.display = 'block';
+
+          salvarPontuacaoFirebase(nomeJogador, finalScore);
         }
       } else {
         lockBoard = true;
@@ -309,7 +403,7 @@
     }
 
     // Inicializa ao carregar a página
-    initGame();
+    window.initGame();
   </script>
 </body>
 </html>
