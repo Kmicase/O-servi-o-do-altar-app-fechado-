@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ranking dos Jogos</title>
+    <!-- Importação do Firebase -->
+    <script type="module" src="config-firebase.js"></script>
+</head>
+<body>
+    <h1 id="titulo-ranking">Classificação</h1>
+    
+    <div class="menu-jogos">
+        <button onclick="carregarRanking('cobrinha')">Jogo da Cobrinha</button>
+        <button onclick="carregarRanking('outro_jogo')">Outro Jogo</button>
+    </div>
+
+    <ol id="lista-ranking"></ol>
+
+    <script type="module">
+        import { collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        window.carregarRanking = async function(idJogo) {
+            const lista = document.getElementById('lista-ranking');
+            lista.innerHTML = '<li>Carregando...</li>';
+
+            const nomesJogos = {
+                'cobrinha': 'Jogo da Cobrinha',
+                'outro_jogo': 'Outro Jogo'
+            };
+            document.getElementById('titulo-ranking').innerText = `Classificação - ${nomesJogos[idJogo] || 'Geral'}`;
+
+            try {
+                // Consulta: Filtra pelo jogo, ordena por pontos (decrescente) e pega o Top 10
+                const q = query(
+                    collection(window.db, "rankings"),
+                    where("jogo", "==", idJogo),
+                    orderBy("pontos", "desc"),
+                    limit(10)
+                );
+
+                const querySnapshot = await getDocs(q);
+                lista.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    lista.innerHTML = '<li>Nenhuma pontuação registrada ainda.</li>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const li = document.createElement('li');
+                    li.innerText = `${item.nome} — ${item.pontos} pts`;
+                    lista.appendChild(li);
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar o ranking: ", erro);
+                lista.innerHTML = '<li>Erro ao carregar o ranking.</li>';
+            }
+        };
+
+        // Carrega o jogo inicial da URL (?jogo=cobrinha)
+        const urlParams = new URLSearchParams(window.location.search);
+        const jogoInicial = urlParams.get('jogo') || 'cobrinha';
+        window.carregarRanking(jogoInicial);
+    </script>
+</body>
+</html>
