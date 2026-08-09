@@ -1,36 +1,144 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <title>Ranking dos Jogos</title>
-    <!-- Importação do Firebase -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificação dos Jogos</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sacro: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#d97706',
+                            600: '#b45309',
+                            700: '#92400e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Estilos Customizados e Fundo Sacro -->
+    <style type="text/tailwindcss">
+        .bg-sacro-dourado {
+            background-color: #f8fafc;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23b45309' fill-opacity='0.04'%3E%3Cpath d='M39 0h2v15h-2zM39 25h2v15h-2zM39 40h2v15h-2zM39 65h2v15h-2zM0 39h15v2H0zM25 39h15v2H25zM40 39h15v2H40zM65 39h15v2H65z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .dark .bg-sacro-dourado {
+            background-color: #09090b;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d97706' fill-opacity='0.07'%3E%3Cpath d='M39 0h2v15h-2zM39 25h2v15h-2zM39 40h2v15h-2zM39 65h2v15h-2zM0 39h15v2H0zM25 39h15v2H25zM40 39h15v2H40zM65 39h15v2H65z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+
+    <!-- Importação do Firebase Config -->
     <script type="module" src="config-firebase.js"></script>
 </head>
-<body>
-    <h1 id="titulo-ranking">Classificação</h1>
-    
-    <div class="menu-jogos">
-        <button onclick="carregarRanking('cobrinha')">Jogo da Cobrinha</button>
-        <button onclick="carregarRanking('outro_jogo')">Outro Jogo</button>
-    </div>
 
-    <ol id="lista-ranking"></ol>
+<body class="bg-sacro-dourado min-h-full text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
 
+    <!-- Topbar / Cabeçalho -->
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-amber-200/60 dark:border-amber-900/30 px-4 py-3 shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="javascript:history.back()" class="p-2 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-zinc-800 transition-colors">
+                    <i class="fa-solid fa-arrow-left text-lg"></i>
+                </a>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-600 bg-clip-text text-transparent flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-amber-500"></i>
+                    Hall da Fama
+                </h1>
+            </div>
+            
+            <button onclick="document.documentElement.classList.toggle('dark')" class="p-2 text-slate-500 hover:text-amber-500 transition-colors">
+                <i class="fa-solid fa-circle-half-stroke text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
+        
+        <!-- Título Dinâmico do Jogo -->
+        <div class="text-center py-2">
+            <h2 id="titulo-ranking" class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-wide">
+                Classificação
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Confira os melhores jogadores e maiores pontuações</p>
+        </div>
+
+        <!-- Seletor de Jogos (Abas) -->
+        <div class="flex flex-wrap justify-center gap-2 p-1.5 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-amber-200/50 dark:border-amber-900/20 max-w-md mx-auto">
+            <button id="btn-cobrinha" onclick="carregarRanking('cobrinha')" class="btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-worm"></i> Cobrinha
+            </button>
+            <button id="btn-outro_jogo" onclick="carregarRanking('outro_jogo')" class="btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-gamepad"></i> Outro Jogo
+            </button>
+        </div>
+
+        <!-- Card da Tabela de Classificação -->
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-amber-200/60 dark:border-amber-900/30 shadow-xl overflow-hidden">
+            
+            <!-- Cabeçalho da Tabela -->
+            <div class="grid grid-cols-12 gap-2 bg-amber-500/10 dark:bg-amber-500/5 px-4 py-3 text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider border-b border-amber-200/50 dark:border-amber-900/30">
+                <div class="col-span-2 text-center">Pos.</div>
+                <div class="col-span-7">Jogador</div>
+                <div class="col-span-3 text-right">Pontos</div>
+            </div>
+
+            <!-- Lista Dinâmica (Ranking) -->
+            <ul id="lista-ranking" class="divide-y divide-slate-100 dark:divide-zinc-800/60">
+                <!-- Conteúdo via JS -->
+            </ul>
+
+        </div>
+    </main>
+
+    <!-- Script Principal -->
     <script type="module">
         import { collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        const nomesJogos = {
+            'cobrinha': 'Jogo da Cobrinha',
+            'outro_jogo': 'Outro Jogo'
+        };
+
         window.carregarRanking = async function(idJogo) {
             const lista = document.getElementById('lista-ranking');
-            lista.innerHTML = '<li>Carregando...</li>';
+            
+            // Atualiza o Título
+            document.getElementById('titulo-ranking').innerText = nomesJogos[idJogo] || 'Classificação Geral';
 
-            const nomesJogos = {
-                'cobrinha': 'Jogo da Cobrinha',
-                'outro_jogo': 'Outro Jogo'
-            };
-            document.getElementById('titulo-ranking').innerText = `Classificação - ${nomesJogos[idJogo] || 'Geral'}`;
+            // Atualiza os Botões Ativos
+            document.querySelectorAll('.btn-jogo').forEach(btn => {
+                btn.className = "btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 hover:bg-amber-50 dark:hover:bg-zinc-800";
+            });
+            const btnAtivo = document.getElementById(`btn-${idJogo}`);
+            if (btnAtivo) {
+                btnAtivo.className = "btn-jogo flex-1 py-2 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-amber-600 text-white shadow-md shadow-amber-600/30 dark:bg-amber-500 dark:text-zinc-950";
+            }
+
+            // Estado de Carregamento (Skeleton / Loader)
+            lista.innerHTML = `
+                <li class="p-8 text-center text-slate-400 animate-pulse flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-spinner fa-spin text-2xl text-amber-500"></i>
+                    <span class="text-sm font-medium">Buscando pontuações...</span>
+                </li>
+            `;
 
             try {
-                // Consulta: Filtra pelo jogo, ordena por pontos (decrescente) e pega o Top 10
                 const q = query(
                     collection(window.db, "rankings"),
                     where("jogo", "==", idJogo),
@@ -42,19 +150,54 @@
                 lista.innerHTML = '';
 
                 if (querySnapshot.empty) {
-                    lista.innerHTML = '<li>Nenhuma pontuação registrada ainda.</li>';
+                    lista.innerHTML = `
+                        <li class="p-8 text-center text-slate-400 dark:text-slate-500 flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-ghost text-3xl mb-1 text-slate-300 dark:text-zinc-700"></i>
+                            <span class="text-sm">Nenhuma pontuação registrada ainda. Seja o primeiro!</span>
+                        </li>
+                    `;
                     return;
                 }
 
+                let index = 1;
                 querySnapshot.forEach((doc) => {
                     const item = doc.data();
                     const li = document.createElement('li');
-                    li.innerText = `${item.nome} — ${item.pontos} pts`;
+                    li.className = "grid grid-cols-12 gap-2 items-center px-4 py-3.5 hover:bg-amber-50/50 dark:hover:bg-zinc-800/40 transition-colors";
+
+                    // Ícones do Pódio
+                    let badgePosicao = `<span class="font-bold text-slate-500 text-sm">#${index}</span>`;
+                    if (index === 1) badgePosicao = `<span class="w-7 h-7 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-xs shadow-md shadow-amber-400/40">1º</span>`;
+                    if (index === 2) badgePosicao = `<span class="w-7 h-7 rounded-full bg-slate-300 text-slate-800 font-black flex items-center justify-center text-xs shadow-md">2º</span>`;
+                    if (index === 3) badgePosicao = `<span class="w-7 h-7 rounded-full bg-amber-700 text-amber-100 font-black flex items-center justify-center text-xs shadow-md">3º</span>`;
+
+                    li.innerHTML = `
+                        <div class="col-span-2 flex justify-center items-center">
+                            ${badgePosicao}
+                        </div>
+                        <div class="col-span-7 font-semibold text-slate-800 dark:text-slate-100 truncate flex items-center gap-2">
+                            <i class="fa-solid fa-user text-xs text-slate-400"></i>
+                            ${item.nome || 'Anônimo'}
+                        </div>
+                        <div class="col-span-3 text-right">
+                            <span class="inline-block bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-bold px-2.5 py-1 rounded-lg text-xs border border-amber-200/50 dark:border-amber-800/40">
+                                ${item.pontos} <span class="text-[10px] font-normal opacity-75">pts</span>
+                            </span>
+                        </div>
+                    `;
+                    
                     lista.appendChild(li);
+                    index++;
                 });
+
             } catch (erro) {
                 console.error("Erro ao carregar o ranking: ", erro);
-                lista.innerHTML = '<li>Erro ao carregar o ranking.</li>';
+                lista.innerHTML = `
+                    <li class="p-6 text-center text-red-500 dark:text-red-400 text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Erro ao carregar dados do ranking.
+                    </li>
+                `;
             }
         };
 
