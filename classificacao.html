@@ -38,7 +38,7 @@
 
         .dark .bg-sacro-dourado {
             background-color: #09090b;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d97706' fill-opacity='0.07'%3E%3Cpath d='M39 0h2v15h-2zM39 25h2v15h-2zM39 40h2v15h-2zM39 65h2v15h-2zM0 39h15v2H0zM25 39h15v2H25zM40 39h15v2H40zM65 39h15v2H65z'/%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d97706' fill-opacity='0.07'%3E%3Cpath d='M39 0h2v15h-2zM39 25h2v15h-2zM39 40h2v15h-2zM39 65h2v15h-2zM0 39h15v2H0zM25 39h15v2H25zM40 39h15v2H65z'/%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 
@@ -70,6 +70,26 @@
     <!-- Conteúdo Principal -->
     <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 space-y-6">
         
+        <!-- Bloco do Criador de Avatar Estilo Kahoot -->
+        <div class="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-amber-200/60 dark:border-amber-900/30 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="relative group">
+                    <img id="my-avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=jogador1" class="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-zinc-800 p-1 border-2 border-amber-500 shadow-inner object-cover" alt="Avatar">
+                    <button onclick="gerarNovoAvatar()" class="absolute -bottom-1 -right-1 bg-amber-600 hover:bg-amber-700 text-white p-1.5 rounded-full text-xs shadow-md transition-transform active:scale-95" title="Sortear outro avatar">
+                        <i class="fa-solid fa-dice"></i>
+                    </button>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800 dark:text-slate-100">Seu Avatar de Jogador</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Clique no dado para mudar seu visual tipo Kahoot!</p>
+                </div>
+            </div>
+            <button onclick="gerarNovoAvatar()" class="w-full sm:w-auto px-4 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Trocar Monstrinho
+            </button>
+        </div>
+
         <!-- Título Dinâmico do Jogo -->
         <div class="text-center py-2">
             <h2 id="titulo-ranking" class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-wide">
@@ -110,6 +130,31 @@
     <script type="module">
         import { collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Estilos de avatares divertidos da API DiceBear estilo Kahoot
+        const estilosAvatar = ['bottts', 'adventurer', 'big-smile', 'fun-emoji', 'thumbs'];
+
+        // Carrega ou cria um avatar para o usuário atual
+        let meuAvatarSeed = localStorage.getItem('user_avatar_seed') || Math.random().toString(36).substring(7);
+        let meuAvatarEstilo = localStorage.getItem('user_avatar_style') || 'bottts';
+        
+        function atualizarPreviewMeuAvatar() {
+            localStorage.setItem('user_avatar_seed', meuAvatarSeed);
+            localStorage.setItem('user_avatar_style', meuAvatarEstilo);
+            const imgEl = document.getElementById('my-avatar-preview');
+            if (imgEl) {
+                imgEl.src = `https://api.dicebear.com/7.x/${meuAvatarEstilo}/svg?seed=${meuAvatarSeed}`;
+            }
+        }
+
+        window.gerarNovoAvatar = function() {
+            meuAvatarSeed = Math.random().toString(36).substring(7);
+            meuAvatarEstilo = estilosAvatar[Math.floor(Math.random() * estilosAvatar.length)];
+            atualizarPreviewMeuAvatar();
+        };
+
+        // Inicializa preview
+        atualizarPreviewMeuAvatar();
+
         const nomesJogos = {
             'cobrinha': 'Jogo da Cobrinha',
             'outro_jogo': 'Outro Jogo'
@@ -118,10 +163,8 @@
         window.carregarRanking = async function(idJogo) {
             const lista = document.getElementById('lista-ranking');
             
-            // Atualiza o Título
             document.getElementById('titulo-ranking').innerText = nomesJogos[idJogo] || 'Classificação Geral';
 
-            // Atualiza os Botões Ativos
             document.querySelectorAll('.btn-jogo').forEach(btn => {
                 btn.className = "btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 hover:bg-amber-50 dark:hover:bg-zinc-800";
             });
@@ -130,7 +173,6 @@
                 btnAtivo.className = "btn-jogo flex-1 py-2 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-amber-600 text-white shadow-md shadow-amber-600/30 dark:bg-amber-500 dark:text-zinc-950";
             }
 
-            // Estado de Carregamento (Skeleton / Loader)
             lista.innerHTML = `
                 <li class="p-8 text-center text-slate-400 animate-pulse flex flex-col items-center gap-2">
                     <i class="fa-solid fa-spinner fa-spin text-2xl text-amber-500"></i>
@@ -163,7 +205,7 @@
                 querySnapshot.forEach((doc) => {
                     const item = doc.data();
                     const li = document.createElement('li');
-                    li.className = "grid grid-cols-12 gap-2 items-center px-4 py-3.5 hover:bg-amber-50/50 dark:hover:bg-zinc-800/40 transition-colors";
+                    li.className = "grid grid-cols-12 gap-2 items-center px-4 py-3 hover:bg-amber-50/50 dark:hover:bg-zinc-800/40 transition-colors";
 
                     // Ícones do Pódio
                     let badgePosicao = `<span class="font-bold text-slate-500 text-sm">#${index}</span>`;
@@ -171,13 +213,18 @@
                     if (index === 2) badgePosicao = `<span class="w-7 h-7 rounded-full bg-slate-300 text-slate-800 font-black flex items-center justify-center text-xs shadow-md">2º</span>`;
                     if (index === 3) badgePosicao = `<span class="w-7 h-7 rounded-full bg-amber-700 text-amber-100 font-black flex items-center justify-center text-xs shadow-md">3º</span>`;
 
+                    // URL do Avatar do jogador no ranking (ou gera um baseado no nome se não existir)
+                    const avatarSeed = item.avatarSeed || item.nome || `player${index}`;
+                    const avatarStyle = item.avatarStyle || 'bottts';
+                    const avatarUrl = `https://api.dicebear.com/7.x/${avatarStyle}/svg?seed=${encodeURIComponent(avatarSeed)}`;
+
                     li.innerHTML = `
                         <div class="col-span-2 flex justify-center items-center">
                             ${badgePosicao}
                         </div>
-                        <div class="col-span-7 font-semibold text-slate-800 dark:text-slate-100 truncate flex items-center gap-2">
-                            <i class="fa-solid fa-user text-xs text-slate-400"></i>
-                            ${item.nome || 'Anônimo'}
+                        <div class="col-span-7 font-semibold text-slate-800 dark:text-slate-100 truncate flex items-center gap-2.5">
+                            <img src="${avatarUrl}" class="w-8 h-8 rounded-full bg-amber-100 dark:bg-zinc-800 p-0.5 border border-amber-300 dark:border-zinc-700 object-cover" alt="Avatar">
+                            <span class="truncate">${item.nome || 'Anônimo'}</span>
                         </div>
                         <div class="col-span-3 text-right">
                             <span class="inline-block bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-bold px-2.5 py-1 rounded-lg text-xs border border-amber-200/50 dark:border-amber-800/40">
