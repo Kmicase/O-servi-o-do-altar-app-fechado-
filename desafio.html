@@ -77,6 +77,25 @@
       text-transform: uppercase;
     }
 
+    .player-setup {
+      margin: 6px auto;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .input-player {
+      width: 100%;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 2px solid var(--neon-cyan);
+      background: rgba(13, 6, 20, 0.8);
+      color: #fff;
+      font-size: 0.9rem;
+      text-align: center;
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    }
+
     .hud {
       display: flex;
       gap: 10px;
@@ -122,7 +141,7 @@
       position: relative;
       width: 100%;
       max-width: 900px;
-      height: 68vh;
+      height: 65vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -130,11 +149,11 @@
       z-index: 10;
     }
 
-    /* Super Zonas de Soltura (Ocupam toda a metade superior da tela) */
+    /* Super Zonas de Soltura */
     .portals-container {
       display: flex;
       width: 100%;
-      height: 60%; /* Expandido para cobrir 60% da área jogável */
+      height: 60%;
       gap: 15px;
       justify-content: space-between;
     }
@@ -164,7 +183,6 @@
       box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
     }
 
-    /* Animação quando a carta entra na zona (Glow gigante) */
     .portal.drag-hover {
       transform: scale(1.02);
       border-style: solid;
@@ -282,19 +300,37 @@
       color: #000;
       border: none;
       padding: 14px 35px;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 900;
       border-radius: 50px;
       cursor: pointer;
-      margin-top: 20px;
+      margin-top: 15px;
       box-shadow: 0 0 20px var(--neon-green);
       transition: transform 0.1s;
+      width: 100%;
     }
 
     .btn-play:active {
       transform: scale(0.95);
     }
+
+    .btn-ranking {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid var(--neon-cyan);
+      border-radius: 30px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+    }
   </style>
+
+  <!-- Importação do Firebase Config local -->
+  <script type="module" src="config-firebase.js"></script>
 </head>
 <body>
 
@@ -302,6 +338,11 @@
 
   <header>
     <h1>Desafio Litúrgico</h1>
+    
+    <div class="player-setup">
+      <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nome / Nickname" maxlength="15">
+    </div>
+
     <div class="hud">
       <div class="hud-box">PONTOS: <span id="score">0</span></div>
       <div class="hud-box">COMBO: <span id="combo" style="color:var(--neon-yellow)">x1</span> 🔥</div>
@@ -313,7 +354,6 @@
   </header>
 
   <div class="arena">
-    <!-- As Super Zonas agora ocupam grande parte da metade superior -->
     <div class="portals-container">
       <div class="portal left" id="portal-palavra" data-category="palavra">
         <div class="icon">📖</div>
@@ -334,13 +374,27 @@
   <div class="modal" id="winModal">
     <div class="modal-box">
       <h2>MEGAMIND! ⚡</h2>
-      <p style="font-size: 1.2rem;">Você dominou todos os 26 momentos da Santa Missa!</p>
-      <p style="margin-top: 12px; font-size: 1.5rem;">Pontuação Final: <strong id="final-score" style="color:var(--neon-cyan)">0</strong></p>
+      <p style="font-size: 1.1rem;">Você dominou todos os 26 momentos da Santa Missa!</p>
+      <p style="margin-top: 12px; font-size: 1.4rem;">Pontuação Final: <strong id="final-score" style="color:var(--neon-cyan)">0</strong></p>
+      
       <button class="btn-play" onclick="initGame()">JOGAR NOVAMENTE</button>
+      <a href="ranking.html?jogo=desafio" class="btn-ranking">🏆 Ver Ranking Geral</a>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Nome do Jogador
+    const inputPlayer = document.getElementById('playerName');
+    if (localStorage.getItem('user_player_name')) {
+      inputPlayer.value = localStorage.getItem('user_player_name');
+    }
+
+    inputPlayer.addEventListener('change', () => {
+      localStorage.setItem('user_player_name', inputPlayer.value.trim());
+    });
+
     // Banco Ampliado com 26 Itens Litúrgicos
     const cardsData = [
       // --- LITURGIA DA PALAVRA ---
@@ -474,8 +528,30 @@
     }
     loopFX();
 
+    // Persistência Firebase
+    async function salvarPontuacaoFirebase(nome, pontos) {
+      if (!window.db) {
+        console.warn("Instância do Firestore não encontrada.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(window.db, "rankings"), {
+          nome: nome,
+          pontos: pontos,
+          jogo: "desafio",
+          avatarSeed: localStorage.getItem('user_avatar_seed') || nome,
+          avatarStyle: localStorage.getItem('user_avatar_style') || 'bottts',
+          data: new Date()
+        });
+        console.log("Pontuação do Desafio salva no Firebase!");
+      } catch (erro) {
+        console.error("Erro ao salvar pontuação no Firebase: ", erro);
+      }
+    }
+
     // Lógica de Inicialização
-    function initGame() {
+    window.initGame = function() {
       score = 0;
       combo = 1;
       cardsStack = [...cardsData].sort(() => Math.random() - 0.5);
@@ -483,7 +559,7 @@
       document.getElementById('winModal').style.display = 'none';
       updateHUD();
       renderCard();
-    }
+    };
 
     function updateHUD() {
       document.getElementById('score').textContent = score;
@@ -499,8 +575,13 @@
       deck.innerHTML = '';
 
       if (cardsStack.length === 0) {
+        const nomeJogador = inputPlayer.value.trim() || 'Anônimo';
+        localStorage.setItem('user_player_name', nomeJogador);
+
         document.getElementById('final-score').textContent = score;
         document.getElementById('winModal').style.display = 'flex';
+
+        salvarPontuacaoFirebase(nomeJogador, score);
         return;
       }
 
@@ -514,7 +595,6 @@
       deck.appendChild(card);
     }
 
-    // Arraste com detecção de colisão ampliada
     function bindPhysicsDrag(card) {
       let isDragging = false;
       let startX = 0, startY = 0;
@@ -595,7 +675,6 @@
       });
     }
 
-    // Detecção Ultra Forgiativa (Overlapping melhorado)
     function checkPortalHover(card) {
       const cRect = card.getBoundingClientRect();
       const cardCenterX = cRect.left + cRect.width / 2;
@@ -604,7 +683,6 @@
       document.querySelectorAll('.portal').forEach(p => {
         const pRect = p.getBoundingClientRect();
         
-        // Colisão aceita se o CENTRO da carta estiver dentro da Super Zona
         const isCenterInside = (
           cardCenterX >= pRect.left &&
           cardCenterX <= pRect.right &&
@@ -640,7 +718,7 @@
       document.querySelectorAll('.portal').forEach(p => p.classList.remove('drag-hover'));
     }
 
-    initGame();
+    window.initGame();
   </script>
 </body>
 </html>
