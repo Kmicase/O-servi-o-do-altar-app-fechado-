@@ -38,7 +38,7 @@
 
         .dark .bg-sacro-dourado {
             background-color: #09090b;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d97706' fill-opacity='0.07'%3E%3Cpath d='M39 0h2v15h-2zM39 25h2v15h-2zM39 40h2v15h-2zM39 65h2v15h-2zM0 39h15v2H0zM25 39h15v2H25zM40 39h15v2H65z'/%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23d97706' fill-opacity='0.07'%3E%3Cpath d='M39 0h2v15h-2zM39 25h2v15h-2zM39 40h2v15h-2zM39 65h2v15h-2zM0 39h15v2H0zM25 39h15v2H25zM40 39h15v2H40zM65 39h15v2H65z'/%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 
@@ -93,47 +93,51 @@
         <!-- Título Dinâmico do Jogo -->
         <div class="text-center py-2">
             <h2 id="titulo-ranking" class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 uppercase tracking-wide">
-                Classificação
+                Classificação Geral
             </h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Confira os melhores jogadores e maiores pontuações</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Confira os melhores jogadores e maiores pontuações acumuladas</p>
         </div>
 
         <!-- Seletor de Jogos (Abas) -->
-        <div class="flex flex-wrap justify-center gap-2 p-1.5 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-amber-200/50 dark:border-amber-900/20 max-w-md mx-auto">
-            <button id="btn-cobrinha" onclick="carregarRanking('cobrinha')" class="btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2">
+        <div class="flex flex-wrap justify-center gap-2 p-1.5 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-amber-200/50 dark:border-amber-900/20 max-w-lg mx-auto">
+            <button id="btn-geral" onclick="carregarRanking('geral')" class="btn-jogo flex-1 py-2 px-3 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-award"></i> Geral
+            </button>
+            <button id="btn-cobrinha" onclick="carregarRanking('cobrinha')" class="btn-jogo flex-1 py-2 px-3 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-worm"></i> Cobrinha
             </button>
-            <button id="btn-outro_jogo" onclick="carregarRanking('outro_jogo')" class="btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2">
+            <button id="btn-outro_jogo" onclick="carregarRanking('outro_jogo')" class="btn-jogo flex-1 py-2 px-3 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-gamepad"></i> Outro Jogo
             </button>
         </div>
 
         <!-- Card da Tabela de Classificação -->
-        <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-amber-200/60 dark:border-amber-900/30 shadow-xl overflow-hidden">
-            
-            <!-- Cabeçalho da Tabela -->
-            <div class="grid grid-cols-12 gap-2 bg-amber-500/10 dark:bg-amber-500/5 px-4 py-3 text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider border-b border-amber-200/50 dark:border-amber-900/30">
-                <div class="col-span-2 text-center">Pos.</div>
-                <div class="col-span-7">Jogador</div>
-                <div class="col-span-3 text-right">Pontos</div>
-            </div>
-
-            <!-- Lista Dinâmica (Ranking) -->
-            <ul id="lista-ranking" class="divide-y divide-slate-100 dark:divide-zinc-800/60">
-                <!-- Conteúdo via JS -->
-            </ul>
-
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-amber-200/60 dark:border-amber-900/30 shadow-xl overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[500px]">
+                <thead>
+                    <tr id="cabecalho-tabela" class="bg-amber-500/10 dark:bg-amber-500/5 text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider border-b border-amber-200/50 dark:border-amber-900/30">
+                        <!-- Gerado Dinamicamente -->
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela" class="divide-y divide-slate-100 dark:divide-zinc-800/60 text-sm">
+                    <!-- Gerado Dinamicamente -->
+                </tbody>
+            </table>
         </div>
     </main>
 
     <!-- Script Principal -->
     <script type="module">
-        import { collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Estilos de avatares divertidos da API DiceBear estilo Kahoot
+        // Mapeamento de jogos cadastrados
+        const listaJogos = [
+            { id: 'cobrinha', nome: 'Cobrinha' },
+            { id: 'outro_jogo', nome: 'Outro Jogo' }
+        ];
+
         const estilosAvatar = ['bottts', 'adventurer', 'big-smile', 'fun-emoji', 'thumbs'];
 
-        // Carrega ou cria um avatar para o usuário atual
         let meuAvatarSeed = localStorage.getItem('user_avatar_seed') || Math.random().toString(36).substring(7);
         let meuAvatarEstilo = localStorage.getItem('user_avatar_style') || 'bottts';
         
@@ -152,105 +156,183 @@
             atualizarPreviewMeuAvatar();
         };
 
-        // Inicializa preview
         atualizarPreviewMeuAvatar();
 
-        const nomesJogos = {
-            'cobrinha': 'Jogo da Cobrinha',
-            'outro_jogo': 'Outro Jogo'
-        };
-
-        window.carregarRanking = async function(idJogo) {
-            const lista = document.getElementById('lista-ranking');
+        window.carregarRanking = async function(idJogo = 'geral') {
+            const cabecalho = document.getElementById('cabecalho-tabela');
+            const corpo = document.getElementById('corpo-tabela');
             
-            document.getElementById('titulo-ranking').innerText = nomesJogos[idJogo] || 'Classificação Geral';
+            // Atualiza título e botões ativos
+            document.getElementById('titulo-ranking').innerText = idJogo === 'geral' 
+                ? 'Classificação Geral' 
+                : `Classificação: ${listaJogos.find(j => j.id === idJogo)?.nome || idJogo}`;
 
             document.querySelectorAll('.btn-jogo').forEach(btn => {
-                btn.className = "btn-jogo flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 hover:bg-amber-50 dark:hover:bg-zinc-800";
+                btn.className = "btn-jogo flex-1 py-2 px-3 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:bg-amber-50 dark:hover:bg-zinc-800";
             });
             const btnAtivo = document.getElementById(`btn-${idJogo}`);
             if (btnAtivo) {
-                btnAtivo.className = "btn-jogo flex-1 py-2 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-amber-600 text-white shadow-md shadow-amber-600/30 dark:bg-amber-500 dark:text-zinc-950";
+                btnAtivo.className = "btn-jogo flex-1 py-2 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-1.5 bg-amber-600 text-white shadow-md shadow-amber-600/30 dark:bg-amber-500 dark:text-zinc-950";
             }
 
-            lista.innerHTML = `
-                <li class="p-8 text-center text-slate-400 animate-pulse flex flex-col items-center gap-2">
-                    <i class="fa-solid fa-spinner fa-spin text-2xl text-amber-500"></i>
-                    <span class="text-sm font-medium">Buscando pontuações...</span>
-                </li>
+            // Exibe mensagem de carregamento
+            cabecalho.innerHTML = `<th colspan="10" class="p-4 text-center">Buscando ranking...</th>`;
+            corpo.innerHTML = `
+                <tr>
+                    <td colspan="10" class="p-8 text-center text-slate-400 animate-pulse">
+                        <i class="fa-solid fa-spinner fa-spin text-2xl text-amber-500 mb-2"></i>
+                        <div>Calculando pontuações...</div>
+                    </td>
+                </tr>
             `;
 
             try {
-                const q = query(
-                    collection(window.db, "rankings"),
-                    where("jogo", "==", idJogo),
-                    orderBy("pontos", "desc"),
-                    limit(10)
-                );
-
-                const querySnapshot = await getDocs(q);
-                lista.innerHTML = '';
-
-                if (querySnapshot.empty) {
-                    lista.innerHTML = `
-                        <li class="p-8 text-center text-slate-400 dark:text-slate-500 flex flex-col items-center gap-2">
-                            <i class="fa-solid fa-ghost text-3xl mb-1 text-slate-300 dark:text-zinc-700"></i>
-                            <span class="text-sm">Nenhuma pontuação registrada ainda. Seja o primeiro!</span>
-                        </li>
+                const snapshot = await getDocs(collection(window.db, "rankings"));
+                
+                if (snapshot.empty) {
+                    corpo.innerHTML = `
+                        <tr>
+                            <td colspan="10" class="p-8 text-center text-slate-400">
+                                <i class="fa-solid fa-ghost text-3xl mb-1 opacity-50"></i>
+                                <div>Nenhuma pontuação registrada ainda.</div>
+                            </td>
+                        </tr>
                     `;
                     return;
                 }
 
-                let index = 1;
-                querySnapshot.forEach((doc) => {
-                    const item = doc.data();
-                    const li = document.createElement('li');
-                    li.className = "grid grid-cols-12 gap-2 items-center px-4 py-3 hover:bg-amber-50/50 dark:hover:bg-zinc-800/40 transition-colors";
+                // Agrupa as pontuações por Usuário
+                const usuariosMap = {};
 
-                    // Ícones do Pódio
-                    let badgePosicao = `<span class="font-bold text-slate-500 text-sm">#${index}</span>`;
-                    if (index === 1) badgePosicao = `<span class="w-7 h-7 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-xs shadow-md shadow-amber-400/40">1º</span>`;
-                    if (index === 2) badgePosicao = `<span class="w-7 h-7 rounded-full bg-slate-300 text-slate-800 font-black flex items-center justify-center text-xs shadow-md">2º</span>`;
-                    if (index === 3) badgePosicao = `<span class="w-7 h-7 rounded-full bg-amber-700 text-amber-100 font-black flex items-center justify-center text-xs shadow-md">3º</span>`;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const chave = (data.nome || 'Anônimo').toLowerCase().trim();
 
-                    // URL do Avatar do jogador no ranking (ou gera um baseado no nome se não existir)
-                    const avatarSeed = item.avatarSeed || item.nome || `player${index}`;
-                    const avatarStyle = item.avatarStyle || 'bottts';
-                    const avatarUrl = `https://api.dicebear.com/7.x/${avatarStyle}/svg?seed=${encodeURIComponent(avatarSeed)}`;
+                    if (!usuariosMap[chave]) {
+                        usuariosMap[chave] = {
+                            nome: data.nome || 'Anônimo',
+                            avatarSeed: data.avatarSeed || data.nome || 'player',
+                            avatarStyle: data.avatarStyle || 'bottts',
+                            pontosPorJogo: {},
+                            scoreGeral: 0
+                        };
+                    }
 
-                    li.innerHTML = `
-                        <div class="col-span-2 flex justify-center items-center">
-                            ${badgePosicao}
-                        </div>
-                        <div class="col-span-7 font-semibold text-slate-800 dark:text-slate-100 truncate flex items-center gap-2.5">
-                            <img src="${avatarUrl}" class="w-8 h-8 rounded-full bg-amber-100 dark:bg-zinc-800 p-0.5 border border-amber-300 dark:border-zinc-700 object-cover" alt="Avatar">
-                            <span class="truncate">${item.nome || 'Anônimo'}</span>
-                        </div>
-                        <div class="col-span-3 text-right">
-                            <span class="inline-block bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-bold px-2.5 py-1 rounded-lg text-xs border border-amber-200/50 dark:border-amber-800/40">
-                                ${item.pontos} <span class="text-[10px] font-normal opacity-75">pts</span>
-                            </span>
-                        </div>
-                    `;
+                    // Armazena a maior pontuação do usuário em cada jogo
+                    const pontosAtuais = Number(data.pontos) || 0;
+                    const idDoJogo = data.jogo;
                     
-                    lista.appendChild(li);
-                    index++;
+                    if (!usuariosMap[chave].pontosPorJogo[idDoJogo] || pontosAtuais > usuariosMap[chave].pontosPorJogo[idDoJogo]) {
+                        usuariosMap[chave].pontosPorJogo[idDoJogo] = pontosAtuais;
+                    }
+                });
+
+                // Converte em Lista e calcula o Score Geral (Soma das maiores pontuações de cada jogo)
+                let rankingData = Object.values(usuariosMap).map(u => {
+                    const scoreGeral = Object.values(u.pontosPorJogo).reduce((acc, pts) => acc + pts, 0);
+                    return { ...u, scoreGeral };
+                });
+
+                // Ordena conforme a aba selecionada
+                if (idJogo === 'geral') {
+                    rankingData.sort((a, b) => b.scoreGeral - a.scoreGeral);
+                } else {
+                    rankingData.sort((a, b) => (b.pontosPorJogo[idJogo] || 0) - (a.pontosPorJogo[idJogo] || 0));
+                    // Filtra apenas quem jogou aquele jogo
+                    rankingData = rankingData.filter(u => (u.pontosPorJogo[idJogo] || 0) > 0);
+                }
+
+                // Construção Dinâmica dos Cabeçalhos
+                let htmlCabecalho = `
+                    <th class="py-3 px-4 text-center w-16">Pos.</th>
+                    <th class="py-3 px-4">Jogador</th>
+                `;
+
+                if (idJogo === 'geral') {
+                    listaJogos.forEach(j => {
+                        htmlCabecalho += `<th class="py-3 px-4 text-center">${j.nome}</th>`;
+                    });
+                    htmlCabecalho += `<th class="py-3 px-4 text-right">Score Geral</th>`;
+                } else {
+                    const nomeJogoAtual = listaJogos.find(j => j.id === idJogo)?.nome || 'Pontos';
+                    htmlCabecalho += `<th class="py-3 px-4 text-right">${nomeJogoAtual}</th>`;
+                }
+
+                cabecalho.innerHTML = htmlCabecalho;
+                corpo.innerHTML = '';
+
+                // Construção do Corpo da Tabela
+                rankingData.forEach((user, index) => {
+                    const posicao = index + 1;
+
+                    let badgePos = `<span class="font-bold text-slate-500 text-sm">#${posicao}</span>`;
+                    if (posicao === 1) badgePos = `<span class="w-7 h-7 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-xs shadow-md shadow-amber-400/40">1º</span>`;
+                    if (posicao === 2) badgePos = `<span class="w-7 h-7 rounded-full bg-slate-300 text-slate-800 font-black flex items-center justify-center text-xs shadow-md">2º</span>`;
+                    if (posicao === 3) badgePos = `<span class="w-7 h-7 rounded-full bg-amber-700 text-amber-100 font-black flex items-center justify-center text-xs shadow-md">3º</span>`;
+
+                    const avatarUrl = `https://api.dicebear.com/7.x/${user.avatarStyle}/svg?seed=${encodeURIComponent(user.avatarSeed)}`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-amber-50/50 dark:hover:bg-zinc-800/40 transition-colors border-b border-slate-100 dark:border-zinc-800/60";
+
+                    let htmlLinha = `
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex justify-center">${badgePos}</div>
+                        </td>
+                        <td class="py-3 px-4">
+                            <div class="flex items-center gap-2.5">
+                                <img src="${avatarUrl}" class="w-8 h-8 rounded-full bg-amber-100 dark:bg-zinc-800 p-0.5 border border-amber-300 dark:border-zinc-700 object-cover" alt="Avatar">
+                                <span class="font-semibold text-slate-800 dark:text-slate-100">${user.nome}</span>
+                            </div>
+                        </td>
+                    `;
+
+                    if (idJogo === 'geral') {
+                        listaJogos.forEach(j => {
+                            const pts = user.pontosPorJogo[j.id] || 0;
+                            htmlLinha += `
+                                <td class="py-3 px-4 text-center font-medium ${pts > 0 ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 opacity-50'}">
+                                    ${pts}
+                                </td>
+                            `;
+                        });
+                        htmlLinha += `
+                            <td class="py-3 px-4 text-right">
+                                <span class="inline-block bg-amber-500/10 text-amber-700 dark:text-amber-400 font-extrabold px-3 py-1 rounded-lg text-xs border border-amber-500/20">
+                                    ${user.scoreGeral} <span class="font-normal opacity-75">pts</span>
+                                </span>
+                            </td>
+                        `;
+                    } else {
+                        const pts = user.pontosPorJogo[idJogo] || 0;
+                        htmlLinha += `
+                            <td class="py-3 px-4 text-right">
+                                <span class="inline-block bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold px-3 py-1 rounded-lg text-xs border border-amber-500/20">
+                                    ${pts} <span class="font-normal opacity-75">pts</span>
+                                </span>
+                            </td>
+                        `;
+                    }
+
+                    tr.innerHTML = htmlLinha;
+                    corpo.appendChild(tr);
                 });
 
             } catch (erro) {
-                console.error("Erro ao carregar o ranking: ", erro);
-                lista.innerHTML = `
-                    <li class="p-6 text-center text-red-500 dark:text-red-400 text-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Erro ao carregar dados do ranking.
-                    </li>
+                console.error("Erro ao processar ranking: ", erro);
+                corpo.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="p-6 text-center text-red-500 text-sm">
+                            <i class="fa-solid fa-triangle-exclamation mr-1"></i> Erro ao carregar dados do ranking.
+                        </td>
+                    </tr>
                 `;
             }
         };
 
-        // Carrega o jogo inicial da URL (?jogo=cobrinha)
+        // Carrega o ranking inicial
         const urlParams = new URLSearchParams(window.location.search);
-        const jogoInicial = urlParams.get('jogo') || 'cobrinha';
+        const jogoInicial = urlParams.get('jogo') || 'geral';
         window.carregarRanking(jogoInicial);
     </script>
 </body>
