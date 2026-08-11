@@ -11,8 +11,6 @@
       --accent: #f1c40f;
       --accent-glow: rgba(241, 196, 15, 0.5);
       --danger: #e74c3c;
-      --health: #ff4757;
-      --bomb: #e67e22;
       --text: #ffffff;
     }
 
@@ -127,7 +125,6 @@
       image-rendering: pixelated;
     }
 
-    /* Modal / Overlay */
     .overlay {
       display: none;
       position: absolute;
@@ -174,7 +171,6 @@
       box-shadow: 0 4px 15px var(--accent-glow);
     }
 
-    /* Painel de Controles Touch */
     .controls-container {
       display: flex;
       align-items: center;
@@ -233,9 +229,6 @@
       transform: scale(0.9);
     }
   </style>
-
-  <!-- Firebase local config -->
-  <script type="module" src="config-firebase.js"></script>
 </head>
 <body>
 
@@ -283,19 +276,17 @@
 
     <div class="controls-container">
       <div class="dpad">
-        <button class="btn-touch btn-up" onmousedown="handleMove(0,-1)" touchstart="handleMove(0,-1)">▲</button>
-        <button class="btn-touch btn-left" onmousedown="handleMove(-1,0)" touchstart="handleMove(-1,0)">◀</button>
-        <button class="btn-touch btn-right" onmousedown="handleMove(1,0)" touchstart="handleMove(1,0)">▶</button>
-        <button class="btn-touch btn-down" onmousedown="handleMove(0,1)" touchstart="handleMove(0,1)">▼</button>
+        <button class="btn-touch btn-up" onclick="handleMove(0,-1)">▲</button>
+        <button class="btn-touch btn-left" onclick="handleMove(-1,0)">◀</button>
+        <button class="btn-touch btn-right" onclick="handleMove(1,0)">▶</button>
+        <button class="btn-touch btn-down" onclick="handleMove(0,1)">▼</button>
       </div>
 
       <button class="btn-bomb-action" onclick="plantBomb()" title="Plantar Dinamite (Espaço)">💣</button>
     </div>
   </div>
 
-  <script type="module">
-    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+  <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const inputPlayer = document.getElementById('playerName');
@@ -307,49 +298,49 @@
       localStorage.setItem('user_player_name', inputPlayer.value.trim());
     });
 
-    // --- SINTETIZADOR DE ÁUDIO ---
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
     function playSFX(type) {
-      if (!audioCtx) audioCtx = new AudioCtx();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
 
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
 
-      if (type === 'dig') {
-        osc.type = 'triangle'; osc.frequency.setValueAtTime(100, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 0.08);
-        gain.gain.setValueAtTime(0.15, now); gain.gain.linearRampToValueAtTime(0, now + 0.08);
-        osc.start(now); osc.stop(now + 0.08);
-      } else if (type === 'gem') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
-        osc.frequency.setValueAtTime(1200, now + 0.08);
-        gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.18);
-        osc.start(now); osc.stop(now + 0.18);
-      } else if (type === 'explosion') {
-        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(20, now + 0.4);
-        gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
-        osc.start(now); osc.stop(now + 0.4);
-      } else if (type === 'hit') {
-        osc.type = 'square'; osc.frequency.setValueAtTime(250, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.2);
-        gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
-      } else if (type === 'win') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(523, now);
-        osc.frequency.setValueAtTime(659, now + 0.1); osc.frequency.setValueAtTime(783, now + 0.2);
-        gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
-        osc.start(now); osc.stop(now + 0.4);
-      }
+        if (type === 'dig') {
+          osc.type = 'triangle'; osc.frequency.setValueAtTime(100, now);
+          osc.frequency.exponentialRampToValueAtTime(30, now + 0.08);
+          gain.gain.setValueAtTime(0.15, now); gain.gain.linearRampToValueAtTime(0, now + 0.08);
+          osc.start(now); osc.stop(now + 0.08);
+        } else if (type === 'gem') {
+          osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
+          osc.frequency.setValueAtTime(1200, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.18);
+          osc.start(now); osc.stop(now + 0.18);
+        } else if (type === 'explosion') {
+          osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+          osc.frequency.exponentialRampToValueAtTime(20, now + 0.4);
+          gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
+          osc.start(now); osc.stop(now + 0.4);
+        } else if (type === 'hit') {
+          osc.type = 'square'; osc.frequency.setValueAtTime(250, now);
+          osc.frequency.linearRampToValueAtTime(80, now + 0.2);
+          gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.2);
+          osc.start(now); osc.stop(now + 0.2);
+        } else if (type === 'win') {
+          osc.type = 'sine'; osc.frequency.setValueAtTime(523, now);
+          osc.frequency.setValueAtTime(659, now + 0.1); osc.frequency.setValueAtTime(783, now + 0.2);
+          gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
+          osc.start(now); osc.stop(now + 0.4);
+        }
+      } catch (e) {}
     }
 
-    // --- SISTEMA DE PARTÍCULAS E TREMOR DE TELA ---
     let particles = [];
     let floatingTexts = [];
     let shakeTimer = 0;
@@ -369,18 +360,16 @@
       floatingTexts.push({ text, x, y, alpha: 1.0, color });
     }
 
-    // --- ELEMENTOS DO MAPA ---
-    // 0:Vazio, 1:Parede, 2:Terra, 3:Pedra, 4:Diamante, 5:Chave, 6:Porta, 7:Saída, 8:Dinamite, 9:Coração, 10:Espinhos
     const TILE = {
       EMPTY: 0, WALL: 1, DIRT: 2, ROCK: 3, GEM: 4,
       KEY: 5, DOOR: 6, EXIT: 7, BOMB_ITEM: 8, HEART_ITEM: 9, SPIKES: 10
     };
 
     const MAP_SIZE = 13;
-    const TILE_SIZE = 32; // 13 * 32 = 416px
+    const TILE_SIZE = 32;
 
     const levels = [
-      { // Nível 1: Templo Básico
+      {
         grid: [
           [1,1,1,1,1,1,1,1,1,1,1,1,1],
           [1,0,2,2,4,2,2,3,2,4,2,8,1],
@@ -393,11 +382,12 @@
           [1,1,1,1,1,6,1,1,1,1,2,2,1],
           [1,4,2,2,2,2,2,2,2,2,2,2,1],
           [1,2,2,2,2,2,2,2,2,2,2,7,1],
+          [1,2,2,2,2,2,2,2,2,2,2,2,1],
           [1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],
         playerStart: { x: 1, y: 1 }
       },
-      { // Nível 2: Caverna de Dinamites e Espinhos
+      {
         grid: [
           [1,1,1,1,1,1,1,1,1,1,1,1,1],
           [1,0,3,4,3,2,8,3,4,3,2,2,1],
@@ -410,11 +400,12 @@
           [1,2,4,2,3,2,2,3,2,4,9,2,1],
           [1,1,1,1,1,2,2,1,1,1,1,2,1],
           [1,7,2,2,2,2,2,2,2,2,2,2,1],
+          [1,2,2,2,2,2,2,2,2,2,2,2,1],
           [1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],
         playerStart: { x: 1, y: 1 }
       },
-      { // Nível 3: O CONFRONTO COM O CHEFE
+      {
         isBossLevel: true,
         grid: [
           [1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -428,6 +419,7 @@
           [1,0,0,0,0,0,0,0,0,0,0,0,1],
           [1,0,0,0,0,0,0,0,0,0,0,0,1],
           [1,0,0,0,0,0,0,0,0,0,0,7,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
           [1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],
         playerStart: { x: 1, y: 1 }
@@ -465,7 +457,6 @@
       projectiles = [];
       activeBombs = [];
 
-      // Chefe
       if (lvl.isBossLevel) {
         boss = { x: 6, y: 4, hp: 10, maxHp: 10, dir: 1, attackTimer: 0 };
         document.getElementById('bossBarContainer').style.display = 'block';
@@ -505,12 +496,9 @@
       addFloatingText(`-${amount} HP`, (player.x + 0.5) * TILE_SIZE, (player.y + 0.5) * TILE_SIZE, '#e74c3c');
       updateHUD();
 
-      if (player.hp <= 0) {
-        killPlayer();
-      }
+      if (player.hp <= 0) killPlayer();
     }
 
-    // --- BOMBAS E EXPLOSÕES ---
     window.plantBomb = function() {
       if (isGameOver || player.bombs <= 0) return;
 
@@ -532,17 +520,14 @@
           if (ex >= 0 && ex < MAP_SIZE && ey >= 0 && ey < MAP_SIZE) {
             const tile = grid[ey][ex];
 
-            // Destrói Terra, Pedras, Portas
             if ([TILE.DIRT, TILE.ROCK, TILE.DOOR].includes(tile)) {
               grid[ey][ex] = TILE.EMPTY;
             }
 
             addParticles((ex + 0.5) * TILE_SIZE, (ey + 0.5) * TILE_SIZE, '#e67e22', 12);
 
-            // Dano no Jogador
             if (player.x === ex && player.y === ey) damagePlayer(2);
 
-            // Dano no Chefe
             if (boss && Math.abs(boss.x - ex) <= 1 && Math.abs(boss.y - ey) <= 1) {
               boss.hp -= 3;
               addFloatingText("-3 HP CHEFE", (boss.x + 0.5) * TILE_SIZE, (boss.y + 0.5) * TILE_SIZE, '#f1c40f');
@@ -553,7 +538,6 @@
       }
     }
 
-    // --- MOVIMENTAÇÃO DO JOGADOR ---
     window.handleMove = function(dx, dy) {
       if (isGameOver) return;
 
@@ -625,11 +609,9 @@
       if (e.key === ' ') plantBomb();
     });
 
-    // --- LOOP DE FÍSICA E CHEFE ---
     function updateGameLogic() {
       if (isGameOver) return;
 
-      // 1. Atualizar Dinamites
       for (let i = activeBombs.length - 1; i >= 0; i--) {
         let b = activeBombs[i];
         b.timer -= 0.1;
@@ -639,19 +621,17 @@
         }
       }
 
-      // 2. Física do Chefe
       if (boss && boss.hp > 0) {
         boss.x += 0.08 * boss.dir;
         if (boss.x >= 10 || boss.x <= 2) boss.dir *= -1;
 
         boss.attackTimer += 0.1;
-        if (boss.attackTimer > 2.5) { // Atira projétil a cada 2.5s
+        if (boss.attackTimer > 2.5) {
           boss.attackTimer = 0;
           projectiles.push({ x: boss.x, y: boss.y, vy: 3 });
         }
       }
 
-      // 3. Projéteis
       for (let i = projectiles.length - 1; i >= 0; i--) {
         let p = projectiles[i];
         p.y += p.vy * 0.1;
@@ -696,8 +676,6 @@
         document.getElementById('overlayScore').textContent = levelScore;
         document.getElementById('overlayTotalScore').textContent = totalScore;
         document.getElementById('overlayBtn').textContent = 'Jogar Novamente 🔄';
-
-        salvarPontuacaoFirebase(inputPlayer.value.trim() || 'Explorador', totalScore);
       }
 
       document.getElementById('gameOverlay').style.display = 'flex';
@@ -712,21 +690,10 @@
       }
     };
 
-    async function salvarPontuacaoFirebase(nome, pontos) {
-      if (!window.db) return;
-      try {
-        await addDoc(collection(window.db, "rankings"), {
-          nome, pontos, jogo: "diamond_rush_ultimate", data: new Date()
-        });
-      } catch (e) { console.error(e); }
-    }
-
-    // --- RENDERIZAÇÃO CANVAS ---
     function render() {
       ctx.save();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Aplica Tremor de Tela
       if (shakeTimer > 0) {
         ctx.translate((Math.random() - 0.5) * shakeTimer, (Math.random() - 0.5) * shakeTimer);
         shakeTimer *= 0.85;
@@ -773,7 +740,6 @@
         }
       }
 
-      // Desenhar Dinamites Ativas
       activeBombs.forEach(b => {
         const x = b.x * TILE_SIZE + 16;
         const y = b.y * TILE_SIZE + 16;
@@ -781,7 +747,6 @@
         ctx.fillText('🧨', x, y);
       });
 
-      // Desenhar Chefe
       if (boss && boss.hp > 0) {
         const bx = boss.x * TILE_SIZE + 16;
         const by = boss.y * TILE_SIZE + 16;
@@ -789,13 +754,11 @@
         ctx.fillText('🗿', bx, by);
       }
 
-      // Desenhar Projéteis
       projectiles.forEach(p => {
         ctx.font = '16px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText('🔥', p.x * TILE_SIZE + 16, p.y * TILE_SIZE + 16);
       });
 
-      // Desenhar Jogador
       if (!isGameOver) {
         const px = player.x * TILE_SIZE + 16;
         const py = player.y * TILE_SIZE + 16;
@@ -803,7 +766,6 @@
         ctx.fillText('🤠', px, py);
       }
 
-      // Partículas & Textos Flutuantes
       particles.forEach((p, i) => {
         p.x += p.vx; p.y += p.vy; p.life -= p.decay;
         if (p.life > 0) {
