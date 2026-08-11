@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Diamond Rush: Temple Conquest</title>
+  <title>Diamond Rush: Ultimate Edition</title>
   <style>
     :root {
-      --bg: #090a0f;
-      --panel-bg: rgba(18, 24, 38, 0.85);
+      --bg: #07090e;
+      --panel: rgba(15, 22, 36, 0.9);
       --accent: #f1c40f;
-      --accent-glow: rgba(241, 196, 15, 0.4);
-      --diamond: #00f2ff;
+      --accent-glow: rgba(241, 196, 15, 0.5);
       --danger: #e74c3c;
-      --success: #2ecc71;
-      --text: #ecf0f1;
+      --health: #ff4757;
+      --bomb: #e67e22;
+      --text: #ffffff;
     }
 
     * {
@@ -27,14 +27,14 @@
 
     body {
       background-color: var(--bg);
-      background-image: radial-gradient(circle at 50% 30%, #172238 0%, var(--bg) 80%);
+      background-image: radial-gradient(circle at 50% 20%, #1a2636 0%, var(--bg) 85%);
       color: var(--text);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 12px;
+      padding: 10px;
       touch-action: none;
       overflow: hidden;
     }
@@ -44,78 +44,80 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 420px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 8px;
+      max-width: 416px;
     }
 
     h1 {
       color: var(--accent);
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       letter-spacing: 1px;
-      text-shadow: 0 0 12px var(--accent-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      text-shadow: 0 0 10px var(--accent-glow);
+      margin-bottom: 6px;
     }
 
     .player-setup {
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .input-player {
       width: 100%;
-      padding: 8px 16px;
+      padding: 6px 14px;
       border-radius: 20px;
-      border: 2px solid rgba(241, 196, 15, 0.5);
+      border: 2px solid rgba(241, 196, 15, 0.4);
       background: rgba(0, 0, 0, 0.6);
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-align: center;
       outline: none;
-      backdrop-filter: blur(4px);
-      transition: all 0.3s ease;
-    }
-
-    .input-player:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .hud {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
       width: 100%;
-      background: var(--panel-bg);
-      backdrop-filter: blur(10px);
-      padding: 10px 14px;
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      padding: 8px 12px;
       border-radius: 12px 12px 0 0;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-bottom: 2px solid var(--accent);
-      font-size: 0.85rem;
-      font-weight: 700;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      gap: 4px;
     }
 
-    .hud-item {
+    .hud-row {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 5px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .boss-bar-container {
+      display: none;
+      width: 100%;
+      height: 10px;
+      background: #2c3e50;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid var(--danger);
+      margin-top: 2px;
+    }
+
+    .boss-bar-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #c0392b, #e74c3c);
+      transition: width 0.2s ease;
     }
 
     #game-container {
       position: relative;
       width: 100%;
       border-radius: 0 0 12px 12px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.9);
       overflow: hidden;
-      background-color: #05070a;
+      background-color: #030508;
     }
 
     canvas {
@@ -125,45 +127,31 @@
       image-rendering: pixelated;
     }
 
-    /* Modais / Overlays */
+    /* Modal / Overlay */
     .overlay {
       display: none;
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(9, 10, 15, 0.92);
+      background: rgba(7, 9, 14, 0.94);
       backdrop-filter: blur(6px);
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 24px;
+      padding: 20px;
       z-index: 10;
-      animation: fadeIn 0.3s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .overlay h2 {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-    }
-
-    .overlay p {
-      color: #a0aec0;
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-    }
+    .overlay h2 { font-size: 1.8rem; margin-bottom: 6px; }
+    .overlay p { color: #a0aec0; font-size: 0.9rem; margin-bottom: 12px; }
 
     .stats-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      padding: 12px;
+      padding: 10px 16px;
       width: 100%;
-      margin: 10px 0 18px 0;
+      margin-bottom: 14px;
     }
 
     .stats-row {
@@ -173,69 +161,46 @@
       font-size: 0.9rem;
     }
 
-    .stats-value {
-      color: var(--accent);
-      font-weight: bold;
-    }
-
     .btn-action {
-      padding: 12px 28px;
+      padding: 10px 24px;
       background: linear-gradient(135deg, #f39c12, #f1c40f);
       color: #000;
       border: none;
-      border-radius: 25px;
-      font-size: 1rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
-      width: 85%;
+      width: 80%;
       box-shadow: 0 4px 15px var(--accent-glow);
-      transition: transform 0.1s ease, filter 0.2s ease;
     }
 
-    .btn-action:active {
-      transform: scale(0.96);
-    }
-
-    .btn-ranking {
+    /* Painel de Controles Touch */
+    .controls-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
       margin-top: 10px;
-      padding: 8px 20px;
-      background: transparent;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      font-size: 0.85rem;
-      text-decoration: none;
-      display: inline-block;
-      transition: background 0.2s ease;
     }
 
-    .btn-ranking:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    /* D-Pad On-Screen para Telas de Toque */
-    .controls-panel {
+    .dpad {
       display: grid;
-      grid-template-columns: repeat(3, 56px);
-      grid-template-rows: repeat(3, 56px);
-      gap: 8px;
-      margin-top: 14px;
-      justify-content: center;
+      grid-template-columns: repeat(3, 48px);
+      grid-template-rows: repeat(3, 48px);
+      gap: 6px;
     }
 
     .btn-touch {
-      background: var(--panel-bg);
+      background: var(--panel);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: var(--accent);
-      font-size: 1.3rem;
-      border-radius: 14px;
+      font-size: 1.2rem;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      backdrop-filter: blur(5px);
-      transition: background 0.1s, transform 0.1s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
 
     .btn-touch:active {
@@ -248,57 +213,83 @@
     .btn-left { grid-column: 1; grid-row: 2; }
     .btn-right { grid-column: 3; grid-row: 2; }
     .btn-down { grid-column: 2; grid-row: 3; }
+
+    .btn-bomb-action {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e67e22, #d35400);
+      border: 2px solid var(--accent);
+      color: #fff;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(230, 126, 34, 0.5);
+      cursor: pointer;
+    }
+
+    .btn-bomb-action:active {
+      transform: scale(0.9);
+    }
   </style>
 
-  <!-- Importação do Firebase Config local -->
+  <!-- Firebase local config -->
   <script type="module" src="config-firebase.js"></script>
 </head>
 <body>
 
   <div class="game-wrapper">
-    <header>
-      <h1>💎 Diamond Rush</h1>
-    </header>
+    <h1>💎 Diamond Rush</h1>
 
     <div class="player-setup">
-      <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nickname" maxlength="15">
+      <input type="text" id="playerName" class="input-player" placeholder="Seu Nickname" maxlength="15">
     </div>
 
     <div class="hud">
-      <div class="hud-item">🚩 <span id="hudLevel">1</span></div>
-      <div class="hud-item">💎 <span id="hudGems">0/0</span></div>
-      <div class="hud-item">🔑 <span id="hudKey">Não</span></div>
-      <div class="hud-item">🏆 <span id="hudScore">0</span></div>
+      <div class="hud-row">
+        <div>❤️ <span id="hudHearts">3/3</span></div>
+        <div>💎 <span id="hudGems">0/0</span></div>
+        <div>💣 <span id="hudBombs">0</span></div>
+        <div>🔑 <span id="hudKey">Não</span></div>
+        <div>🏆 <span id="hudScore">0</span></div>
+      </div>
+      <div class="boss-bar-container" id="bossBarContainer">
+        <div class="boss-bar-fill" id="bossBarFill"></div>
+      </div>
     </div>
 
     <div id="game-container">
-      <canvas id="gameCanvas" width="384" height="384"></canvas>
+      <canvas id="gameCanvas" width="416" height="416"></canvas>
       
       <div class="overlay" id="gameOverlay">
         <h2 id="overlayTitle">Fase Concluída! 🎉</h2>
-        <p id="overlayMsg">Você superou este setor do templo!</p>
+        <p id="overlayMsg">Você superou os perigos do templo!</p>
         
         <div class="stats-card">
           <div class="stats-row">
             <span>Pontos da Fase:</span>
-            <span class="stats-value" id="overlayScore">0</span>
+            <span style="color:var(--accent); font-weight:bold;" id="overlayScore">0</span>
           </div>
           <div class="stats-row">
             <span>Pontuação Total:</span>
-            <span class="stats-value" id="overlayTotalScore">0</span>
+            <span style="color:var(--accent); font-weight:bold;" id="overlayTotalScore">0</span>
           </div>
         </div>
 
         <button class="btn-action" id="overlayBtn" onclick="nextAction()">Avançar ➡️</button>
-        <a href="ranking.html?jogo=diamond_rush" class="btn-ranking">🏆 Ver Ranking Geral</a>
       </div>
     </div>
 
-    <div class="controls-panel">
-      <button class="btn-touch btn-up" onmousedown="handleInput(0,-1)" touchstart="handleInput(0,-1)">▲</button>
-      <button class="btn-touch btn-left" onmousedown="handleInput(-1,0)" touchstart="handleInput(-1,0)">◀</button>
-      <button class="btn-touch btn-right" onmousedown="handleInput(1,0)" touchstart="handleInput(1,0)">▶</button>
-      <button class="btn-touch btn-down" onmousedown="handleInput(0,1)" touchstart="handleInput(0,1)">▼</button>
+    <div class="controls-container">
+      <div class="dpad">
+        <button class="btn-touch btn-up" onmousedown="handleMove(0,-1)" touchstart="handleMove(0,-1)">▲</button>
+        <button class="btn-touch btn-left" onmousedown="handleMove(-1,0)" touchstart="handleMove(-1,0)">◀</button>
+        <button class="btn-touch btn-right" onmousedown="handleMove(1,0)" touchstart="handleMove(1,0)">▶</button>
+        <button class="btn-touch btn-down" onmousedown="handleMove(0,1)" touchstart="handleMove(0,1)">▼</button>
+      </div>
+
+      <button class="btn-bomb-action" onclick="plantBomb()" title="Plantar Dinamite (Espaço)">💣</button>
     </div>
   </div>
 
@@ -316,11 +307,11 @@
       localStorage.setItem('user_player_name', inputPlayer.value.trim());
     });
 
-    // --- AUDIO SYNTHESIZER (Sons Retro Dinâmicos) ---
+    // --- SINTETIZADOR DE ÁUDIO ---
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
-    function playSound(type) {
+    function playSFX(type) {
       if (!audioCtx) audioCtx = new AudioCtx();
       if (audioCtx.state === 'suspended') audioCtx.resume();
 
@@ -331,136 +322,113 @@
       const now = audioCtx.currentTime;
 
       if (type === 'dig') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(110, now);
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(100, now);
         osc.frequency.exponentialRampToValueAtTime(30, now + 0.08);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now); gain.gain.linearRampToValueAtTime(0, now + 0.08);
         osc.start(now); osc.stop(now + 0.08);
       } else if (type === 'gem') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(784, now);
-        osc.frequency.setValueAtTime(1046, now + 0.08);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
-      } else if (type === 'fall') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(90, now);
-        osc.frequency.linearRampToValueAtTime(40, now + 0.09);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.09);
-        osc.start(now); osc.stop(now + 0.09);
-      } else if (type === 'win') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523, now);
-        osc.frequency.setValueAtTime(659, now + 0.1);
-        osc.frequency.setValueAtTime(783, now + 0.2);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.4);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
+        osc.frequency.setValueAtTime(1200, now + 0.08);
+        gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0, now + 0.18);
+        osc.start(now); osc.stop(now + 0.18);
+      } else if (type === 'explosion') {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(20, now + 0.4);
+        gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
         osc.start(now); osc.stop(now + 0.4);
-      } else if (type === 'dead') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.35);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.35);
-        osc.start(now); osc.stop(now + 0.35);
+      } else if (type === 'hit') {
+        osc.type = 'square'; osc.frequency.setValueAtTime(250, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.2);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      } else if (type === 'win') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(523, now);
+        osc.frequency.setValueAtTime(659, now + 0.1); osc.frequency.setValueAtTime(783, now + 0.2);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
       }
     }
 
-    // --- EFEITOS VISUAIS: SISTEMA DE PARTÍCULAS ---
+    // --- SISTEMA DE PARTÍCULAS E TREMOR DE TELA ---
     let particles = [];
-    function createParticles(x, y, color, count = 8) {
+    let floatingTexts = [];
+    let shakeTimer = 0;
+
+    function triggerShake(intensity = 6) { shakeTimer = intensity; }
+
+    function addParticles(x, y, color, count = 10) {
       for (let i = 0; i < count; i++) {
         particles.push({
-          x: x, y: y,
-          vx: (Math.random() - 0.5) * 4,
-          vy: (Math.random() - 0.5) * 4,
-          size: Math.random() * 3 + 2,
-          color: color,
-          life: 1.0,
-          decay: Math.random() * 0.05 + 0.03
+          x, y, vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6,
+          size: Math.random() * 4 + 2, color, life: 1.0, decay: Math.random() * 0.05 + 0.03
         });
       }
     }
 
-    function updateParticles() {
-      for (let i = particles.length - 1; i >= 0; i--) {
-        let p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= p.decay;
-        if (p.life <= 0) particles.splice(i, 1);
-      }
+    function addFloatingText(text, x, y, color = '#f1c40f') {
+      floatingTexts.push({ text, x, y, alpha: 1.0, color });
     }
 
-    function drawParticles() {
-      particles.forEach(p => {
-        ctx.save();
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      });
-    }
+    // --- ELEMENTOS DO MAPA ---
+    // 0:Vazio, 1:Parede, 2:Terra, 3:Pedra, 4:Diamante, 5:Chave, 6:Porta, 7:Saída, 8:Dinamite, 9:Coração, 10:Espinhos
+    const TILE = {
+      EMPTY: 0, WALL: 1, DIRT: 2, ROCK: 3, GEM: 4,
+      KEY: 5, DOOR: 6, EXIT: 7, BOMB_ITEM: 8, HEART_ITEM: 9, SPIKES: 10
+    };
 
-    // --- ELEMENTOS E NÍVEIS ---
-    const TILE = { EMPTY: 0, WALL: 1, DIRT: 2, ROCK: 3, GEM: 4, KEY: 5, DOOR: 6, EXIT: 7 };
-    const MAP_SIZE = 12;
-    const TILE_SIZE = 32;
+    const MAP_SIZE = 13;
+    const TILE_SIZE = 32; // 13 * 32 = 416px
 
     const levels = [
-      {
+      { // Nível 1: Templo Básico
         grid: [
-          [1,1,1,1,1,1,1,1,1,1,1,1],
-          [1,0,2,2,4,2,2,3,2,4,2,1],
-          [1,2,1,1,1,2,1,1,1,2,2,1],
-          [1,2,2,4,2,2,2,4,2,2,2,1],
-          [1,1,1,2,1,1,1,2,1,1,2,1],
-          [1,4,2,2,3,2,2,2,2,4,2,1],
-          [1,2,1,1,1,1,1,1,1,2,2,1],
-          [1,2,2,2,2,5,2,2,2,2,2,1],
-          [1,1,1,1,1,6,1,1,1,1,2,1],
-          [1,4,2,2,2,2,2,2,2,2,2,1],
-          [1,2,2,2,2,2,2,2,2,2,7,1],
-          [1,1,1,1,1,1,1,1,1,1,1,1]
+          [1,1,1,1,1,1,1,1,1,1,1,1,1],
+          [1,0,2,2,4,2,2,3,2,4,2,8,1],
+          [1,2,1,1,1,2,1,1,1,2,2,2,1],
+          [1,2,2,4,2,2,2,4,2,2,10,2,1],
+          [1,1,1,2,1,1,1,2,1,1,2,2,1],
+          [1,4,2,2,3,2,2,2,2,4,2,2,1],
+          [1,2,1,1,1,1,1,1,1,2,2,2,1],
+          [1,2,2,2,2,5,2,2,2,2,9,2,1],
+          [1,1,1,1,1,6,1,1,1,1,2,2,1],
+          [1,4,2,2,2,2,2,2,2,2,2,2,1],
+          [1,2,2,2,2,2,2,2,2,2,2,7,1],
+          [1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],
         playerStart: { x: 1, y: 1 }
       },
-      {
+      { // Nível 2: Caverna de Dinamites e Espinhos
         grid: [
-          [1,1,1,1,1,1,1,1,1,1,1,1],
-          [1,0,3,4,3,2,2,3,4,3,2,1],
-          [1,2,2,2,2,2,2,2,2,2,2,1],
-          [1,2,3,1,1,3,3,1,1,3,2,1],
-          [1,4,2,1,4,2,2,4,1,2,4,1],
-          [1,3,2,1,2,5,2,2,1,2,3,1],
-          [1,2,2,1,1,6,1,1,1,2,2,1],
-          [1,2,3,2,2,2,2,2,2,3,2,1],
-          [1,2,4,2,3,2,2,3,2,4,2,1],
-          [1,1,1,1,1,2,2,1,1,1,1,1],
-          [1,7,2,2,2,2,2,2,2,2,2,1],
-          [1,1,1,1,1,1,1,1,1,1,1,1]
+          [1,1,1,1,1,1,1,1,1,1,1,1,1],
+          [1,0,3,4,3,2,8,3,4,3,2,2,1],
+          [1,2,10,2,2,2,2,2,10,2,2,2,1],
+          [1,2,3,1,1,3,3,1,1,3,2,2,1],
+          [1,4,2,1,4,2,2,4,1,2,4,2,1],
+          [1,3,2,1,2,5,2,2,1,2,3,2,1],
+          [1,2,2,1,1,6,1,1,1,2,2,2,1],
+          [1,2,3,2,2,8,2,2,2,3,2,2,1],
+          [1,2,4,2,3,2,2,3,2,4,9,2,1],
+          [1,1,1,1,1,2,2,1,1,1,1,2,1],
+          [1,7,2,2,2,2,2,2,2,2,2,2,1],
+          [1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],
         playerStart: { x: 1, y: 1 }
       },
-      {
+      { // Nível 3: O CONFRONTO COM O CHEFE
+        isBossLevel: true,
         grid: [
-          [1,1,1,1,1,1,1,1,1,1,1,1],
-          [1,0,2,3,4,3,2,3,4,3,2,1],
-          [1,2,1,1,3,1,1,3,1,1,2,1],
-          [1,4,2,2,2,2,2,2,2,2,4,1],
-          [1,3,1,2,1,5,1,2,1,3,1],
-          [1,2,1,2,1,6,1,2,1,2,1],
-          [1,2,2,2,2,2,2,2,2,2,2,1],
-          [1,1,1,3,1,1,1,3,1,1,1,1],
-          [1,4,2,2,2,4,2,2,2,2,4,1],
-          [1,3,2,1,1,1,1,1,1,2,3,1],
-          [1,2,2,2,2,2,2,2,2,2,7,1],
-          [1,1,1,1,1,1,1,1,1,1,1,1]
+          [1,1,1,1,1,1,1,1,1,1,1,1,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,3,0,3,0,3,0,3,0,3,0,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,8,0,0,8,0,0,8,0,0,8,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,0,0,0,0,0,0,0,0,0,0,1],
+          [1,0,0,0,0,0,0,0,0,0,0,7,1],
+          [1,1,1,1,1,1,1,1,1,1,1,1,1]
         ],
         playerStart: { x: 1, y: 1 }
       }
@@ -468,32 +436,43 @@
 
     let currentLevelIndex = 0;
     let grid = [];
-    let player = { x: 1, y: 1, renderX: 1, renderY: 1 };
+    let player = { x: 1, y: 1, hp: 3, maxHp: 3, bombs: 1 };
+    let boss = null;
+    let projectiles = [];
+    let activeBombs = [];
+
     let totalScore = 0;
     let levelScore = 0;
     let gemsCollected = 0;
     let totalGemsInLevel = 0;
     let hasKey = false;
     let isGameOver = false;
-    let fallingObjects = new Set();
-    let animTimer = 0;
 
     function initLevel(index) {
       currentLevelIndex = index;
       const lvl = levels[currentLevelIndex];
       grid = lvl.grid.map(row => [...row]);
-      
+
       player.x = lvl.playerStart.x;
       player.y = lvl.playerStart.y;
-      player.renderX = player.x;
-      player.renderY = player.y;
+      player.hp = 3;
+      player.bombs = 1;
 
       levelScore = 0;
       gemsCollected = 0;
       hasKey = false;
       isGameOver = false;
-      fallingObjects.clear();
-      particles = [];
+      projectiles = [];
+      activeBombs = [];
+
+      // Chefe
+      if (lvl.isBossLevel) {
+        boss = { x: 6, y: 4, hp: 10, maxHp: 10, dir: 1, attackTimer: 0 };
+        document.getElementById('bossBarContainer').style.display = 'block';
+      } else {
+        boss = null;
+        document.getElementById('bossBarContainer').style.display = 'none';
+      }
 
       totalGemsInLevel = 0;
       for (let r = 0; r < MAP_SIZE; r++) {
@@ -507,62 +486,75 @@
     }
 
     function updateHUD() {
-      document.getElementById('hudLevel').textContent = currentLevelIndex + 1;
+      document.getElementById('hudHearts').textContent = `${player.hp}/${player.maxHp}`;
       document.getElementById('hudGems').textContent = `${gemsCollected}/${totalGemsInLevel}`;
+      document.getElementById('hudBombs').textContent = player.bombs;
       document.getElementById('hudKey').textContent = hasKey ? 'Sim 🔑' : 'Não';
       document.getElementById('hudScore').textContent = totalScore + levelScore;
+
+      if (boss) {
+        const pct = Math.max(0, (boss.hp / boss.maxHp) * 100);
+        document.getElementById('bossBarFill').style.width = pct + '%';
+      }
     }
 
-    // --- FÍSICA E MOVIMENTAÇÃO ---
-    function updatePhysics() {
-      if (isGameOver) return;
+    function damagePlayer(amount = 1) {
+      player.hp -= amount;
+      playSFX('hit');
+      triggerShake(8);
+      addFloatingText(`-${amount} HP`, (player.x + 0.5) * TILE_SIZE, (player.y + 0.5) * TILE_SIZE, '#e74c3c');
+      updateHUD();
 
-      let newFalling = new Set();
+      if (player.hp <= 0) {
+        killPlayer();
+      }
+    }
 
-      for (let r = MAP_SIZE - 2; r >= 0; r--) {
-        for (let c = 0; c < MAP_SIZE; c++) {
-          const item = grid[r][c];
+    // --- BOMBAS E EXPLOSÕES ---
+    window.plantBomb = function() {
+      if (isGameOver || player.bombs <= 0) return;
 
-          if (item === TILE.ROCK || item === TILE.GEM) {
-            const itemKey = `${r},${c}`;
+      player.bombs--;
+      activeBombs.push({ x: player.x, y: player.y, timer: 3.0 });
+      addFloatingText("BOMBA!", (player.x + 0.5) * TILE_SIZE, (player.y + 0.5) * TILE_SIZE, '#e67e22');
+      updateHUD();
+    };
 
-            // Queda Direta
-            if (grid[r + 1][c] === TILE.EMPTY) {
-              grid[r + 1][c] = item;
-              grid[r][c] = TILE.EMPTY;
-              newFalling.add(`${r + 1},${c}`);
+    function explodeBomb(b) {
+      playSFX('explosion');
+      triggerShake(12);
 
-              if (player.x === c && player.y === r + 1) {
-                killPlayer();
-                return;
-              }
-            } 
-            // Rolamento Lateral
-            else if ([TILE.ROCK, TILE.GEM, TILE.WALL].includes(grid[r + 1][c])) {
-              if (c > 0 && grid[r][c - 1] === TILE.EMPTY && grid[r + 1][c - 1] === TILE.EMPTY) {
-                grid[r][c - 1] = item;
-                grid[r][c] = TILE.EMPTY;
-                newFalling.add(`${r},${c - 1}`);
-              } else if (c < MAP_SIZE - 1 && grid[r][c + 1] === TILE.EMPTY && grid[r + 1][c + 1] === TILE.EMPTY) {
-                grid[r][c + 1] = item;
-                grid[r][c] = TILE.EMPTY;
-                newFalling.add(`${r},${c + 1}`);
-              }
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          const ex = b.x + dc;
+          const ey = b.y + dr;
+
+          if (ex >= 0 && ex < MAP_SIZE && ey >= 0 && ey < MAP_SIZE) {
+            const tile = grid[ey][ex];
+
+            // Destrói Terra, Pedras, Portas
+            if ([TILE.DIRT, TILE.ROCK, TILE.DOOR].includes(tile)) {
+              grid[ey][ex] = TILE.EMPTY;
             }
 
-            if (fallingObjects.has(itemKey) && !newFalling.has(`${r + 1},${c}`)) {
-              playSound('fall');
-              createParticles((c + 0.5) * TILE_SIZE, (r + 1.5) * TILE_SIZE, '#7f8c8d', 4);
+            addParticles((ex + 0.5) * TILE_SIZE, (ey + 0.5) * TILE_SIZE, '#e67e22', 12);
+
+            // Dano no Jogador
+            if (player.x === ex && player.y === ey) damagePlayer(2);
+
+            // Dano no Chefe
+            if (boss && Math.abs(boss.x - ex) <= 1 && Math.abs(boss.y - ey) <= 1) {
+              boss.hp -= 3;
+              addFloatingText("-3 HP CHEFE", (boss.x + 0.5) * TILE_SIZE, (boss.y + 0.5) * TILE_SIZE, '#f1c40f');
+              if (boss.hp <= 0) winLevel();
             }
           }
         }
       }
-      fallingObjects = newFalling;
     }
 
-    setInterval(updatePhysics, 110);
-
-    window.handleInput = function(dx, dy) {
+    // --- MOVIMENTAÇÃO DO JOGADOR ---
+    window.handleMove = function(dx, dy) {
       if (isGameOver) return;
 
       const tx = player.x + dx;
@@ -571,8 +563,6 @@
       if (tx < 0 || tx >= MAP_SIZE || ty < 0 || ty >= MAP_SIZE) return;
 
       const tile = grid[ty][tx];
-      const px = (tx + 0.5) * TILE_SIZE;
-      const py = (ty + 0.5) * TILE_SIZE;
 
       if (tile === TILE.EMPTY) {
         player.x = tx; player.y = ty;
@@ -580,58 +570,109 @@
         grid[ty][tx] = TILE.EMPTY;
         player.x = tx; player.y = ty;
         levelScore += 10;
-        playSound('dig');
-        createParticles(px, py, '#8d6e63', 6);
+        playSFX('dig');
       } else if (tile === TILE.GEM) {
         grid[ty][tx] = TILE.EMPTY;
         player.x = tx; player.y = ty;
         gemsCollected++;
         levelScore += 100;
-        playSound('gem');
-        createParticles(px, py, '#00f2ff', 10);
+        playSFX('gem');
+      } else if (tile === TILE.BOMB_ITEM) {
+        grid[ty][tx] = TILE.EMPTY;
+        player.x = tx; player.y = ty;
+        player.bombs += 2;
+        playSFX('gem');
+        addFloatingText("+2 BOMBAS", (tx + 0.5) * TILE_SIZE, (ty + 0.5) * TILE_SIZE, '#e67e22');
+      } else if (tile === TILE.HEART_ITEM) {
+        grid[ty][tx] = TILE.EMPTY;
+        player.x = tx; player.y = ty;
+        player.hp = Math.min(player.maxHp, player.hp + 1);
+        playSFX('gem');
+        addFloatingText("+1 VIDA", (tx + 0.5) * TILE_SIZE, (ty + 0.5) * TILE_SIZE, '#ff4757');
+      } else if (tile === TILE.SPIKES) {
+        player.x = tx; player.y = ty;
+        damagePlayer(1);
       } else if (tile === TILE.KEY) {
         grid[ty][tx] = TILE.EMPTY;
         player.x = tx; player.y = ty;
         hasKey = true;
-        levelScore += 150;
-        playSound('gem');
-        createParticles(px, py, '#f1c40f', 10);
+        playSFX('gem');
       } else if (tile === TILE.DOOR && hasKey) {
         grid[ty][tx] = TILE.EMPTY;
         player.x = tx; player.y = ty;
-        levelScore += 200;
-        playSound('win');
-        createParticles(px, py, '#e67e22', 12);
+        playSFX('win');
       } else if (tile === TILE.ROCK && dy === 0) {
         const bx = tx + dx;
         if (bx >= 0 && bx < MAP_SIZE && grid[ty][bx] === TILE.EMPTY) {
           grid[ty][bx] = TILE.ROCK;
           grid[ty][tx] = TILE.EMPTY;
           player.x = tx; player.y = ty;
-          playSound('dig');
+          playSFX('dig');
         }
       } else if (tile === TILE.EXIT) {
-        player.x = tx; player.y = ty;
-        winLevel();
+        if (!boss || boss.hp <= 0) winLevel();
+        else addFloatingText("Derrote o Chefe!", (tx + 0.5) * TILE_SIZE, (ty + 0.5) * TILE_SIZE, '#e74c3c');
       }
 
       updateHUD();
     };
 
     window.addEventListener('keydown', e => {
-      if (['ArrowUp', 'w', 'W'].includes(e.key)) handleInput(0, -1);
-      if (['ArrowDown', 's', 'S'].includes(e.key)) handleInput(0, 1);
-      if (['ArrowLeft', 'a', 'A'].includes(e.key)) handleInput(-1, 0);
-      if (['ArrowRight', 'd', 'D'].includes(e.key)) handleInput(1, 0);
+      if (['ArrowUp', 'w', 'W'].includes(e.key)) handleMove(0, -1);
+      if (['ArrowDown', 's', 'S'].includes(e.key)) handleMove(0, 1);
+      if (['ArrowLeft', 'a', 'A'].includes(e.key)) handleMove(-1, 0);
+      if (['ArrowRight', 'd', 'D'].includes(e.key)) handleMove(1, 0);
+      if (e.key === ' ') plantBomb();
     });
+
+    // --- LOOP DE FÍSICA E CHEFE ---
+    function updateGameLogic() {
+      if (isGameOver) return;
+
+      // 1. Atualizar Dinamites
+      for (let i = activeBombs.length - 1; i >= 0; i--) {
+        let b = activeBombs[i];
+        b.timer -= 0.1;
+        if (b.timer <= 0) {
+          explodeBomb(b);
+          activeBombs.splice(i, 1);
+        }
+      }
+
+      // 2. Física do Chefe
+      if (boss && boss.hp > 0) {
+        boss.x += 0.08 * boss.dir;
+        if (boss.x >= 10 || boss.x <= 2) boss.dir *= -1;
+
+        boss.attackTimer += 0.1;
+        if (boss.attackTimer > 2.5) { // Atira projétil a cada 2.5s
+          boss.attackTimer = 0;
+          projectiles.push({ x: boss.x, y: boss.y, vy: 3 });
+        }
+      }
+
+      // 3. Projéteis
+      for (let i = projectiles.length - 1; i >= 0; i--) {
+        let p = projectiles[i];
+        p.y += p.vy * 0.1;
+        if (Math.hypot(p.x - player.x, p.y - player.y) < 0.6) {
+          damagePlayer(1);
+          projectiles.splice(i, 1);
+        } else if (p.y >= MAP_SIZE) {
+          projectiles.splice(i, 1);
+        }
+      }
+
+      updateHUD();
+    }
+
+    setInterval(updateGameLogic, 100);
 
     function killPlayer() {
       isGameOver = true;
-      playSound('dead');
-      createParticles((player.x + 0.5) * TILE_SIZE, (player.y + 0.5) * TILE_SIZE, '#e74c3c', 15);
-
-      document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--danger)">Esmagado! 🪨</span>';
-      document.getElementById('overlayMsg').textContent = 'Fique atento às pedras instáveis!';
+      playSFX('hit');
+      document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--danger)">Você Morreu! 💀</span>';
+      document.getElementById('overlayMsg').textContent = 'As armadilhas do templo venceram...';
       document.getElementById('overlayScore').textContent = levelScore;
       document.getElementById('overlayTotalScore').textContent = totalScore;
       document.getElementById('overlayBtn').textContent = 'Tentar Novamente 🔄';
@@ -640,18 +681,18 @@
 
     function winLevel() {
       isGameOver = true;
-      playSound('win');
+      playSFX('win');
       totalScore += levelScore;
 
       if (currentLevelIndex < levels.length - 1) {
         document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--accent)">Fase Concluída! 🎉</span>';
-        document.getElementById('overlayMsg').textContent = 'Você dominou este setor do templo!';
+        document.getElementById('overlayMsg').textContent = 'Avançando no templo...';
         document.getElementById('overlayScore').textContent = levelScore;
         document.getElementById('overlayTotalScore').textContent = totalScore;
         document.getElementById('overlayBtn').textContent = 'Próxima Fase ➡️';
       } else {
-        document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--success)">Templo Conquistado! 🏆</span>';
-        document.getElementById('overlayMsg').textContent = 'Incrível! Você completou todas as fases!';
+        document.getElementById('overlayTitle').innerHTML = '<span style="color:#2ecc71">ZEREI O JOGO! 🏆</span>';
+        document.getElementById('overlayMsg').textContent = 'Você derrotou o Chefe e recuperou o Tesouro!';
         document.getElementById('overlayScore').textContent = levelScore;
         document.getElementById('overlayTotalScore').textContent = totalScore;
         document.getElementById('overlayBtn').textContent = 'Jogar Novamente 🔄';
@@ -663,11 +704,8 @@
     }
 
     window.nextAction = function() {
-      if (document.getElementById('overlayBtn').textContent.includes('Tentar') || 
-          currentLevelIndex >= levels.length - 1) {
-        if (currentLevelIndex >= levels.length - 1 && !document.getElementById('overlayBtn').textContent.includes('Tentar')) {
-          totalScore = 0;
-        }
+      if (document.getElementById('overlayBtn').textContent.includes('Tentar') || currentLevelIndex >= levels.length - 1) {
+        totalScore = 0;
         initLevel(0);
       } else {
         initLevel(currentLevelIndex + 1);
@@ -678,22 +716,21 @@
       if (!window.db) return;
       try {
         await addDoc(collection(window.db, "rankings"), {
-          nome: nome,
-          pontos: pontos,
-          jogo: "diamond_rush",
-          data: new Date()
+          nome, pontos, jogo: "diamond_rush_ultimate", data: new Date()
         });
       } catch (e) { console.error(e); }
     }
 
-    // --- RENDERIZAÇÃO GRÁFICA AVANÇADA ---
+    // --- RENDERIZAÇÃO CANVAS ---
     function render() {
-      animTimer += 0.05;
+      ctx.save();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Interpolante suave de movimento do jogador
-      player.renderX += (player.x - player.renderX) * 0.3;
-      player.renderY += (player.y - player.renderY) * 0.3;
+      // Aplica Tremor de Tela
+      if (shakeTimer > 0) {
+        ctx.translate((Math.random() - 0.5) * shakeTimer, (Math.random() - 0.5) * shakeTimer);
+        shakeTimer *= 0.85;
+      }
 
       for (let r = 0; r < MAP_SIZE; r++) {
         for (let c = 0; c < MAP_SIZE; c++) {
@@ -701,95 +738,90 @@
           const x = c * TILE_SIZE;
           const y = r * TILE_SIZE;
 
-          // Fundo de Piso com padrão quadriculado sutil
-          ctx.fillStyle = (r + c) % 2 === 0 ? '#0f141d' : '#0b0e14';
+          ctx.fillStyle = '#0d131d';
           ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
-          // Parede Texturizada
           if (tile === TILE.WALL) {
-            let grad = ctx.createLinearGradient(x, y, x + TILE_SIZE, y + TILE_SIZE);
-            grad.addColorStop(0, '#2c3e50');
-            grad.addColorStop(1, '#1a252f');
-            ctx.fillStyle = grad;
-            ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-            ctx.strokeStyle = '#111822';
-            ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
-          }
-          // Terra Escavável
-          else if (tile === TILE.DIRT) {
-            ctx.fillStyle = '#6d4c41';
-            ctx.fillRect(x + 1, y + 1, TILE_SIZE - 2, TILE_SIZE - 2);
-            ctx.fillStyle = '#4e342e';
-            ctx.fillRect(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
-          }
-          // Pedra 3D com Brilho
-          else if (tile === TILE.ROCK) {
-            let grad = ctx.createRadialGradient(x + 10, y + 10, 2, x + 16, y + 16, 14);
-            grad.addColorStop(0, '#bdc3c7');
-            grad.addColorStop(1, '#7f8c8d');
-            ctx.beginPath();
-            ctx.arc(x + TILE_SIZE/2, y + TILE_SIZE/2, TILE_SIZE/2 - 2, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
-            ctx.fill();
-          }
-          // Diamante com Iluminação e Animação Flutuante
-          else if (tile === TILE.GEM) {
-            const floatY = Math.sin(animTimer * 2 + c) * 2;
-            ctx.save();
-            ctx.shadowColor = '#00f2ff';
-            ctx.shadowBlur = 8;
-            ctx.font = '20px serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('💎', x + TILE_SIZE/2, y + TILE_SIZE/2 + floatY);
-            ctx.restore();
-          }
-          // Chave
-          else if (tile === TILE.KEY) {
-            ctx.save();
-            ctx.shadowColor = '#f1c40f';
-            ctx.shadowBlur = 6;
-            ctx.font = '18px serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('🔑', x + TILE_SIZE/2, y + TILE_SIZE/2);
-            ctx.restore();
-          }
-          // Porta
-          else if (tile === TILE.DOOR) {
-            ctx.fillStyle = '#d35400';
-            ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
-            ctx.font = '16px serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('🔒', x + TILE_SIZE/2, y + TILE_SIZE/2);
-          }
-          // Saída
-          else if (tile === TILE.EXIT) {
-            ctx.fillStyle = '#27ae60';
-            ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
-            ctx.font = '18px serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('🏛️', x + TILE_SIZE/2, y + TILE_SIZE/2);
+            ctx.fillStyle = '#2c3e50'; ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+            ctx.strokeStyle = '#1a252f'; ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
+          } else if (tile === TILE.DIRT) {
+            ctx.fillStyle = '#6d4c41'; ctx.fillRect(x + 1, y + 1, TILE_SIZE - 2, TILE_SIZE - 2);
+          } else if (tile === TILE.ROCK) {
+            ctx.beginPath(); ctx.arc(x + 16, y + 16, 14, 0, Math.PI * 2);
+            ctx.fillStyle = '#7f8c8d'; ctx.fill();
+          } else if (tile === TILE.GEM) {
+            ctx.font = '18px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('💎', x + 16, y + 16);
+          } else if (tile === TILE.BOMB_ITEM) {
+            ctx.font = '18px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('💣', x + 16, y + 16);
+          } else if (tile === TILE.HEART_ITEM) {
+            ctx.font = '18px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('❤️', x + 16, y + 16);
+          } else if (tile === TILE.SPIKES) {
+            ctx.font = '18px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🗡️', x + 16, y + 16);
+          } else if (tile === TILE.KEY) {
+            ctx.font = '18px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🔑', x + 16, y + 16);
+          } else if (tile === TILE.DOOR) {
+            ctx.fillStyle = '#e67e22'; ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+          } else if (tile === TILE.EXIT) {
+            ctx.font = '20px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🏛️', x + 16, y + 16);
           }
         }
       }
 
-      // Renderizar Jogador com Brilho Suave
-      if (!isGameOver) {
-        const px = player.renderX * TILE_SIZE + TILE_SIZE / 2;
-        const py = player.renderY * TILE_SIZE + TILE_SIZE / 2;
+      // Desenhar Dinamites Ativas
+      activeBombs.forEach(b => {
+        const x = b.x * TILE_SIZE + 16;
+        const y = b.y * TILE_SIZE + 16;
+        ctx.font = '20px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('🧨', x, y);
+      });
 
-        ctx.save();
-        ctx.shadowColor = 'rgba(241, 196, 15, 0.6)';
-        ctx.shadowBlur = 10;
-        ctx.font = '20px serif';
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('🤠', px, py);
-        ctx.restore();
+      // Desenhar Chefe
+      if (boss && boss.hp > 0) {
+        const bx = boss.x * TILE_SIZE + 16;
+        const by = boss.y * TILE_SIZE + 16;
+        ctx.font = '32px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('🗿', bx, by);
       }
 
-      // Atualizar e Desenhar Partículas
-      updateParticles();
-      drawParticles();
+      // Desenhar Projéteis
+      projectiles.forEach(p => {
+        ctx.font = '16px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('🔥', p.x * TILE_SIZE + 16, p.y * TILE_SIZE + 16);
+      });
 
+      // Desenhar Jogador
+      if (!isGameOver) {
+        const px = player.x * TILE_SIZE + 16;
+        const py = player.y * TILE_SIZE + 16;
+        ctx.font = '22px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('🤠', px, py);
+      }
+
+      // Partículas & Textos Flutuantes
+      particles.forEach((p, i) => {
+        p.x += p.vx; p.y += p.vy; p.life -= p.decay;
+        if (p.life > 0) {
+          ctx.fillStyle = p.color;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+        } else particles.splice(i, 1);
+      });
+
+      floatingTexts.forEach((t, i) => {
+        t.y -= 0.5; t.alpha -= 0.02;
+        if (t.alpha > 0) {
+          ctx.save(); ctx.globalAlpha = t.alpha;
+          ctx.fillStyle = t.color; ctx.font = 'bold 12px sans-serif';
+          ctx.fillText(t.text, t.x, t.y); ctx.restore();
+        } else floatingTexts.splice(i, 1);
+      });
+
+      ctx.restore();
       requestAnimationFrame(render);
     }
 
