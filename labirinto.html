@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Caminho do Altar - Ultra Fluido</title>
+  <title>Diamond Rush: Caminho do Templo</title>
   <style>
     :root {
-      --primary: #1a252f;
-      --accent: #d4af37;
-      --bg: #0f171e;
+      --primary: #121921;
+      --accent: #f39c12;
+      --diamond: #00d2ff;
+      --bg: #090d12;
+      --panel: #1a2430;
     }
 
     * {
@@ -26,25 +28,45 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       padding: 10px;
-      touch-action: none; /* Previne rolagem de tela no celular */
+      touch-action: none;
     }
 
     h1 {
       color: var(--accent);
-      margin-bottom: 8px;
+      margin: 4px 0;
       text-align: center;
-      font-size: 1.6rem;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      font-size: 1.5rem;
+      text-shadow: 0 2px 8px rgba(243, 156, 18, 0.4);
+    }
+
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 384px;
+      background: var(--panel);
+      padding: 8px 12px;
+      border-radius: 10px 10px 0 0;
+      border: 2px solid var(--accent);
+      border-bottom: none;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .hud-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .player-setup {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       width: 100%;
-      max-width: 320px;
-      text-align: center;
+      max-width: 384px;
     }
 
     .input-player {
@@ -52,94 +74,94 @@
       padding: 8px 14px;
       border-radius: 20px;
       border: 2px solid var(--accent);
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-align: center;
       outline: none;
     }
 
-    .level-selector {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .btn-level {
-      padding: 6px 14px;
-      border: 2px solid var(--accent);
-      background: transparent;
-      color: #fff;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-level.active, .btn-level:hover {
-      background-color: var(--accent);
-      color: var(--primary);
-    }
-
-    .instructions {
-      font-size: 0.85rem;
-      color: #bdc3c7;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
     #game-container {
       position: relative;
-      border: 3px solid var(--accent);
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      border: 2px solid var(--accent);
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
       overflow: hidden;
-      background-color: #050b10;
+      background-color: #000;
+      width: 100%;
+      max-width: 384px;
     }
 
     canvas {
       display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
     }
 
-    /* Modal de Vitória */
-    .win-overlay {
+    /* Controles On-Screen para Mobile */
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(3, 52px);
+      grid-template-rows: repeat(3, 52px);
+      gap: 6px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+
+    .btn-touch {
+      background: var(--panel);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 1.4rem;
+      font-weight: bold;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .btn-touch:active {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .btn-up { grid-column: 2; grid-row: 1; }
+    .btn-left { grid-column: 1; grid-row: 2; }
+    .btn-right { grid-column: 3; grid-row: 2; }
+    .btn-down { grid-column: 2; grid-row: 3; }
+
+    /* Modal de Vitória / Derrota */
+    .overlay {
       display: none;
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 30, 0.95);
+      background: rgba(9, 13, 18, 0.95);
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 20px;
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10;
     }
 
-    @keyframes popIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .win-overlay h2 {
+    .overlay h2 {
       color: var(--accent);
       font-size: 1.8rem;
       margin-bottom: 8px;
     }
 
-    .win-stats {
-      margin: 10px 0;
-      font-size: 0.95rem;
+    .overlay p {
       color: #ecf0f1;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
     }
 
-    .win-stats span {
-      color: var(--accent);
-      font-weight: bold;
-    }
-
-    .btn-reset {
-      margin-top: 10px;
+    .btn-action {
+      margin-top: 12px;
       padding: 10px 22px;
       background-color: var(--accent);
       color: var(--primary);
@@ -169,37 +191,42 @@
 </head>
 <body>
 
-  <h1>Caminho do Altar</h1>
+  <h1>💎 Diamond Rush</h1>
 
   <div class="player-setup">
-    <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nome / Nickname" maxlength="15">
+    <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nickname" maxlength="15">
   </div>
 
-  <div class="level-selector">
-    <button class="btn-level active" onclick="changeLevel('easy', event)">Fácil (Coroinha)</button>
-    <button class="btn-level" onclick="changeLevel('medium', event)">Médio (Cerimoniário)</button>
-    <button class="btn-level" onclick="changeLevel('hard', event)">Difícil (Acólito)</button>
-  </div>
-
-  <div class="instructions" id="instructions">
-    Use as <b>Teclas de Seta / WASD</b> ou <b>Arraste na tela (Joystick)</b> para andar!
+  <div class="hud">
+    <div class="hud-item">🚩 Fase: <span id="hudLevel">1</span></div>
+    <div class="hud-item">💎 <span id="hudGems">0/0</span></div>
+    <div class="hud-item">🔑 <span id="hudKey">Não</span></div>
+    <div class="hud-item">🏆 <span id="hudScore">0</span></div>
   </div>
 
   <div id="game-container">
     <canvas id="gameCanvas" width="384" height="384"></canvas>
     
-    <div class="win-overlay" id="winOverlay">
-      <h2>Missa Pronta! 🎉</h2>
-      <p>Você acendeu as velas e chegou ao Altar a tempo!</p>
+    <div class="overlay" id="gameOverlay">
+      <h2 id="overlayTitle">Fase Concluída! 🎉</h2>
+      <p id="overlayMsg">Você coletou os diamantes e escapou!</p>
       
-      <div class="win-stats">
-        <p>Tempo: <span id="winTime">0.0</span>s</p>
-        <p>Pontuação: <span id="winScore">0</span> pts</p>
+      <div style="margin: 10px 0;">
+        <p>Pontuação da Fase: <span id="overlayScore" style="color:var(--accent); font-weight:bold;">0</span></p>
+        <p>Pontuação Total: <span id="overlayTotalScore" style="color:var(--accent); font-weight:bold;">0</span></p>
       </div>
 
-      <button class="btn-reset" onclick="initGame()">Jogar Novamente</button>
-      <a href="ranking.html?jogo=labirinto" class="btn-ranking">🏆 Ver Ranking Geral</a>
+      <button class="btn-action" id="overlayBtn" onclick="nextAction()">Próxima Fase ➡️</button>
+      <a href="ranking.html?jogo=diamond_rush" class="btn-ranking">🏆 Ver Ranking Geral</a>
     </div>
+  </div>
+
+  <!-- Controles Virtuais para Celular -->
+  <div class="controls">
+    <button class="btn-touch btn-up" onmousedown="handleTouchMove(0,-1)" touchstart="handleTouchMove(0,-1)">▲</button>
+    <button class="btn-touch btn-left" onmousedown="handleTouchMove(-1,0)" touchstart="handleTouchMove(-1,0)">◀</button>
+    <button class="btn-touch btn-right" onmousedown="handleTouchMove(1,0)" touchstart="handleTouchMove(1,0)">▶</button>
+    <button class="btn-touch btn-down" onmousedown="handleTouchMove(0,1)" touchstart="handleTouchMove(0,1)">▼</button>
   </div>
 
   <script type="module">
@@ -207,373 +234,475 @@
 
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-
     const inputPlayer = document.getElementById('playerName');
+
     if (localStorage.getItem('user_player_name')) {
       inputPlayer.value = localStorage.getItem('user_player_name');
     }
-
     inputPlayer.addEventListener('change', () => {
       localStorage.setItem('user_player_name', inputPlayer.value.trim());
     });
 
-    // Níveis do Labirinto
-    const levels = {
-      easy: {
-        cols: 6, rows: 6, tileSize: 64, basePoints: 500,
-        grid: [
-          [0,0,1,1,1,1],
-          [1,0,0,0,1,1],
-          [1,1,1,0,0,1],
-          [1,0,0,0,1,1],
-          [1,0,1,0,0,0],
-          [1,1,1,1,1,0]
-        ],
-        item: {x: 3, y: 1}, goal: {x: 5, y: 5}
-      },
-      medium: {
-        cols: 8, rows: 8, tileSize: 48, basePoints: 1000,
-        grid: [
-          [0,0,0,1,1,1,1,1],
-          [1,1,0,1,0,0,0,1],
-          [1,0,0,0,0,1,0,1],
-          [1,0,1,1,0,1,0,1],
-          [1,0,0,1,0,0,0,1],
-          [1,1,0,1,1,1,0,1],
-          [1,0,0,0,0,1,0,0],
-          [1,1,1,1,1,1,1,0]
-        ],
-        item: {x: 4, y: 1}, goal: {x: 7, y: 7}
-      },
-      hard: {
-        cols: 10, rows: 10, tileSize: 38, basePoints: 2000,
-        grid: [
-          [0,0,1,1,1,1,1,1,1,1],
-          [1,0,0,0,0,0,1,0,0,1],
-          [1,1,1,1,1,0,1,0,1,1],
-          [1,0,0,0,1,0,0,0,0,1],
-          [1,0,1,0,1,1,1,1,0,1],
-          [1,0,1,0,0,0,0,1,0,1],
-          [1,0,1,1,1,1,0,1,0,1],
-          [1,0,0,0,0,1,0,0,0,1],
-          [1,1,1,1,0,1,1,1,0,0],
-          [1,1,1,1,1,1,1,1,1,0]
-        ],
-        item: {x: 8, y: 1}, goal: {x: 9, y: 9}
+    // --- EFEITOS SONOROS (Web Audio API) ---
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playSFX(type) {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+      if (type === 'dig') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.08);
+        osc.start(now); osc.stop(now + 0.08);
+      } else if (type === 'gem') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.12);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'fall') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.linearRampToValueAtTime(30, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'win') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.setValueAtTime(600, now + 0.1);
+        osc.frequency.setValueAtTime(900, now + 0.2);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
+      } else if (type === 'dead') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
       }
-    };
+    }
 
-    let currentLevelKey = 'easy';
-    let currentLevel = levels.easy;
+    // --- ELEMENTOS DO MAPA ---
+    // 0: Vazio, 1: Parede, 2: Terra, 3: Pedra, 4: Diamante, 5: Chave, 6: Porta, 7: Saída
+    const TILE = { EMPTY: 0, WALL: 1, DIRT: 2, ROCK: 3, GEM: 4, KEY: 5, DOOR: 6, EXIT: 7 };
 
-    // Física e Vetores do Jogador
-    let player = {
-      x: 0, y: 0,
-      vx: 0, vy: 0,
-      radius: 12,
-      maxSpeed: 220,
-      accel: 1800,
-      friction: 0.82
-    };
+    const MAP_SIZE = 12;
+    const TILE_SIZE = 32; // 12 x 32 = 384px
 
-    let trail = [];
-    let input = { x: 0, y: 0 };
-    let keys = {};
-    let joystick = { active: false, startX: 0, startY: 0, currX: 0, currY: 0 };
+    // Definição das Fases
+    const levels = [
+      { // Fase 1: Introdução
+        grid: [
+          [1,1,1,1,1,1,1,1,1,1,1,1],
+          [1,0,2,2,4,2,2,3,2,4,2,1],
+          [1,2,1,1,1,2,1,1,1,2,2,1],
+          [1,2,2,4,2,2,2,4,2,2,2,1],
+          [1,1,1,2,1,1,1,2,1,1,2,1],
+          [1,4,2,2,3,2,2,2,2,4,2,1],
+          [1,2,1,1,1,1,1,1,1,2,2,1],
+          [1,2,2,2,2,5,2,2,2,2,2,1],
+          [1,1,1,1,1,6,1,1,1,1,2,1],
+          [1,4,2,2,2,2,2,2,2,2,2,1],
+          [1,2,2,2,2,2,2,2,2,2,7,1],
+          [1,1,1,1,1,1,1,1,1,1,1,1]
+        ],
+        playerStart: { x: 1, y: 1 }
+      },
+      { // Fase 2: Templo das Rochas
+        grid: [
+          [1,1,1,1,1,1,1,1,1,1,1,1],
+          [1,0,3,4,3,2,2,3,4,3,2,1],
+          [1,2,2,2,2,2,2,2,2,2,2,1],
+          [1,2,3,1,1,3,3,1,1,3,2,1],
+          [1,4,2,1,4,2,2,4,1,2,4,1],
+          [1,3,2,1,2,5,2,2,1,2,3,1],
+          [1,2,2,1,1,6,1,1,1,2,2,1],
+          [1,2,3,2,2,2,2,2,2,3,2,1],
+          [1,2,4,2,3,2,2,3,2,4,2,1],
+          [1,1,1,1,1,2,2,1,1,1,1,1],
+          [1,7,2,2,2,2,2,2,2,2,2,1],
+          [1,1,1,1,1,1,1,1,1,1,1,1]
+        ],
+        playerStart: { x: 1, y: 1 }
+      },
+      { // Fase 3: Desafio Final
+        grid: [
+          [1,1,1,1,1,1,1,1,1,1,1,1],
+          [1,0,2,3,4,3,2,3,4,3,2,1],
+          [1,2,1,1,3,1,1,3,1,1,2,1],
+          [1,4,2,2,2,2,2,2,2,2,4,1],
+          [1,3,1,2,1,5,1,2,1,3,1],
+          [1,2,1,2,1,6,1,2,1,2,1],
+          [1,2,2,2,2,2,2,2,2,2,2,1],
+          [1,1,1,3,1,1,1,3,1,1,1,1],
+          [1,4,2,2,2,4,2,2,2,2,4,1],
+          [1,3,2,1,1,1,1,1,1,2,3,1],
+          [1,2,2,2,2,2,2,2,2,2,7,1],
+          [1,1,1,1,1,1,1,1,1,1,1,1]
+        ],
+        playerStart: { x: 1, y: 1 }
+      }
+    ];
 
-    let hasItem = false;
-    let gameWon = false;
-    let lastTime = performance.now();
-    let startTime = performance.now();
-    let animTimer = 0;
+    let currentLevelIndex = 0;
+    let grid = [];
+    let player = { x: 1, y: 1 };
+    let totalScore = 0;
+    let levelScore = 0;
+    let gemsCollected = 0;
+    let totalGemsInLevel = 0;
+    let hasKey = false;
+    let isGameOver = false;
+    let fallingObjects = new Set(); // Rastreia pedras/diamantes caindo
 
-    window.changeLevel = function(key, e) {
-      currentLevelKey = key;
-      document.querySelectorAll('.btn-level').forEach(btn => btn.classList.remove('active'));
-      if (e && e.target) e.target.classList.add('active');
-      window.initGame();
-    };
-
-    window.initGame = function() {
-      currentLevel = levels[currentLevelKey];
-      const ts = currentLevel.tileSize;
+    function initLevel(index) {
+      currentLevelIndex = index;
+      const lvl = levels[currentLevelIndex];
       
-      player.x = ts / 2;
-      player.y = ts / 2;
-      player.vx = 0;
-      player.vy = 0;
-      player.radius = ts * 0.28;
+      // Copia profunda da matriz do nível
+      grid = lvl.grid.map(row => [...row]);
+      player = { ...lvl.playerStart };
+      
+      levelScore = 0;
+      gemsCollected = 0;
+      hasKey = false;
+      isGameOver = false;
+      fallingObjects.clear();
 
-      trail = [];
-      hasItem = false;
-      gameWon = false;
-      startTime = performance.now();
-
-      document.getElementById('winOverlay').style.display = 'none';
-      document.getElementById('instructions').innerHTML = 'Guie o coroinha 🚶‍♂️ até a vela 🕯️ e depois ao Altar ⛪!';
-    };
-
-    // --- ENTRADA DE DADOS ---
-    window.addEventListener('keydown', e => { keys[e.key] = true; updateKeyboardInput(); });
-    window.addEventListener('keyup', e => { keys[e.key] = false; updateKeyboardInput(); });
-
-    function updateKeyboardInput() {
-      if (joystick.active) return;
-      input.x = 0;
-      input.y = 0;
-
-      if (keys['ArrowLeft'] || keys['a'] || keys['A']) input.x -= 1;
-      if (keys['ArrowRight'] || keys['d'] || keys['D']) input.x += 1;
-      if (keys['ArrowUp'] || keys['w'] || keys['W']) input.y -= 1;
-      if (keys['ArrowDown'] || keys['s'] || keys['S']) input.y += 1;
-
-      if (input.x !== 0 && input.y !== 0) {
-        input.x *= 0.7071;
-        input.y *= 0.7071;
-      }
-    }
-
-    // Touch Joystick
-    canvas.addEventListener('touchstart', e => {
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      joystick.active = true;
-      joystick.startX = touch.clientX - rect.left;
-      joystick.startY = touch.clientY - rect.top;
-      joystick.currX = joystick.startX;
-      joystick.currY = joystick.startY;
-    });
-
-    canvas.addEventListener('touchmove', e => {
-      if (!joystick.active) return;
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      joystick.currX = touch.clientX - rect.left;
-      joystick.currY = touch.clientY - rect.top;
-
-      let dx = joystick.currX - joystick.startX;
-      let dy = joystick.currY - joystick.startY;
-      let dist = Math.hypot(dx, dy);
-      let maxRadius = 40;
-
-      if (dist === 0) { input.x = 0; input.y = 0; }
-      else {
-        input.x = (dx / dist) * Math.min(dist / maxRadius, 1);
-        input.y = (dy / dist) * Math.min(dist / maxRadius, 1);
-      }
-    });
-
-    window.addEventListener('touchend', () => {
-      joystick.active = false;
-      input.x = 0;
-      input.y = 0;
-    });
-
-    // --- COLISÕES E FÍSICA ---
-    function isWall(x, y) {
-      const col = Math.floor(x / currentLevel.tileSize);
-      const row = Math.floor(y / currentLevel.tileSize);
-      if (col < 0 || col >= currentLevel.cols || row < 0 || row >= currentLevel.rows) return true;
-      return currentLevel.grid[row][col] === 1;
-    }
-
-    function checkWallCollision(px, py) {
-      const r = player.radius;
-      return isWall(px - r, py) || isWall(px + r, py) || 
-             isWall(px, py - r) || isWall(px, py + r);
-    }
-
-    // Função para salvar dados no Firebase Firestore
-    async function salvarPontuacaoFirebase(nome, pontos) {
-      if (!window.db) {
-        console.warn("Instância do Firestore não encontrada.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(window.db, "rankings"), {
-          nome: nome,
-          pontos: pontos,
-          jogo: "labirinto",
-          dificuldade: currentLevelKey,
-          avatarSeed: localStorage.getItem('user_avatar_seed') || nome,
-          avatarStyle: localStorage.getItem('user_avatar_style') || 'bottts',
-          data: new Date()
-        });
-        console.log("Pontuação do Labirinto salva no Firebase!");
-      } catch (erro) {
-        console.error("Erro ao salvar pontuação no Firebase: ", erro);
-      }
-    }
-
-    function update(dt) {
-      if (gameWon) return;
-
-      animTimer += dt;
-
-      player.vx += input.x * player.accel * dt;
-      player.vy += input.y * player.accel * dt;
-
-      player.vx *= Math.pow(player.friction, dt * 60);
-      player.vy *= Math.pow(player.friction, dt * 60);
-
-      let currentSpeed = Math.hypot(player.vx, player.vy);
-      if (currentSpeed > player.maxSpeed) {
-        player.vx = (player.vx / currentSpeed) * player.maxSpeed;
-        player.vy = (player.vy / currentSpeed) * player.maxSpeed;
-      }
-
-      let nextX = player.x + player.vx * dt;
-      let nextY = player.y + player.vy * dt;
-
-      if (!checkWallCollision(nextX, player.y)) {
-        player.x = nextX;
-      } else {
-        player.vx = 0;
-      }
-
-      if (!checkWallCollision(player.x, nextY)) {
-        player.y = nextY;
-      } else {
-        player.vy = 0;
-      }
-
-      if (currentSpeed > 20) {
-        trail.push({ x: player.x, y: player.y, alpha: 0.6 });
-        if (trail.length > 8) trail.shift();
-      }
-      trail.forEach(t => t.alpha -= dt * 2);
-
-      const ts = currentLevel.tileSize;
-
-      // Vela
-      const itemX = currentLevel.item.x * ts + ts / 2;
-      const itemY = currentLevel.item.y * ts + ts / 2;
-      if (!hasItem && Math.hypot(player.x - itemX, player.y - itemY) < player.radius + ts * 0.3) {
-        hasItem = true;
-        document.getElementById('instructions').innerHTML = 'Vela acesa! Agora vá rápido até o Altar ⛪!';
-      }
-
-      // Altar (Vitória)
-      const goalX = currentLevel.goal.x * ts + ts / 2;
-      const goalY = currentLevel.goal.y * ts + ts / 2;
-      if (Math.hypot(player.x - goalX, player.y - goalY) < player.radius + ts * 0.3) {
-        if (hasItem) {
-          gameWon = true;
-
-          const tempoSegundos = ((performance.now() - startTime) / 1000).toFixed(1);
-          const pontosCalculados = Math.max(10, Math.floor(currentLevel.basePoints - tempoSegundos * 15));
-          
-          const nomeJogador = inputPlayer.value.trim() || 'Anônimo';
-          localStorage.setItem('user_player_name', nomeJogador);
-
-          document.getElementById('winTime').textContent = tempoSegundos;
-          document.getElementById('winScore').textContent = pontosCalculados;
-          document.getElementById('winOverlay').style.display = 'flex';
-
-          // Envia a pontuação para o Firebase
-          salvarPontuacaoFirebase(nomeJogador, pontosCalculados);
-
-        } else {
-          document.getElementById('instructions').innerHTML = '<span style="color:#e74c3c;">Pegue a vela 🕯️ primeiro!</span>';
+      // Contar total de diamantes no mapa
+      totalGemsInLevel = 0;
+      for (let r = 0; r < MAP_SIZE; r++) {
+        for (let c = 0; c < MAP_SIZE; c++) {
+          if (grid[r][c] === TILE.GEM) totalGemsInLevel++;
         }
       }
+
+      document.getElementById('gameOverlay').style.display = 'none';
+      updateHUD();
+      draw();
     }
 
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const ts = currentLevel.tileSize;
+    function updateHUD() {
+      document.getElementById('hudLevel').textContent = currentLevelIndex + 1;
+      document.getElementById('hudGems').textContent = `${gemsCollected}/${totalGemsInLevel}`;
+      document.getElementById('hudKey').textContent = hasKey ? 'Sim 🔑' : 'Não';
+      document.getElementById('hudScore').textContent = totalScore + levelScore;
+    }
 
-      for (let r = 0; r < currentLevel.rows; r++) {
-        for (let c = 0; c < currentLevel.cols; c++) {
-          if (currentLevel.grid[r][c] === 1) {
-            ctx.fillStyle = '#1e2b37';
-            ctx.fillRect(c * ts, r * ts, ts, ts);
-            ctx.strokeStyle = '#0f171e';
-            ctx.strokeRect(c * ts, r * ts, ts, ts);
-          } else {
-            ctx.fillStyle = '#0a1017';
-            ctx.fillRect(c * ts, r * ts, ts, ts);
+    // --- FÍSICA DE GRAVIDADE E ROLAMENTO (Estilo Diamond Rush) ---
+    function updatePhysics() {
+      if (isGameOver) return;
+
+      let movedAny = false;
+      let newFalling = new Set();
+
+      // Varre de baixo para cima para simular a gravidade corretamente
+      for (let r = MAP_SIZE - 2; r >= 0; r--) {
+        for (let c = 0; c < MAP_SIZE; c++) {
+          const item = grid[r][c];
+
+          if (item === TILE.ROCK || item === TILE.GEM) {
+            const itemKey = `${r},${c}`;
+
+            // 1. Queda Direta para Baixo
+            if (grid[r + 1][c] === TILE.EMPTY) {
+              grid[r + 1][c] = item;
+              grid[r][c] = TILE.EMPTY;
+              newFalling.add(`${r + 1},${c}`);
+              movedAny = true;
+
+              // Verifica se caiu em cima do jogador!
+              if (player.x === c && player.y === r + 1) {
+                killPlayer();
+                return;
+              }
+            } 
+            // 2. Rolamento lateral (sobre outra pedra, diamante ou parede)
+            else if (grid[r + 1][c] === TILE.ROCK || grid[r + 1][c] === TILE.GEM || grid[r + 1][c] === TILE.WALL) {
+              // Tenta rolar para a esquerda
+              if (c > 0 && grid[r][c - 1] === TILE.EMPTY && grid[r + 1][c - 1] === TILE.EMPTY) {
+                grid[r][c - 1] = item;
+                grid[r][c] = TILE.EMPTY;
+                newFalling.add(`${r},${c - 1}`);
+                movedAny = true;
+              } 
+              // Tenta rolar para a direita
+              else if (c < MAP_SIZE - 1 && grid[r][c + 1] === TILE.EMPTY && grid[r + 1][c + 1] === TILE.EMPTY) {
+                grid[r][c + 1] = item;
+                grid[r][c] = TILE.EMPTY;
+                newFalling.add(`${r},${c + 1}`);
+                movedAny = true;
+              }
+            }
+
+            // Som de impacto quando atinge o chão
+            if (fallingObjects.has(itemKey) && !newFalling.has(`${r + 1},${c}`)) {
+              playSFX('fall');
+            }
           }
         }
       }
 
-      if (!hasItem) {
-        const ix = currentLevel.item.x * ts + ts / 2;
-        const iy = currentLevel.item.y * ts + ts / 2;
-        const pulse = Math.sin(animTimer * 5) * 4 + ts * 0.25;
+      fallingObjects = newFalling;
+      if (movedAny) draw();
+    }
 
-        ctx.beginPath();
-        ctx.arc(ix, iy, pulse + 6, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(212, 175, 55, 0.25)';
-        ctx.fill();
+    // Loop de física rodando a cada 120ms
+    setInterval(updatePhysics, 120);
 
-        ctx.font = `${ts * 0.5}px serif`;
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('🕯️', ix, iy);
+    // --- MOVIMENTAÇÃO DO JOGADOR ---
+    window.movePlayer = function(dx, dy) {
+      if (isGameOver) return;
+
+      const targetX = player.x + dx;
+      const targetY = player.y + dy;
+
+      if (targetX < 0 || targetX >= MAP_SIZE || targetY < 0 || targetY >= MAP_SIZE) return;
+
+      const targetTile = grid[targetY][targetX];
+
+      // Mover para Vazio
+      if (targetTile === TILE.EMPTY) {
+        player.x = targetX;
+        player.y = targetY;
+      }
+      // Escavar Terra
+      else if (targetTile === TILE.DIRT) {
+        grid[targetY][targetX] = TILE.EMPTY;
+        player.x = targetX;
+        player.y = targetY;
+        levelScore += 10;
+        playSFX('dig');
+      }
+      // Coletar Diamante
+      else if (targetTile === TILE.GEM) {
+        grid[targetY][targetX] = TILE.EMPTY;
+        player.x = targetX;
+        player.y = targetY;
+        gemsCollected++;
+        levelScore += 100;
+        playSFX('gem');
+      }
+      // Coletar Chave
+      else if (targetTile === TILE.KEY) {
+        grid[targetY][targetX] = TILE.EMPTY;
+        player.x = targetX;
+        player.y = targetY;
+        hasKey = true;
+        levelScore += 150;
+        playSFX('gem');
+      }
+      // Abrir Porta
+      else if (targetTile === TILE.DOOR) {
+        if (hasKey) {
+          grid[targetY][targetX] = TILE.EMPTY;
+          player.x = targetX;
+          player.y = targetY;
+          levelScore += 200;
+          playSFX('win');
+        }
+      }
+      // Empurrar Pedra (Empurrão horizontal)
+      else if (targetTile === TILE.ROCK && dy === 0) {
+        const behindX = targetX + dx;
+        if (behindX >= 0 && behindX < MAP_SIZE && grid[targetY][behindX] === TILE.EMPTY) {
+          grid[targetY][behindX] = TILE.ROCK;
+          grid[targetY][targetX] = TILE.EMPTY;
+          player.x = targetX;
+          player.y = targetY;
+          playSFX('dig');
+        }
+      }
+      // Saída (Concluir Fase)
+      else if (targetTile === TILE.EXIT) {
+        player.x = targetX;
+        player.y = targetY;
+        winLevel();
       }
 
-      const gx = currentLevel.goal.x * ts + ts / 2;
-      const gy = currentLevel.goal.y * ts + ts / 2;
-      ctx.font = `${ts * 0.6}px serif`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('⛪', gx, gy);
+      updateHUD();
+      draw();
+    };
 
-      trail.forEach(t => {
-        if (t.alpha > 0) {
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, player.radius * 0.8, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(231, 76, 60, ${t.alpha * 0.4})`;
-          ctx.fill();
+    window.handleTouchMove = function(dx, dy) {
+      movePlayer(dx, dy);
+    };
+
+    // Suporte ao Teclado
+    window.addEventListener('keydown', e => {
+      if (['ArrowUp', 'w', 'W'].includes(e.key)) movePlayer(0, -1);
+      if (['ArrowDown', 's', 'S'].includes(e.key)) movePlayer(0, 1);
+      if (['ArrowLeft', 'a', 'A'].includes(e.key)) movePlayer(-1, 0);
+      if (['ArrowRight', 'd', 'D'].includes(e.key)) movePlayer(1, 0);
+    });
+
+    function killPlayer() {
+      isGameOver = true;
+      playSFX('dead');
+      
+      document.getElementById('overlayTitle').textContent = 'Você Foi Esmagado! 🪨';
+      document.getElementById('overlayMsg').textContent = 'Cuidado com as pedras no caminho!';
+      document.getElementById('overlayScore').textContent = levelScore;
+      document.getElementById('overlayTotalScore').textContent = totalScore;
+      document.getElementById('overlayBtn').textContent = 'Tentar Novamente 🔄';
+      document.getElementById('gameOverlay').style.display = 'flex';
+    }
+
+    function winLevel() {
+      isGameOver = true;
+      playSFX('win');
+
+      totalScore += levelScore;
+
+      if (currentLevelIndex < levels.length - 1) {
+        document.getElementById('overlayTitle').textContent = 'Fase Concluída! 🎉';
+        document.getElementById('overlayMsg').textContent = 'Você dominou este setor do templo!';
+        document.getElementById('overlayScore').textContent = levelScore;
+        document.getElementById('overlayTotalScore').textContent = totalScore;
+        document.getElementById('overlayBtn').textContent = 'Próxima Fase ➡️';
+      } else {
+        document.getElementById('overlayTitle').textContent = 'Templo Superado! 🏆';
+        document.getElementById('overlayMsg').textContent = 'Parabéns! Você concluiu todas as fases!';
+        document.getElementById('overlayScore').textContent = levelScore;
+        document.getElementById('overlayTotalScore').textContent = totalScore;
+        document.getElementById('overlayBtn').textContent = 'Jogar Novamente 🔄';
+
+        // Salvar Ranking no Firebase
+        const nome = inputPlayer.value.trim() || 'Explorador';
+        salvarPontuacaoFirebase(nome, totalScore);
+      }
+
+      document.getElementById('gameOverlay').style.display = 'flex';
+    }
+
+    window.nextAction = function() {
+      if (document.getElementById('overlayTitle').textContent.includes('Esmagado') || 
+          currentLevelIndex >= levels.length - 1) {
+        if (currentLevelIndex >= levels.length - 1 && !document.getElementById('overlayTitle').textContent.includes('Esmagado')) {
+          totalScore = 0;
         }
-      });
+        initLevel(0);
+      } else {
+        initLevel(currentLevelIndex + 1);
+      }
+    };
+
+    // Firebase Integration
+    async function salvarPontuacaoFirebase(nome, pontos) {
+      if (!window.db) return;
+      try {
+        await addDoc(collection(window.db, "rankings"), {
+          nome: nome,
+          pontos: pontos,
+          jogo: "diamond_rush",
+          data: new Date()
+        });
+        console.log("Pontuação salva com sucesso no Firestore!");
+      } catch (e) {
+        console.error("Erro ao salvar no Firestore:", e);
+      }
+    }
+
+    // --- RENDERIZAÇÃO GRÁFICA DO CANVAS ---
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let r = 0; r < MAP_SIZE; r++) {
+        for (let c = 0; c < MAP_SIZE; c++) {
+          const tile = grid[r][c];
+          const x = c * TILE_SIZE;
+          const y = r * TILE_SIZE;
+
+          // Fundo padrão
+          ctx.fillStyle = '#0a0e14';
+          ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+
+          // 1. Parede de Pedra
+          if (tile === TILE.WALL) {
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+            ctx.strokeStyle = '#1a252f';
+            ctx.strokeRect(x + 1, y + 1, TILE_SIZE - 2, TILE_SIZE - 2);
+          }
+          // 2. Terra Escavável
+          else if (tile === TILE.DIRT) {
+            ctx.fillStyle = '#795548';
+            ctx.fillRect(x + 1, y + 1, TILE_SIZE - 2, TILE_SIZE - 2);
+            ctx.fillStyle = '#5d4037';
+            ctx.fillRect(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+          }
+          // 3. Pedra / Rocha
+          else if (tile === TILE.ROCK) {
+            ctx.beginPath();
+            ctx.arc(x + TILE_SIZE/2, y + TILE_SIZE/2, TILE_SIZE/2 - 2, 0, Math.PI * 2);
+            ctx.fillStyle = '#95a5a6';
+            ctx.fill();
+            ctx.strokeStyle = '#7f8c8d';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+          // 4. Diamante
+          else if (tile === TILE.GEM) {
+            ctx.font = '20px serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('💎', x + TILE_SIZE/2, y + TILE_SIZE/2);
+          }
+          // 5. Chave
+          else if (tile === TILE.KEY) {
+            ctx.font = '18px serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🔑', x + TILE_SIZE/2, y + TILE_SIZE/2);
+          }
+          // 6. Porta Trancada
+          else if (tile === TILE.DOOR) {
+            ctx.fillStyle = '#d35400';
+            ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+            ctx.font = '16px serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🔒', x + TILE_SIZE/2, y + TILE_SIZE/2);
+          }
+          // 7. Saída / Portal
+          else if (tile === TILE.EXIT) {
+            ctx.fillStyle = '#27ae60';
+            ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+            ctx.font = '18px serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('🏛️', x + TILE_SIZE/2, y + TILE_SIZE/2);
+          }
+        }
+      }
+
+      // Desenhar o Jogador (Explorador)
+      const px = player.x * TILE_SIZE;
+      const py = player.y * TILE_SIZE;
 
       ctx.beginPath();
-      ctx.arc(player.x, player.y, player.radius * 1.6, 0, Math.PI * 2);
-      ctx.fillStyle = hasItem ? 'rgba(241, 196, 15, 0.2)' : 'rgba(231, 76, 60, 0.15)';
+      ctx.arc(px + TILE_SIZE/2, py + TILE_SIZE/2, TILE_SIZE/2 - 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#e67e22';
       ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-      ctx.fillStyle = '#e74c3c';
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
+      ctx.strokeStyle = '#f39c12';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      if (hasItem) {
-        ctx.font = `${ts * 0.35}px serif`;
-        ctx.fillText('🕯️', player.x + player.radius * 0.7, player.y - player.radius * 0.7);
-      }
-
-      if (joystick.active) {
-        ctx.beginPath();
-        ctx.arc(joystick.startX, joystick.startY, 40, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(joystick.currX, joystick.currY, 18, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
-        ctx.fill();
-      }
+      ctx.font = '16px serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('🤠', px + TILE_SIZE/2, py + TILE_SIZE/2);
     }
 
-    function gameLoop(now) {
-      let dt = (now - lastTime) / 1000;
-      if (dt > 0.1) dt = 0.1;
-      lastTime = now;
-
-      update(dt);
-      draw();
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    window.initGame();
-    requestAnimationFrame(gameLoop);
+    // Inicializa a primeira fase
+    initLevel(0);
   </script>
 </body>
 </html>
