@@ -3,43 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Diamond Rush: Caminho do Templo</title>
+  <title>Diamond Rush: Temple Conquest</title>
   <style>
     :root {
-      --primary: #121921;
-      --accent: #f39c12;
-      --diamond: #00d2ff;
-      --bg: #090d12;
-      --panel: #1a2430;
+      --bg: #090a0f;
+      --panel-bg: rgba(18, 24, 38, 0.85);
+      --accent: #f1c40f;
+      --accent-glow: rgba(241, 196, 15, 0.4);
+      --diamond: #00f2ff;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --text: #ecf0f1;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
 
     body {
       background-color: var(--bg);
-      color: #fff;
+      background-image: radial-gradient(circle at 50% 30%, #172238 0%, var(--bg) 80%);
+      color: var(--text);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       min-height: 100vh;
-      padding: 10px;
+      padding: 12px;
       touch-action: none;
+      overflow: hidden;
+    }
+
+    .game-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 8px;
     }
 
     h1 {
       color: var(--accent);
-      margin: 4px 0;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      text-shadow: 0 0 12px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .player-setup {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .input-player {
+      width: 100%;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 2px solid rgba(241, 196, 15, 0.5);
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 0.9rem;
       text-align: center;
-      font-size: 1.5rem;
-      text-shadow: 0 2px 8px rgba(243, 156, 18, 0.4);
+      outline: none;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+    }
+
+    .input-player:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .hud {
@@ -47,49 +92,30 @@
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      max-width: 384px;
-      background: var(--panel);
-      padding: 8px 12px;
-      border-radius: 10px 10px 0 0;
-      border: 2px solid var(--accent);
-      border-bottom: none;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      padding: 10px 14px;
+      border-radius: 12px 12px 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 2px solid var(--accent);
       font-size: 0.85rem;
-      font-weight: bold;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
 
     .hud-item {
       display: flex;
       align-items: center;
-      gap: 4px;
-    }
-
-    .player-setup {
-      margin-bottom: 8px;
-      width: 100%;
-      max-width: 384px;
-    }
-
-    .input-player {
-      width: 100%;
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 2px solid var(--accent);
-      background: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      font-size: 0.85rem;
-      text-align: center;
-      outline: none;
+      gap: 5px;
     }
 
     #game-container {
       position: relative;
-      border: 2px solid var(--accent);
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-      overflow: hidden;
-      background-color: #000;
       width: 100%;
-      max-width: 384px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+      background-color: #05070a;
     }
 
     canvas {
@@ -99,91 +125,129 @@
       image-rendering: pixelated;
     }
 
-    /* Controles On-Screen para Mobile */
-    .controls {
-      display: grid;
-      grid-template-columns: repeat(3, 52px);
-      grid-template-rows: repeat(3, 52px);
-      gap: 6px;
+    /* Modais / Overlays */
+    .overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(9, 10, 15, 0.92);
+      backdrop-filter: blur(6px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      z-index: 10;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .overlay h2 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .overlay p {
+      color: #a0aec0;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .stats-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px;
+      width: 100%;
+      margin: 10px 0 18px 0;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 4px 0;
+      font-size: 0.9rem;
+    }
+
+    .stats-value {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .btn-action {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #f39c12, #f1c40f);
+      color: #000;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 85%;
+      box-shadow: 0 4px 15px var(--accent-glow);
+      transition: transform 0.1s ease, filter 0.2s ease;
+    }
+
+    .btn-action:active {
+      transform: scale(0.96);
+    }
+
+    .btn-ranking {
       margin-top: 10px;
+      padding: 8px 20px;
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s ease;
+    }
+
+    .btn-ranking:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* D-Pad On-Screen para Telas de Toque */
+    .controls-panel {
+      display: grid;
+      grid-template-columns: repeat(3, 56px);
+      grid-template-rows: repeat(3, 56px);
+      gap: 8px;
+      margin-top: 14px;
       justify-content: center;
     }
 
     .btn-touch {
-      background: var(--panel);
-      border: 2px solid var(--accent);
+      background: var(--panel-bg);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: var(--accent);
-      font-size: 1.4rem;
-      font-weight: bold;
-      border-radius: 12px;
+      font-size: 1.3rem;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      user-select: none;
-      touch-action: manipulation;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      backdrop-filter: blur(5px);
+      transition: background 0.1s, transform 0.1s;
     }
 
     .btn-touch:active {
       background: var(--accent);
-      color: var(--primary);
+      color: #000;
+      transform: scale(0.92);
     }
 
     .btn-up { grid-column: 2; grid-row: 1; }
     .btn-left { grid-column: 1; grid-row: 2; }
     .btn-right { grid-column: 3; grid-row: 2; }
     .btn-down { grid-column: 2; grid-row: 3; }
-
-    /* Modal de Vitória / Derrota */
-    .overlay {
-      display: none;
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(9, 13, 18, 0.95);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      z-index: 10;
-    }
-
-    .overlay h2 {
-      color: var(--accent);
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-    }
-
-    .overlay p {
-      color: #ecf0f1;
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-    }
-
-    .btn-action {
-      margin-top: 12px;
-      padding: 10px 22px;
-      background-color: var(--accent);
-      color: var(--primary);
-      border: none;
-      border-radius: 20px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      cursor: pointer;
-      width: 80%;
-    }
-
-    .btn-ranking {
-      margin-top: 8px;
-      padding: 8px 18px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      border: 1px solid var(--accent);
-      border-radius: 20px;
-      font-size: 0.85rem;
-      text-decoration: none;
-      display: inline-block;
-    }
   </style>
 
   <!-- Importação do Firebase Config local -->
@@ -191,42 +255,51 @@
 </head>
 <body>
 
-  <h1>💎 Diamond Rush</h1>
+  <div class="game-wrapper">
+    <header>
+      <h1>💎 Diamond Rush</h1>
+    </header>
 
-  <div class="player-setup">
-    <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nickname" maxlength="15">
-  </div>
-
-  <div class="hud">
-    <div class="hud-item">🚩 Fase: <span id="hudLevel">1</span></div>
-    <div class="hud-item">💎 <span id="hudGems">0/0</span></div>
-    <div class="hud-item">🔑 <span id="hudKey">Não</span></div>
-    <div class="hud-item">🏆 <span id="hudScore">0</span></div>
-  </div>
-
-  <div id="game-container">
-    <canvas id="gameCanvas" width="384" height="384"></canvas>
-    
-    <div class="overlay" id="gameOverlay">
-      <h2 id="overlayTitle">Fase Concluída! 🎉</h2>
-      <p id="overlayMsg">Você coletou os diamantes e escapou!</p>
-      
-      <div style="margin: 10px 0;">
-        <p>Pontuação da Fase: <span id="overlayScore" style="color:var(--accent); font-weight:bold;">0</span></p>
-        <p>Pontuação Total: <span id="overlayTotalScore" style="color:var(--accent); font-weight:bold;">0</span></p>
-      </div>
-
-      <button class="btn-action" id="overlayBtn" onclick="nextAction()">Próxima Fase ➡️</button>
-      <a href="ranking.html?jogo=diamond_rush" class="btn-ranking">🏆 Ver Ranking Geral</a>
+    <div class="player-setup">
+      <input type="text" id="playerName" class="input-player" placeholder="Digite seu Nickname" maxlength="15">
     </div>
-  </div>
 
-  <!-- Controles Virtuais para Celular -->
-  <div class="controls">
-    <button class="btn-touch btn-up" onmousedown="handleTouchMove(0,-1)" touchstart="handleTouchMove(0,-1)">▲</button>
-    <button class="btn-touch btn-left" onmousedown="handleTouchMove(-1,0)" touchstart="handleTouchMove(-1,0)">◀</button>
-    <button class="btn-touch btn-right" onmousedown="handleTouchMove(1,0)" touchstart="handleTouchMove(1,0)">▶</button>
-    <button class="btn-touch btn-down" onmousedown="handleTouchMove(0,1)" touchstart="handleTouchMove(0,1)">▼</button>
+    <div class="hud">
+      <div class="hud-item">🚩 <span id="hudLevel">1</span></div>
+      <div class="hud-item">💎 <span id="hudGems">0/0</span></div>
+      <div class="hud-item">🔑 <span id="hudKey">Não</span></div>
+      <div class="hud-item">🏆 <span id="hudScore">0</span></div>
+    </div>
+
+    <div id="game-container">
+      <canvas id="gameCanvas" width="384" height="384"></canvas>
+      
+      <div class="overlay" id="gameOverlay">
+        <h2 id="overlayTitle">Fase Concluída! 🎉</h2>
+        <p id="overlayMsg">Você superou este setor do templo!</p>
+        
+        <div class="stats-card">
+          <div class="stats-row">
+            <span>Pontos da Fase:</span>
+            <span class="stats-value" id="overlayScore">0</span>
+          </div>
+          <div class="stats-row">
+            <span>Pontuação Total:</span>
+            <span class="stats-value" id="overlayTotalScore">0</span>
+          </div>
+        </div>
+
+        <button class="btn-action" id="overlayBtn" onclick="nextAction()">Avançar ➡️</button>
+        <a href="ranking.html?jogo=diamond_rush" class="btn-ranking">🏆 Ver Ranking Geral</a>
+      </div>
+    </div>
+
+    <div class="controls-panel">
+      <button class="btn-touch btn-up" onmousedown="handleInput(0,-1)" touchstart="handleInput(0,-1)">▲</button>
+      <button class="btn-touch btn-left" onmousedown="handleInput(-1,0)" touchstart="handleInput(-1,0)">◀</button>
+      <button class="btn-touch btn-right" onmousedown="handleInput(1,0)" touchstart="handleInput(1,0)">▶</button>
+      <button class="btn-touch btn-down" onmousedown="handleInput(0,1)" touchstart="handleInput(0,1)">▼</button>
+    </div>
   </div>
 
   <script type="module">
@@ -243,67 +316,104 @@
       localStorage.setItem('user_player_name', inputPlayer.value.trim());
     });
 
-    // --- EFEITOS SONOROS (Web Audio API) ---
+    // --- AUDIO SYNTHESIZER (Sons Retro Dinâmicos) ---
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
-    function playSFX(type) {
+    function playSound(type) {
       if (!audioCtx) audioCtx = new AudioCtx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-
       const now = audioCtx.currentTime;
+
       if (type === 'dig') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
-        gain.gain.setValueAtTime(0.15, now);
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.08);
+        gain.gain.setValueAtTime(0.2, now);
         gain.gain.linearRampToValueAtTime(0, now + 0.08);
         osc.start(now); osc.stop(now + 0.08);
       } else if (type === 'gem') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.12);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.12);
-        osc.start(now); osc.stop(now + 0.12);
+        osc.frequency.setValueAtTime(784, now);
+        osc.frequency.setValueAtTime(1046, now + 0.08);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
       } else if (type === 'fall') {
         osc.type = 'square';
-        osc.frequency.setValueAtTime(80, now);
-        osc.frequency.linearRampToValueAtTime(30, now + 0.1);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.1);
-        osc.start(now); osc.stop(now + 0.1);
+        osc.frequency.setValueAtTime(90, now);
+        osc.frequency.linearRampToValueAtTime(40, now + 0.09);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.09);
+        osc.start(now); osc.stop(now + 0.09);
       } else if (type === 'win') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.setValueAtTime(600, now + 0.1);
-        osc.frequency.setValueAtTime(900, now + 0.2);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.35);
-        osc.start(now); osc.stop(now + 0.35);
+        osc.frequency.setValueAtTime(523, now);
+        osc.frequency.setValueAtTime(659, now + 0.1);
+        osc.frequency.setValueAtTime(783, now + 0.2);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
       } else if (type === 'dead') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.3);
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.35);
         gain.gain.setValueAtTime(0.3, now);
-        gain.gain.linearRampToValueAtTime(0, now + 0.3);
-        osc.start(now); osc.stop(now + 0.3);
+        gain.gain.linearRampToValueAtTime(0, now + 0.35);
+        osc.start(now); osc.stop(now + 0.35);
       }
     }
 
-    // --- ELEMENTOS DO MAPA ---
-    // 0: Vazio, 1: Parede, 2: Terra, 3: Pedra, 4: Diamante, 5: Chave, 6: Porta, 7: Saída
+    // --- EFEITOS VISUAIS: SISTEMA DE PARTÍCULAS ---
+    let particles = [];
+    function createParticles(x, y, color, count = 8) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x, y: y,
+          vx: (Math.random() - 0.5) * 4,
+          vy: (Math.random() - 0.5) * 4,
+          size: Math.random() * 3 + 2,
+          color: color,
+          life: 1.0,
+          decay: Math.random() * 0.05 + 0.03
+        });
+      }
+    }
+
+    function updateParticles() {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= p.decay;
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+    }
+
+    function drawParticles() {
+      particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    // --- ELEMENTOS E NÍVEIS ---
     const TILE = { EMPTY: 0, WALL: 1, DIRT: 2, ROCK: 3, GEM: 4, KEY: 5, DOOR: 6, EXIT: 7 };
-
     const MAP_SIZE = 12;
-    const TILE_SIZE = 32; // 12 x 32 = 384px
+    const TILE_SIZE = 32;
 
-    // Definição das Fases
     const levels = [
-      { // Fase 1: Introdução
+      {
         grid: [
           [1,1,1,1,1,1,1,1,1,1,1,1],
           [1,0,2,2,4,2,2,3,2,4,2,1],
@@ -320,7 +430,7 @@
         ],
         playerStart: { x: 1, y: 1 }
       },
-      { // Fase 2: Templo das Rochas
+      {
         grid: [
           [1,1,1,1,1,1,1,1,1,1,1,1],
           [1,0,3,4,3,2,2,3,4,3,2,1],
@@ -337,7 +447,7 @@
         ],
         playerStart: { x: 1, y: 1 }
       },
-      { // Fase 3: Desafio Final
+      {
         grid: [
           [1,1,1,1,1,1,1,1,1,1,1,1],
           [1,0,2,3,4,3,2,3,4,3,2,1],
@@ -358,30 +468,33 @@
 
     let currentLevelIndex = 0;
     let grid = [];
-    let player = { x: 1, y: 1 };
+    let player = { x: 1, y: 1, renderX: 1, renderY: 1 };
     let totalScore = 0;
     let levelScore = 0;
     let gemsCollected = 0;
     let totalGemsInLevel = 0;
     let hasKey = false;
     let isGameOver = false;
-    let fallingObjects = new Set(); // Rastreia pedras/diamantes caindo
+    let fallingObjects = new Set();
+    let animTimer = 0;
 
     function initLevel(index) {
       currentLevelIndex = index;
       const lvl = levels[currentLevelIndex];
-      
-      // Copia profunda da matriz do nível
       grid = lvl.grid.map(row => [...row]);
-      player = { ...lvl.playerStart };
       
+      player.x = lvl.playerStart.x;
+      player.y = lvl.playerStart.y;
+      player.renderX = player.x;
+      player.renderY = player.y;
+
       levelScore = 0;
       gemsCollected = 0;
       hasKey = false;
       isGameOver = false;
       fallingObjects.clear();
+      particles = [];
 
-      // Contar total de diamantes no mapa
       totalGemsInLevel = 0;
       for (let r = 0; r < MAP_SIZE; r++) {
         for (let c = 0; c < MAP_SIZE; c++) {
@@ -391,7 +504,6 @@
 
       document.getElementById('gameOverlay').style.display = 'none';
       updateHUD();
-      draw();
     }
 
     function updateHUD() {
@@ -401,14 +513,12 @@
       document.getElementById('hudScore').textContent = totalScore + levelScore;
     }
 
-    // --- FÍSICA DE GRAVIDADE E ROLAMENTO (Estilo Diamond Rush) ---
+    // --- FÍSICA E MOVIMENTAÇÃO ---
     function updatePhysics() {
       if (isGameOver) return;
 
-      let movedAny = false;
       let newFalling = new Set();
 
-      // Varre de baixo para cima para simular a gravidade corretamente
       for (let r = MAP_SIZE - 2; r >= 0; r--) {
         for (let c = 0; c < MAP_SIZE; c++) {
           const item = grid[r][c];
@@ -416,144 +526,112 @@
           if (item === TILE.ROCK || item === TILE.GEM) {
             const itemKey = `${r},${c}`;
 
-            // 1. Queda Direta para Baixo
+            // Queda Direta
             if (grid[r + 1][c] === TILE.EMPTY) {
               grid[r + 1][c] = item;
               grid[r][c] = TILE.EMPTY;
               newFalling.add(`${r + 1},${c}`);
-              movedAny = true;
 
-              // Verifica se caiu em cima do jogador!
               if (player.x === c && player.y === r + 1) {
                 killPlayer();
                 return;
               }
             } 
-            // 2. Rolamento lateral (sobre outra pedra, diamante ou parede)
-            else if (grid[r + 1][c] === TILE.ROCK || grid[r + 1][c] === TILE.GEM || grid[r + 1][c] === TILE.WALL) {
-              // Tenta rolar para a esquerda
+            // Rolamento Lateral
+            else if ([TILE.ROCK, TILE.GEM, TILE.WALL].includes(grid[r + 1][c])) {
               if (c > 0 && grid[r][c - 1] === TILE.EMPTY && grid[r + 1][c - 1] === TILE.EMPTY) {
                 grid[r][c - 1] = item;
                 grid[r][c] = TILE.EMPTY;
                 newFalling.add(`${r},${c - 1}`);
-                movedAny = true;
-              } 
-              // Tenta rolar para a direita
-              else if (c < MAP_SIZE - 1 && grid[r][c + 1] === TILE.EMPTY && grid[r + 1][c + 1] === TILE.EMPTY) {
+              } else if (c < MAP_SIZE - 1 && grid[r][c + 1] === TILE.EMPTY && grid[r + 1][c + 1] === TILE.EMPTY) {
                 grid[r][c + 1] = item;
                 grid[r][c] = TILE.EMPTY;
                 newFalling.add(`${r},${c + 1}`);
-                movedAny = true;
               }
             }
 
-            // Som de impacto quando atinge o chão
             if (fallingObjects.has(itemKey) && !newFalling.has(`${r + 1},${c}`)) {
-              playSFX('fall');
+              playSound('fall');
+              createParticles((c + 0.5) * TILE_SIZE, (r + 1.5) * TILE_SIZE, '#7f8c8d', 4);
             }
           }
         }
       }
-
       fallingObjects = newFalling;
-      if (movedAny) draw();
     }
 
-    // Loop de física rodando a cada 120ms
-    setInterval(updatePhysics, 120);
+    setInterval(updatePhysics, 110);
 
-    // --- MOVIMENTAÇÃO DO JOGADOR ---
-    window.movePlayer = function(dx, dy) {
+    window.handleInput = function(dx, dy) {
       if (isGameOver) return;
 
-      const targetX = player.x + dx;
-      const targetY = player.y + dy;
+      const tx = player.x + dx;
+      const ty = player.y + dy;
 
-      if (targetX < 0 || targetX >= MAP_SIZE || targetY < 0 || targetY >= MAP_SIZE) return;
+      if (tx < 0 || tx >= MAP_SIZE || ty < 0 || ty >= MAP_SIZE) return;
 
-      const targetTile = grid[targetY][targetX];
+      const tile = grid[ty][tx];
+      const px = (tx + 0.5) * TILE_SIZE;
+      const py = (ty + 0.5) * TILE_SIZE;
 
-      // Mover para Vazio
-      if (targetTile === TILE.EMPTY) {
-        player.x = targetX;
-        player.y = targetY;
-      }
-      // Escavar Terra
-      else if (targetTile === TILE.DIRT) {
-        grid[targetY][targetX] = TILE.EMPTY;
-        player.x = targetX;
-        player.y = targetY;
+      if (tile === TILE.EMPTY) {
+        player.x = tx; player.y = ty;
+      } else if (tile === TILE.DIRT) {
+        grid[ty][tx] = TILE.EMPTY;
+        player.x = tx; player.y = ty;
         levelScore += 10;
-        playSFX('dig');
-      }
-      // Coletar Diamante
-      else if (targetTile === TILE.GEM) {
-        grid[targetY][targetX] = TILE.EMPTY;
-        player.x = targetX;
-        player.y = targetY;
+        playSound('dig');
+        createParticles(px, py, '#8d6e63', 6);
+      } else if (tile === TILE.GEM) {
+        grid[ty][tx] = TILE.EMPTY;
+        player.x = tx; player.y = ty;
         gemsCollected++;
         levelScore += 100;
-        playSFX('gem');
-      }
-      // Coletar Chave
-      else if (targetTile === TILE.KEY) {
-        grid[targetY][targetX] = TILE.EMPTY;
-        player.x = targetX;
-        player.y = targetY;
+        playSound('gem');
+        createParticles(px, py, '#00f2ff', 10);
+      } else if (tile === TILE.KEY) {
+        grid[ty][tx] = TILE.EMPTY;
+        player.x = tx; player.y = ty;
         hasKey = true;
         levelScore += 150;
-        playSFX('gem');
-      }
-      // Abrir Porta
-      else if (targetTile === TILE.DOOR) {
-        if (hasKey) {
-          grid[targetY][targetX] = TILE.EMPTY;
-          player.x = targetX;
-          player.y = targetY;
-          levelScore += 200;
-          playSFX('win');
+        playSound('gem');
+        createParticles(px, py, '#f1c40f', 10);
+      } else if (tile === TILE.DOOR && hasKey) {
+        grid[ty][tx] = TILE.EMPTY;
+        player.x = tx; player.y = ty;
+        levelScore += 200;
+        playSound('win');
+        createParticles(px, py, '#e67e22', 12);
+      } else if (tile === TILE.ROCK && dy === 0) {
+        const bx = tx + dx;
+        if (bx >= 0 && bx < MAP_SIZE && grid[ty][bx] === TILE.EMPTY) {
+          grid[ty][bx] = TILE.ROCK;
+          grid[ty][tx] = TILE.EMPTY;
+          player.x = tx; player.y = ty;
+          playSound('dig');
         }
-      }
-      // Empurrar Pedra (Empurrão horizontal)
-      else if (targetTile === TILE.ROCK && dy === 0) {
-        const behindX = targetX + dx;
-        if (behindX >= 0 && behindX < MAP_SIZE && grid[targetY][behindX] === TILE.EMPTY) {
-          grid[targetY][behindX] = TILE.ROCK;
-          grid[targetY][targetX] = TILE.EMPTY;
-          player.x = targetX;
-          player.y = targetY;
-          playSFX('dig');
-        }
-      }
-      // Saída (Concluir Fase)
-      else if (targetTile === TILE.EXIT) {
-        player.x = targetX;
-        player.y = targetY;
+      } else if (tile === TILE.EXIT) {
+        player.x = tx; player.y = ty;
         winLevel();
       }
 
       updateHUD();
-      draw();
     };
 
-    window.handleTouchMove = function(dx, dy) {
-      movePlayer(dx, dy);
-    };
-
-    // Suporte ao Teclado
     window.addEventListener('keydown', e => {
-      if (['ArrowUp', 'w', 'W'].includes(e.key)) movePlayer(0, -1);
-      if (['ArrowDown', 's', 'S'].includes(e.key)) movePlayer(0, 1);
-      if (['ArrowLeft', 'a', 'A'].includes(e.key)) movePlayer(-1, 0);
-      if (['ArrowRight', 'd', 'D'].includes(e.key)) movePlayer(1, 0);
+      if (['ArrowUp', 'w', 'W'].includes(e.key)) handleInput(0, -1);
+      if (['ArrowDown', 's', 'S'].includes(e.key)) handleInput(0, 1);
+      if (['ArrowLeft', 'a', 'A'].includes(e.key)) handleInput(-1, 0);
+      if (['ArrowRight', 'd', 'D'].includes(e.key)) handleInput(1, 0);
     });
 
     function killPlayer() {
       isGameOver = true;
-      playSFX('dead');
-      
-      document.getElementById('overlayTitle').textContent = 'Você Foi Esmagado! 🪨';
-      document.getElementById('overlayMsg').textContent = 'Cuidado com as pedras no caminho!';
+      playSound('dead');
+      createParticles((player.x + 0.5) * TILE_SIZE, (player.y + 0.5) * TILE_SIZE, '#e74c3c', 15);
+
+      document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--danger)">Esmagado! 🪨</span>';
+      document.getElementById('overlayMsg').textContent = 'Fique atento às pedras instáveis!';
       document.getElementById('overlayScore').textContent = levelScore;
       document.getElementById('overlayTotalScore').textContent = totalScore;
       document.getElementById('overlayBtn').textContent = 'Tentar Novamente 🔄';
@@ -562,35 +640,32 @@
 
     function winLevel() {
       isGameOver = true;
-      playSFX('win');
-
+      playSound('win');
       totalScore += levelScore;
 
       if (currentLevelIndex < levels.length - 1) {
-        document.getElementById('overlayTitle').textContent = 'Fase Concluída! 🎉';
+        document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--accent)">Fase Concluída! 🎉</span>';
         document.getElementById('overlayMsg').textContent = 'Você dominou este setor do templo!';
         document.getElementById('overlayScore').textContent = levelScore;
         document.getElementById('overlayTotalScore').textContent = totalScore;
         document.getElementById('overlayBtn').textContent = 'Próxima Fase ➡️';
       } else {
-        document.getElementById('overlayTitle').textContent = 'Templo Superado! 🏆';
-        document.getElementById('overlayMsg').textContent = 'Parabéns! Você concluiu todas as fases!';
+        document.getElementById('overlayTitle').innerHTML = '<span style="color:var(--success)">Templo Conquistado! 🏆</span>';
+        document.getElementById('overlayMsg').textContent = 'Incrível! Você completou todas as fases!';
         document.getElementById('overlayScore').textContent = levelScore;
         document.getElementById('overlayTotalScore').textContent = totalScore;
         document.getElementById('overlayBtn').textContent = 'Jogar Novamente 🔄';
 
-        // Salvar Ranking no Firebase
-        const nome = inputPlayer.value.trim() || 'Explorador';
-        salvarPontuacaoFirebase(nome, totalScore);
+        salvarPontuacaoFirebase(inputPlayer.value.trim() || 'Explorador', totalScore);
       }
 
       document.getElementById('gameOverlay').style.display = 'flex';
     }
 
     window.nextAction = function() {
-      if (document.getElementById('overlayTitle').textContent.includes('Esmagado') || 
+      if (document.getElementById('overlayBtn').textContent.includes('Tentar') || 
           currentLevelIndex >= levels.length - 1) {
-        if (currentLevelIndex >= levels.length - 1 && !document.getElementById('overlayTitle').textContent.includes('Esmagado')) {
+        if (currentLevelIndex >= levels.length - 1 && !document.getElementById('overlayBtn').textContent.includes('Tentar')) {
           totalScore = 0;
         }
         initLevel(0);
@@ -599,7 +674,6 @@
       }
     };
 
-    // Firebase Integration
     async function salvarPontuacaoFirebase(nome, pontos) {
       if (!window.db) return;
       try {
@@ -609,15 +683,17 @@
           jogo: "diamond_rush",
           data: new Date()
         });
-        console.log("Pontuação salva com sucesso no Firestore!");
-      } catch (e) {
-        console.error("Erro ao salvar no Firestore:", e);
-      }
+      } catch (e) { console.error(e); }
     }
 
-    // --- RENDERIZAÇÃO GRÁFICA DO CANVAS ---
-    function draw() {
+    // --- RENDERIZAÇÃO GRÁFICA AVANÇADA ---
+    function render() {
+      animTimer += 0.05;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Interpolante suave de movimento do jogador
+      player.renderX += (player.x - player.renderX) * 0.3;
+      player.renderY += (player.y - player.renderY) * 0.3;
 
       for (let r = 0; r < MAP_SIZE; r++) {
         for (let c = 0; c < MAP_SIZE; c++) {
@@ -625,47 +701,59 @@
           const x = c * TILE_SIZE;
           const y = r * TILE_SIZE;
 
-          // Fundo padrão
-          ctx.fillStyle = '#0a0e14';
+          // Fundo de Piso com padrão quadriculado sutil
+          ctx.fillStyle = (r + c) % 2 === 0 ? '#0f141d' : '#0b0e14';
           ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
 
-          // 1. Parede de Pedra
+          // Parede Texturizada
           if (tile === TILE.WALL) {
-            ctx.fillStyle = '#2c3e50';
+            let grad = ctx.createLinearGradient(x, y, x + TILE_SIZE, y + TILE_SIZE);
+            grad.addColorStop(0, '#2c3e50');
+            grad.addColorStop(1, '#1a252f');
+            ctx.fillStyle = grad;
             ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-            ctx.strokeStyle = '#1a252f';
-            ctx.strokeRect(x + 1, y + 1, TILE_SIZE - 2, TILE_SIZE - 2);
+            ctx.strokeStyle = '#111822';
+            ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
           }
-          // 2. Terra Escavável
+          // Terra Escavável
           else if (tile === TILE.DIRT) {
-            ctx.fillStyle = '#795548';
+            ctx.fillStyle = '#6d4c41';
             ctx.fillRect(x + 1, y + 1, TILE_SIZE - 2, TILE_SIZE - 2);
-            ctx.fillStyle = '#5d4037';
+            ctx.fillStyle = '#4e342e';
             ctx.fillRect(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
           }
-          // 3. Pedra / Rocha
+          // Pedra 3D com Brilho
           else if (tile === TILE.ROCK) {
+            let grad = ctx.createRadialGradient(x + 10, y + 10, 2, x + 16, y + 16, 14);
+            grad.addColorStop(0, '#bdc3c7');
+            grad.addColorStop(1, '#7f8c8d');
             ctx.beginPath();
             ctx.arc(x + TILE_SIZE/2, y + TILE_SIZE/2, TILE_SIZE/2 - 2, 0, Math.PI * 2);
-            ctx.fillStyle = '#95a5a6';
+            ctx.fillStyle = grad;
             ctx.fill();
-            ctx.strokeStyle = '#7f8c8d';
-            ctx.lineWidth = 2;
-            ctx.stroke();
           }
-          // 4. Diamante
+          // Diamante com Iluminação e Animação Flutuante
           else if (tile === TILE.GEM) {
+            const floatY = Math.sin(animTimer * 2 + c) * 2;
+            ctx.save();
+            ctx.shadowColor = '#00f2ff';
+            ctx.shadowBlur = 8;
             ctx.font = '20px serif';
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('💎', x + TILE_SIZE/2, y + TILE_SIZE/2);
+            ctx.fillText('💎', x + TILE_SIZE/2, y + TILE_SIZE/2 + floatY);
+            ctx.restore();
           }
-          // 5. Chave
+          // Chave
           else if (tile === TILE.KEY) {
+            ctx.save();
+            ctx.shadowColor = '#f1c40f';
+            ctx.shadowBlur = 6;
             ctx.font = '18px serif';
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.fillText('🔑', x + TILE_SIZE/2, y + TILE_SIZE/2);
+            ctx.restore();
           }
-          // 6. Porta Trancada
+          // Porta
           else if (tile === TILE.DOOR) {
             ctx.fillStyle = '#d35400';
             ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
@@ -673,7 +761,7 @@
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.fillText('🔒', x + TILE_SIZE/2, y + TILE_SIZE/2);
           }
-          // 7. Saída / Portal
+          // Saída
           else if (tile === TILE.EXIT) {
             ctx.fillStyle = '#27ae60';
             ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, TILE_SIZE - 4);
@@ -684,25 +772,29 @@
         }
       }
 
-      // Desenhar o Jogador (Explorador)
-      const px = player.x * TILE_SIZE;
-      const py = player.y * TILE_SIZE;
+      // Renderizar Jogador com Brilho Suave
+      if (!isGameOver) {
+        const px = player.renderX * TILE_SIZE + TILE_SIZE / 2;
+        const py = player.renderY * TILE_SIZE + TILE_SIZE / 2;
 
-      ctx.beginPath();
-      ctx.arc(px + TILE_SIZE/2, py + TILE_SIZE/2, TILE_SIZE/2 - 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#e67e22';
-      ctx.fill();
-      ctx.strokeStyle = '#f39c12';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        ctx.save();
+        ctx.shadowColor = 'rgba(241, 196, 15, 0.6)';
+        ctx.shadowBlur = 10;
+        ctx.font = '20px serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('🤠', px, py);
+        ctx.restore();
+      }
 
-      ctx.font = '16px serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🤠', px + TILE_SIZE/2, py + TILE_SIZE/2);
+      // Atualizar e Desenhar Partículas
+      updateParticles();
+      drawParticles();
+
+      requestAnimationFrame(render);
     }
 
-    // Inicializa a primeira fase
     initLevel(0);
+    requestAnimationFrame(render);
   </script>
 </body>
 </html>
