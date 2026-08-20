@@ -182,10 +182,16 @@
                     <h3 class="text-xs font-black text-red-900 dark:text-amber-500 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerador Inteligente</h3>
                 </div>
                 <div class="space-y-3.5">
-                    <div>
-                        <label class="block text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase mb-1">Mês de Referência</label>
-                        <input type="month" id="enq-mes-alvo" class="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                    </div>
+                    <!-- Mês de Referência -->
+<div>
+    <label class="block text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase mb-1">Mês de Referência</label>
+    <input type="month" id="enq-mes-alvo" class="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs font-bold text-zinc-700 dark:text-zinc-300">
+</div>
+<!-- NOVO: Seleção de Dias Específicos -->
+<div id="container-selecao-dias" class="hidden bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2 mt-2">
+    <label class="block text-[10px] font-bold text-red-900 dark:text-amber-500 uppercase tracking-wide">Selecione os dias para a enquete</label>
+    <div id="lista-checkboxes-dias" class="space-y-1.5 max-h-40 overflow-y-auto pr-1 text-xs"></div>
+</div>
                     <div class="flex gap-2">
                         <button id="btn-disparar-enquete" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs py-2.5 rounded-xl cursor-pointer shadow-sm transition-colors">Abrir Pesquisa</button>
                         <button id="btn-fechar-enquete" class="flex-1 bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-700 text-white font-bold text-xs py-2.5 rounded-xl cursor-pointer shadow-sm transition-colors">Fechar</button>
