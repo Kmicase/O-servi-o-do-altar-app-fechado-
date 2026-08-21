@@ -21,8 +21,7 @@
 
         .dark .bg-sacro-dourado {
             background-color: #09090b;
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjZDk3NzA2IiBmaWxsLW9wYWNpdHk9IjAuMDciPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDQwek02NSAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMjAiIHI9IjYiLz48Y2lyY2xlIGN4```html
-="40" cy="60" r="6"/> circle cx="20" cy="40" r="1"/><circle cx="40" cy="40" r="1"/><path d="M36 18h8v2h-8zM36 9l-4zM18 36h2v8h-2zM58 36h2v8h-2z"/></g></svg>");
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjZDk3NzA2IiBmaWxsLW9wYWNpdHk9IjAuMDciPjxwYXRoIGQ9Ik0zOSAwaDJ2MTVoLTJ6TTM5IDI1aDJ2MTVoLTJ6TTM5IDQwaDJ2MTVoLTJ6TTM5IDY1aDJ2MTVoLTJ6TTAgMzloMTV2Mkgwek0yNSAzOWgxNXYySDI1ek00MCAzOWgxNXYySDQwek02NSAzOWgxNXYySDY1eiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMjAiIHI9IjYiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjYwIiByPSI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSI0MCIgcj0iMSIvPjxjaXJjbGUgY3g9IjQwIiBjeD0iNDAiIHI9IjEiLz48cGF0aCBkPSJNMzYgMThoOHYyaC-4ek0zNiA5bC-4ek0xOCAzNmgydjhoLTJNNTggMzZoMnY4aC-yeiIvPjwvZz48L3N2Zz4=");
         }
 
         .active-tab {
@@ -449,10 +448,10 @@
     </div>
 
     <script type="module">
-    import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js)";
-    import { getAuth, signOut, onAuthStateChanged } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js)";
-    import { initializeFirestore, doc, updateDoc, setDoc, getDoc, collection, onSnapshot } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js)";
-    import { getMessaging, getToken, onMessage } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js)";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeFirestore, doc, updateDoc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
     // -------------------------------------------------------------
     // 1. FUNÇÕES GLOBAIS E DE NAVEGAÇÃO
@@ -970,7 +969,7 @@
             containerMidia.innerHTML = `
                 <iframe 
                     class="w-full h-full rounded-2xl" 
-                    src="[https://www.youtube.com/embed/$](https://www.youtube.com/embed/$){videoId}?rel=0&autoplay=1" 
+                    src="https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1" 
                     title="Formação Altaris" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -1160,40 +1159,24 @@
             let meuStatusNestaCeb = "Pendente";
             let vagasLivresOuSubstituicoes = [];
 
-            // 1. Mapear todas as chaves dinamicamente que existem nesta celebração
-            let funcoesDinamicas = [];
-
-            // Adiciona altares APENAS se existirem no objeto 'esc' deste dia
-            Object.keys(esc).forEach(chave => {
-                if (chave.startsWith('altar')) {
-                    const numero = chave.replace('altar', '');
-                    funcoesDinamicas.push({
-                        id: chave,
-                        label: `Altar ${numero}`,
-                        icone: 'fa-fire',
-                        ordem: parseInt(numero) || 99
-                    });
-                }
-            });
-
-            // Ordena os altares em ordem crescente (Altar 1, Altar 2, Altar 3...)
-            funcoesDinamicas.sort((a, b) => a.ordem - b.ordem);
-
-            // Adiciona Turiferário e Naveteiro caso estejam ativos no dia
-            if (esc.turiferario || esc.turibuloAtivo) {
-                funcoesDinamicas.push({ id: 'turiferario', label: 'Turiferário', icone: 'fa-fire' });
-            }
-            if (esc.naveteiro || esc.navetaAtiva) {
-                funcoesDinamicas.push({ id: 'naveteiro', label: 'Naveteiro', icone: 'fa-fire' });
-            }
-
-            // 2. Renderizar somente as funções dinâmicas capturadas acima
-            funcoesDinamicas.forEach(f => {
-                const item = esc[f.id];
+            const funcoes = [
+                { id: 'altar1', label: 'Altar 1', icone: 'fa-fire' }, { id: 'altar2', label: 'Altar 2', icone: 'fa-fire' },
+                { id: 'altar3', label: 'Altar 3', icone: 'fa-fire' }, { id: 'altar4', label: 'Altar 4', icone: 'fa-fire' },
+                { id: 'altar5', label: 'Altar 5', icone: 'fa-fire' }, { id: 'altar6', label: 'Altar 6', icone: 'fa-fire' },
+                { id: 'altar7', label: 'Altar 7', icone: 'fa-fire' }, { id: 'altar8', label: 'Altar 8', icone: 'fa-fire' },
+                { id: 'altar9', label: 'Altar 9', icone: 'fa-fire' }, { id: 'altar10', label: 'Altar 10', icone: 'fa-fire' },
                 
-                // Se não houver dados cadastrados para este campo no Firebase, pula a iteração
-                if (!item && typeof item !== 'object') return;
+                { id: 'turiferario', label: 'Turiferário', icone: 'fa-fire' }, { id: 'naveteiro', label: 'Naveteiro', icone: 'fa-fire' }
+            ];
 
+            funcoes.forEach(f => {
+                // Se a propriedade de um altar não existir no documento Firebase, ignora para não exibir desnecessariamente
+                if (!esc[f.id] && f.id.startsWith('altar')) return;
+
+                const campoAtivo = f.id.startsWith('altar') ? true : (f.id === 'turiferario' ? esc.turibuloAtivo : esc.navetaAtiva);
+                if (campoAtivo === false) return; 
+
+                const item = esc[f.id];
                 const nomeEscalado = item?.nome || "";
                 const statusText = item?.status || "Pendente";
 
@@ -1247,105 +1230,113 @@
                         </div>`;
                 } else if(meuStatusNestaCeb === 'Substituição Solicitada') {
                     painelAcaoUsuarioHtml = `
-                        <div class="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 text-rose-900 dark:text-rose-400 p-3 rounded-xl flex items-center justify-between text-xs font-bold">
+                        <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 text-amber-900 dark:text-amber-400 p-3 rounded-xl flex items-center justify-between text-xs font-bold">
                             <span>Substituição Solicitada</span>
-                            <button onclick="assumirVagaEscala('${esc.idDoc}', '${minhaFuncaoNestaCeb}', 'Voltar')" class="text-[10px] text-emerald-600 dark:text-emerald-400 underline cursor-pointer">Cancelar Pedido</button>
+                            <button onclick="assumirVagaEscala('${esc.idDoc}', '${minhaFuncaoNestaCeb}', 'Voltar')" class="text-[10px] text-amber-700 dark:text-amber-300 underline cursor-pointer">Cancelar Pedido</button>
                         </div>`;
                 } else {
                     painelAcaoUsuarioHtml = `
-                        <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 p-3 rounded-xl flex items-center justify-between gap-2">
-                            <span class="text-xs font-bold text-amber-900 dark:text-amber-400">Você está escalado! Confirme presença:</span>
+                        <div class="bg-slate-50 dark:bg-zinc-800 p-3 rounded-xl border border-slate-100 dark:border-zinc-700 flex items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-700 dark:text-zinc-200">Você está escalado para esta celebração.</span>
                             <div class="flex gap-2">
-                                <button onclick="votarPresencaItem('${esc.idDoc}', '${minhaFuncaoNestaCeb}', 'Confirmado')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg cursor-pointer transition-all shadow-xs">Confirmar</button>
-                                <button onclick="votarPresencaItem('${esc.idDoc}', '${minhaFuncaoNestaCeb}', 'Substituição Solicitada')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg cursor-pointer transition-all shadow-xs">Pedir Subst.</button>
+                                <button onclick="votarPresencaItem('${esc.idDoc}', '${minhaFuncaoNestaCeb}', 'Confirmado')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-1.5 px-3 rounded-lg transition-all cursor-pointer shadow-xs">Confirmar</button>
+                                <button onclick="votarPresencaItem('${esc.idDoc}', '${minhaFuncaoNestaCeb}', 'Substituição Solicitada')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs py-1.5 px-3 rounded-lg transition-all cursor-pointer shadow-xs">Pedir Subst.</button>
                             </div>
                         </div>`;
                 }
             }
 
-            let painelVagasAbertasHtml = "";
+            let htmlVagasParaAssumir = "";
             if(vagasLivresOuSubstituicoes.length > 0) {
-                let botoesVagas = "";
+                htmlVagasParaAssumir = `<div class="mt-3 space-y-2">`;
                 vagasLivresOuSubstituicoes.forEach(v => {
-                    const txtBotao = v.tipo === 'vazia' ? `Assumir ${v.label}` : `Substituir ${v.quem} (${v.label})`;
-                    botoesVagas += `
-                        <button onclick="assumirVagaEscala('${esc.idDoc}', '${v.funcaoId}', 'Assumir')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg cursor-pointer transition-all shadow-xs">
-                            ${txtBotao}
+                    const textoBotao = v.tipo === 'vazia' ? `Assumir Vaga (${v.label})` : `Substituir ${v.quem} (${v.label})`;
+                    htmlVagasParaAssumir += `
+                        <button onclick="assumirVagaEscala('${esc.idDoc}', '${v.funcaoId}', 'Assumir')" class="w-full bg-amber-600/10 hover:bg-amber-600 dark:bg-amber-500/10 dark:hover:bg-amber-600 text-amber-800 hover:text-white dark:text-amber-400 dark:hover:text-white font-bold text-xs py-2 px-3 rounded-xl border border-amber-500/30 transition-all cursor-pointer flex items-center justify-between">
+                            <span>${textoBotao}</span>
+                            <i class="fa-solid fa-plus text-[10px]"></i>
                         </button>`;
                 });
-                painelVagasAbertasHtml = `
-                    <div class="bg-amber-50/50 dark:bg-amber-950/10 border border-amber-100 dark:border-amber-900/20 p-3 rounded-xl space-y-2">
-                        <span class="text-[10px] font-black text-amber-800 dark:text-amber-400 uppercase tracking-wide block">Vagas Disponíveis / Substituições:</span>
-                        <div class="flex flex-wrap gap-2">${botoesVagas}</div>
-                    </div>`;
+                htmlVagasParaAssumir += `</div>`;
             }
 
             resultadoEscalaGeral.innerHTML += `
-                <div class="bg-slate-50/50 dark:bg-zinc-800/20 rounded-2xl p-4 border border-slate-100 dark:border-zinc-800 space-y-3">
-                    <div class="flex justify-between items-center border-b border-slate-200/60 dark:border-zinc-800 pb-2">
-                        <h4 class="font-black text-xs text-slate-800 dark:text-zinc-100 uppercase tracking-wide">${esc.rotulo || "Celebração"} - ${esc.horario || "--:--"}</h4>
+                <div class="bg-slate-50/50 dark:bg-zinc-800/20 p-4 sm:p-5 rounded-2xl border border-slate-100 dark:border-zinc-800/80 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200/60 dark:border-zinc-800 pb-3 gap-1">
+                        <div>
+                            <h4 class="text-xs font-black text-slate-800 dark:text-zinc-100 uppercase tracking-wide">${esc.rotulo || 'Celebração'}</h4>
+                            <span class="text-[10px] font-bold text-amber-600 dark:text-amber-500 block mt-0.5">${esc.horario || ''}</span>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${listaMembrosHtml}</div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        ${listaMembrosHtml}
+                    </div>
+
                     ${painelAcaoUsuarioHtml}
-                    ${painelVagasAbertasHtml}
+                    ${htmlVagasParaAssumir}
                 </div>`;
         });
     }
 
     async function carregarLiturgiaDoDia() {
         try {
-            const resp = await fetch('[https://liturgia.up.railway.app/](https://liturgia.up.railway.app/)');
-            if(!resp.ok) return;
-            const data = await resp.json();
-            cacheLiturgiaDados = data;
+            const res = await fetch("https://liturgia.up.railway.app/");
+            if(!res.ok) throw new Error("Erro ao consultar API de liturgia");
+            cacheLiturgiaDados = await res.json();
 
-            const semanaEl = document.getElementById('liturgia-semana-titulo');
+            const titEl = document.getElementById('liturgia-semana-titulo');
             const santoEl = document.getElementById('liturgia-santo-dia');
             const corBadge = document.getElementById('liturgia-cor-badge');
-            const subtab2 = document.getElementById('subtab-2leitura');
+            const btnSegunda = document.getElementById('subtab-2leitura');
 
-            if(semanaEl) semanaEl.innerText = data.liturgia || "Liturgia do Dia";
-            if(santoEl) santoEl.innerText = data.cor || "Santo do Dia";
-            if(corBadge) corBadge.innerText = data.cor || "Verde";
+            if(titEl) titEl.innerText = cacheLiturgiaDados.liturgia || "Liturgia do Dia";
+            if(santoEl) santoEl.innerText = cacheLiturgiaDados.cor ? `Cor Litúrgica: ${cacheLiturgiaDados.cor}` : "";
+            if(corBadge) corBadge.innerText = cacheLiturgiaDados.cor || "---";
 
-            if(data.segundaLeitura) {
-                subtab2?.classList.remove('hidden');
+            if(cacheLiturgiaDados.segundaLeitura) {
+                if(btnSegunda) btnSegunda.classList.remove('hidden');
             } else {
-                subtab2?.classList.add('hidden');
+                if(btnSegunda) btnSegunda.classList.add('hidden');
             }
 
             window.switchSubTab('1leitura');
         } catch(err) {
-            console.error("Erro ao carregar liturgia:", err);
+            console.error("Erro liturgia:", err);
+            const corpoEl = document.getElementById('liturgia-texto-corpo');
+            if(corpoEl) corpoEl.innerText = "Não foi possível carregar as leituras litúrgicas de hoje.";
         }
     }
 
     function inicializarLeitorBiblia() {
-        const btn = document.getElementById('btn-buscar-biblia');
-        if(!btn) return;
-        btn.addEventListener('click', async () => {
+        const btnBuscar = document.getElementById('btn-buscar-biblia');
+        if(!btnBuscar) return;
+
+        btnBuscar.addEventListener('click', async () => {
             const livro = document.getElementById('select-biblia-livro').value;
             const cap = document.getElementById('input-biblia-capitulo').value;
             const container = document.getElementById('texto-biblia-container');
 
-            container.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20"><i class="fa-solid fa-circle-notch animate-spin"></i> Buscando texto sagrado...</p>`;
+            if(!container) return;
+
+            container.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20">Buscando versículos...</p>`;
 
             try {
-                const res = await fetch(`[https://bible-api.com/$](https://bible-api.com/$){livro}+${cap}?translation=almeida`);
+                const res = await fetch(`https://bible-api.com/${livro}+${cap}?translation=almeida`);
                 if(!res.ok) throw new Error();
-                const json = await res.json();
+                const data = await res.json();
 
-                if(!json.verses || json.verses.length === 0) {
-                    container.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20">Nenhum capítulo encontrado.</p>`;
+                if(!data.verses || data.verses.length === 0) {
+                    container.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20">Nenhum texto encontrado.</p>`;
                     return;
                 }
 
-                container.innerHTML = `<h5 class="font-bold text-amber-700 dark:text-amber-500 mb-2 uppercase text-[10px] tracking-wider">${json.reference}</h5>`;
-                json.verses.forEach(v => {
-                    container.innerHTML += `<p class="mb-1.5"><span class="font-bold text-amber-600 dark:text-amber-500 mr-1 text-[10px]">${v.verse}</span>${v.text}</p>`;
+                container.innerHTML = `<h4 class="font-black text-amber-700 dark:text-amber-500 mb-2">${data.reference}</h4>`;
+                data.verses.forEach(v => {
+                    container.innerHTML += `<p class="mb-1.5"><strong class="text-amber-600 dark:text-amber-400 mr-1">${v.verse}.</strong>${v.text}</p>`;
                 });
-            } catch(e) {
-                container.innerHTML = `<p class="text-red-500 italic text-center pt-20">Erro ao carregar o texto da Bíblia.</p>`;
+            } catch(err) {
+                container.innerHTML = `<p class="text-red-500 italic text-center pt-20">Erro ao buscar este capítulo. Tente novamente.</p>`;
             }
         });
     }
