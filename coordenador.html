@@ -221,7 +221,7 @@
 
       <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800/80 lg:col-span-2 space-y-4">
         <div class="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h3 class="text-xs font-black text-red-900 dark:text-amber-500 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-clipboard-list"></i> Disponibilidades Recebidas</h3>
+          <h3 class="text-xs font-black text-red-900 dark:text-amber-500 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-clipboard-list"></i> Disponividades Recebidas</h3>
         </div>
         <div id="lista-nomes-enquete" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[520px] overflow-y-auto bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800/60"></div>
       </div>
@@ -314,7 +314,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot, deleteDoc, getDocs, query, where, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCwPeLrAtNEO41MZ3yxSuYib2LC0z2dv9U",
@@ -925,6 +925,16 @@
       const tit = document.getElementById('auto-titulo').value.trim();
 
       for(const cel of list) {
+        const idDoc = `${cel.data}_${cel.horario.replace(':','')}`;
+        const docExistente = await getDoc(doc(db, "escalas", idDoc));
+        
+        let qtdAltares = 6;
+        if(docExistente.exists()) {
+          const d = docExistente.data();
+          const altaresKeys = Object.keys(d).filter(k => k.startsWith('altar'));
+          if (altaresKeys.length > 0) qtdAltares = altaresKeys.length;
+        }
+
         let disp = [];
         Object.keys(mapaRespostasGerais).forEach(n => {
           if((mapaRespostasGerais[n].escolhas||[]).includes(cel.idChave)) disp.push(n);
@@ -932,21 +942,21 @@
 
         disp.sort(() => Math.random() - 0.5);
 
-        await setDoc(doc(db, "escalas", `${cel.data}_${cel.horario.replace(':','')}`), {
+        const dadosEscalaNova = {
           titulo: `${tit} (${cel.rotulo})`,
           horario: cel.horario,
           data: cel.data,
-          altar1: { nome: disp[0] || "A definir", status: "Pendente" },
-          altar2: { nome: disp[1] || "A definir", status: "Pendente" },
-          altar3: { nome: disp[2] || "A definir", status: "Pendente" },
-          altar4: { nome: disp[3] || "A definir", status: "Pendente" },
-          altar5: { nome: disp[4] || "A definir", status: "Pendente" },
-          altar6: { nome: disp[5] || "A definir", status: "Pendente" },
           turibuloAtivo: false,
           turiferario: { nome: "A definir", status: "Pendente" },
           navetaAtiva: false,
           naveteiro: { nome: "A definir", status: "Pendente" }
-        });
+        };
+
+        for(let i = 1; i <= qtdAltares; i++) {
+          dadosEscalaNova[`altar${i}`] = { nome: disp[i - 1] || "A definir", status: "Pendente" };
+        }
+
+        await setDoc(doc(db, "escalas", idDoc), dadosEscalaNova);
       }
 
       alert("Escalas oficiais lançadas com sucesso!");
@@ -1012,6 +1022,50 @@
       return opcoes;
     }
 
+    // Função global para adicionar mais campos de altar dinamicamente na tela
+    window.adicionarAltarNaTela = function(idDoc) {
+      const container = document.getElementById(`container-altares-${idDoc}`);
+      if (!container) return;
+
+      const totalAtuais = container.querySelectorAll('.item-altar-campo').length;
+      const novoNum = totalAtuais + 1;
+
+      const div = document.createElement('div');
+      div.className = "item-altar-campo relative";
+      div.setAttribute('data-num', novoNum);
+      div.innerHTML = `
+        <div class="flex justify-between items-center mb-1">
+          <label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block">Altar ${novoNum}</label>
+          ${novoNum > 1 ? `<button type="button" onclick="window.removerAltarNaTela('${idDoc}', this)" class="text-[9px] text-rose-500 hover:text-rose-700 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>` : ''}
+        </div>
+        <select id="edit-a${novoNum}-${idDoc}" class="select-altar-dinamico w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">
+          ${gerarOpcoesUsuarios('A definir')}
+        </select>
+      `;
+      container.appendChild(div);
+    };
+
+    // Função global para remover um altar específico da tela
+    window.removerAltarNaTela = function(idDoc, btn) {
+      const campo = btn.closest('.item-altar-campo');
+      if (campo) {
+        campo.remove();
+        // Reordenar os labels dos altares
+        const container = document.getElementById(`container-altares-${idDoc}`);
+        if (container) {
+          const campos = container.querySelectorAll('.item-altar-campo');
+          campos.forEach((c, index) => {
+            const num = index + 1;
+            c.setAttribute('data-num', num);
+            const lbl = c.querySelector('label');
+            if (lbl) lbl.textContent = `Altar ${num}`;
+            const sel = c.querySelector('select');
+            if (sel) sel.id = `edit-a${num}-${idDoc}`;
+          });
+        }
+      }
+    };
+
     editorEscalaData?.addEventListener('change', (e) => {
       carregarEditorEscalasPorData(e.target.value);
     });
@@ -1040,12 +1094,33 @@
           const dv = document.createElement('div');
           dv.className = "bg-white dark:bg-zinc-900 border p-5 rounded-2xl space-y-4 text-xs shadow-sm border-zinc-200 dark:border-zinc-800/80";
 
-          const optA1 = gerarOpcoesUsuarios(d.altar1?.nome);
-          const optA2 = gerarOpcoesUsuarios(d.altar2?.nome);
-          const optA3 = gerarOpcoesUsuarios(d.altar3?.nome);
-          const optA4 = gerarOpcoesUsuarios(d.altar4?.nome);
-          const optA5 = gerarOpcoesUsuarios(d.altar5?.nome);
-          const optA6 = gerarOpcoesUsuarios(d.altar6?.nome);
+          // Extrair todos os altares dinamicamente
+          const chavesAltares = Object.keys(d)
+            .filter(k => k.startsWith('altar'))
+            .sort((a, b) => parseInt(a.replace('altar', '')) - parseInt(b.replace('altar', '')));
+
+          // Se não houver altares definidos, cria por padrão 6 altares
+          const numAltares = chavesAltares.length > 0 ? chavesAltares.length : 6;
+          
+          let htmlAltares = "";
+          for (let i = 1; i <= numAltares; i++) {
+            const nomeKey = `altar${i}`;
+            const valorAtual = d[nomeKey]?.nome || 'A definir';
+            const opt = gerarOpcoesUsuarios(valorAtual);
+
+            htmlAltares += `
+              <div class="item-altar-campo relative" data-num="${i}">
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block">Altar ${i}</label>
+                  ${i > 1 ? `<button type="button" onclick="window.removerAltarNaTela('${idDoc}', this)" class="text-[9px] text-rose-500 hover:text-rose-700 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                </div>
+                <select id="edit-a${i}-${idDoc}" class="select-altar-dinamico w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">
+                  ${opt}
+                </select>
+              </div>
+            `;
+          }
+
           const optTuri = gerarOpcoesUsuarios(d.turiferario?.nome);
           const optNave = gerarOpcoesUsuarios(d.naveteiro?.nome);
 
@@ -1054,14 +1129,18 @@
               <span class="text-red-950 dark:text-amber-500 font-black text-xs">Horário: ${d.horario}h</span>
               <span class="bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-400 px-2.5 py-0.5 rounded-lg border border-red-200 dark:border-red-900/30 font-black text-[10px]">${d.titulo}</span>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div><label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block mb-1">Altar 1</label><select id="edit-a1-${idDoc}" class="w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">${optA1}</select></div>
-              <div><label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block mb-1">Altar 2</label><select id="edit-a2-${idDoc}" class="w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">${optA2}</select></div>
-              <div><label class="text-[9px] text-zinc-400 dark:text-zinc-500 uppercase block mb-1">Altar 3</label><select id="edit-a3-${idDoc}" class="w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">${optA3}</select></div>
-              <div><label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block mb-1">Altar 4</label><select id="edit-a4-${idDoc}" class="w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">${optA4}</select></div>
-              <div><label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block mb-1">Altar 5</label><select id="edit-a5-${idDoc}" class="w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">${optA5}</select></div>
-              <div><label class="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase block mb-1">Altar 6</label><select id="edit-a6-${idDoc}" class="w-full border dark:border-zinc-800 p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl focus:outline-red-700 dark:text-white">${optA6}</select></div>
+            
+            <div class="flex justify-between items-center pt-1">
+              <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Altares Escalados</span>
+              <button type="button" onclick="window.adicionarAltarNaTela('${idDoc}')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-amber-500/30 cursor-pointer transition-all flex items-center gap-1">
+                <i class="fa-solid fa-plus text-[9px]"></i> Adicionar Altar
+              </button>
             </div>
+
+            <div id="container-altares-${idDoc}" class="grid grid-cols-2 gap-3">
+              ${htmlAltares}
+            </div>
+
             <div class="flex gap-4 border-t dark:border-zinc-800 pt-2.5 font-bold text-zinc-700 dark:text-zinc-300">
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded text-red-700 focus:ring-red-500" id="chk-turi-${idDoc}" ${d.turibuloAtive || d.turibuloAtivo?'checked':''}> Turíbulo</label>
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded text-red-700 focus:ring-red-500" id="chk-nave-${idDoc}" ${d.navetaAtive || d.navetaAtiva?'checked':''}> Naveta</label>
@@ -1080,32 +1159,52 @@
 
         document.querySelectorAll('.btn-atualizar-escala-individual').forEach(btn => {
           btn.addEventListener('click', async (e) => {
-            const idDoc = e.target.getAttribute('data-id');
-            const a1 = document.getElementById(`edit-a1-${idDoc}`).value;
-            const a2 = document.getElementById(`edit-a2-${idDoc}`).value;
-            const a3 = document.getElementById(`edit-a3-${idDoc}`).value;
-            const a4 = document.getElementById(`edit-a4-${idDoc}`).value;
-            const a5 = document.getElementById(`edit-a5-${idDoc}`).value;
-            const a6 = document.getElementById(`edit-a6-${idDoc}`).value;
+            const idDoc = e.currentTarget.getAttribute('data-id');
+            const containerAltares = document.getElementById(`container-altares-${idDoc}`);
+            const camposAltares = containerAltares ? containerAltares.querySelectorAll('.item-altar-campo') : [];
+            
+            const atualizacaoData = {};
+
+            // Ler dynamicamente todos os altares presentes na tela
+            camposAltares.forEach((campo, index) => {
+              const num = index + 1;
+              const select = campo.querySelector('select');
+              if (select) {
+                atualizacaoData[`altar${num}`] = {
+                  nome: select.value,
+                  status: "Pendente"
+                };
+              }
+            });
+
+            // Buscar se havia mais altares cadastrados anteriormente no banco para removê-los caso tenham sido excluídos da tela
+            const docSnap = await getDoc(doc(db, "escalas", idDoc));
+            if (docSnap.exists()) {
+              const dadosAtuais = docSnap.data();
+              Object.keys(dadosAtuais).forEach(k => {
+                if (k.startsWith('altar')) {
+                  const numAnterior = parseInt(k.replace('altar', ''));
+                  if (numAnterior > camposAltares.length) {
+                    atualizacaoData[k] = deleteField();
+                  }
+                }
+              });
+            }
+
             const chkTuri = document.getElementById(`chk-turi-${idDoc}`).checked;
             const chkNave = document.getElementById(`chk-nave-${idDoc}`).checked;
             const turi = document.getElementById(`edit-turi-${idDoc}`).value;
             const nave = document.getElementById(`edit-nave-${idDoc}`).value;
 
+            atualizacaoData.turibuloAtivo = chkTuri;
+            atualizacaoData.navetaAtiva = chkNave;
+            atualizacaoData["turiferario.nome"] = turi;
+            atualizacaoData["naveteiro.nome"] = nave;
+
             try {
-              await updateDoc(doc(db, "escalas", idDoc), {
-                "altar1.nome": a1,
-                "altar2.nome": a2,
-                "altar3.nome": a3,
-                "altar4.nome": a4,
-                "altar5.nome": a5,
-                "altar6.nome": a6,
-                turibuloAtivo: chkTuri,
-                navetaAtiva: chkNave,
-                "turiferario.nome": turi,
-                "naveteiro.nome": nave
-              });
+              await updateDoc(doc(db, "escalas", idDoc), atualizacaoData);
               alert("Escala atualizada com sucesso!");
+              carregarEditorEscalasPorData(dataString);
             } catch(err) {
               alert("Erro ao atualizar dados: " + err.message);
             }
