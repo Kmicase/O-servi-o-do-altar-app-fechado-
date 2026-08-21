@@ -1170,6 +1170,7 @@
             ];
 
             funcoes.forEach(f => {
+                const altaresComoTuriferario = ['altar7', 'altar8', 'altar9', 'altar10'];
                 const campoAtivo = f.id.startsWith('altar') ? true : (f.id === 'turiferario' ? esc.turibuloAtivo : esc.navetaAtiva);
                 if (campoAtivo === false) return; 
 
