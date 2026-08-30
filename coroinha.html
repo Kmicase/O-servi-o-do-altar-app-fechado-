@@ -1034,12 +1034,18 @@ lo<!DOCTYPE html>
     }
 
     function ouvirEnqueteDisponibilidade() {
-    onSnapshot(doc(db, "enquetes", "disponibilidade_atual"), (snap) => {
+    // 1. Gera o ID do documento para o mês atual no formato "disponibilidade_YYYY-MM"
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const docIdMesAtual = `disponibilidade_${ano}-${mes}`;
+
+    // 2. Aponta o Firestore para o documento do mês vigente
+    onSnapshot(doc(db, "enquetes", docIdMesAtual), (snap) => {
         if (snap.exists() && snap.data().ativa === true) {
             const dados = snap.data(); 
             if (listaCelebracoesCheckboxes) listaCelebracoesCheckboxes.innerHTML = "";
             
-            // Busca o nome do usuário logado tratando espaços
             const nomeUsuario = usuarioLogadoDados?.nome?.trim();
             const minhasEscolhasSalvas = dados.respostas?.[nomeUsuario]?.escolhas || [];
             
@@ -1050,7 +1056,6 @@ lo<!DOCTYPE html>
                 return;
             }
 
-            // Garante que o card fique visível se a enquete estiver ativa
             if (cardEnqueteDisponibilidade) {
                 cardEnqueteDisponibilidade.classList.remove('hidden');
             }
