@@ -1041,7 +1041,7 @@ lo<!DOCTYPE html>
     const docIdMesAtual = `disponibilidade_${ano}-${mes}`;
 
     // 2. Aponta o Firestore para o documento do mês vigente
-    onSnapshot(doc(db, "enquetes", docIdMesAtual), (snap) => {
+    onSnapshot(doc(db, "enquetes", `disponibilidade_${mes}` ), (snap) => {
         if (snap.exists() && snap.data().ativa === true) {
             const dados = snap.data(); 
             if (listaCelebracoesCheckboxes) listaCelebracoesCheckboxes.innerHTML = "";
