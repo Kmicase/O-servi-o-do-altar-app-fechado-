@@ -841,7 +841,7 @@
         });
       });
 
-      const docRef = doc(db, "enquetes", `disponibilidade_${mes}`);
+      const docRef = doc(db, "enquetes", `disponibilidade_atual`);
       const snap = await getDoc(docRef);
       let respostasExistentes = snap.exists() ? (snap.data().respostas || {}) : {};
 
