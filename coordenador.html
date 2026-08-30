@@ -771,7 +771,7 @@
     function ouvirEnquetePorMes(mes) {
       if (unsubscribeEnquete) unsubscribeEnquete();
 
-      unsubscribeEnquete = onSnapshot(doc(db, "enquetes", `disponibilidade_${mes}`), (docSnap) => {
+      unsubscribeEnquete = onSnapshot(doc(db, "enquetes", `disponibilidade_atual`), (docSnap) => {
         const fila = document.getElementById('lista-fila-prioridade');
         const container = document.getElementById('lista-nomes-enquete');
 
