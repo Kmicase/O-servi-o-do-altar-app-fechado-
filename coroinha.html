@@ -1033,55 +1033,39 @@
         });
     }
 
-    function ouvirEnqueteDisponibilidade() {
-    // 1. Gera o ID do documento para o mês atual no formato "disponibilidade_YYYY-MM"
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const docIdMesAtual = `disponibilidade_${ano}-${mes}`;
+       function ouvirEnqueteDisponibilidade() {
+        onSnapshot(doc(db, "enquetes", "disponibilidade_atual"), (snap) => {
+            if(snap.exists() && snap.data().ativa === true) {
+                const dados = snap.data(); 
+                if (listaCelebracoesCheckboxes) listaCelebracoesCheckboxes.innerHTML = "";
+                
+                const minhasEscolhasSalvas = dados.respostas?.[usuarioLogadoDados?.nome]?.escolhas || [];
+                let opcoesVisiveisCount = 0;
 
-    // 2. Aponta o Firestore para o documento do mês vigente
-    onSnapshot(doc(db, "enquetes", `disponibilidade_${mes}` ), (snap) => {
-        if (snap.exists() && snap.data().ativa === true) {
-            const dados = snap.data(); 
-            if (listaCelebracoesCheckboxes) listaCelebracoesCheckboxes.innerHTML = "";
-            
-            const nomeUsuario = usuarioLogadoDados?.nome?.trim();
-            const minhasEscolhasSalvas = dados.respostas?.[nomeUsuario]?.escolhas || [];
-            
-            let celebracoesArray = dados.celebracoes || [];
+                (dados.celebracoes || []).forEach(cel => {
+                    if(minhasEscolhasSalvas.includes(cel.idChave)) return;
 
-            if (celebracoesArray.length === 0) {
-                if (cardEnqueteDisponibilidade) cardEnqueteDisponibilidade.classList.add('hidden');
-                return;
-            }
+                    opcoesVisiveisCount++;
+                    const formatData = cel.data.split('-').reverse().join('/');
+                    if (listaCelebracoesCheckboxes) {
+                        listaCelebracoesCheckboxes.innerHTML += `
+                            <label class="flex items-center gap-3 bg-slate-50/50 dark:bg-zinc-800/30 p-2.5 rounded-xl border border-slate-100 dark:border-zinc-800/60 cursor-pointer text-[11px] font-medium text-slate-700 dark:text-zinc-300 hover:bg-amber-50/50 dark:hover:bg-amber-950/20 transition-all">
+                                <input type="checkbox" name="celebracao_resp" value="${cel.idChave}" class="w-4 h-4 accent-amber-700 rounded focus:ring-amber-500">
+                                <div><span class="font-bold text-amber-900 dark:text-amber-500 block">${formatData} - ${cel.horario}</span>${cel.rotulo}</div>
+                            </label>`;
+                    }
+                });
 
-            if (cardEnqueteDisponibilidade) {
-                cardEnqueteDisponibilidade.classList.remove('hidden');
-            }
-
-            celebracoesArray.forEach(cel => {
-                const jaMarcado = minhasEscolhasSalvas.includes(cel.idChave);
-                const formatData = cel.data ? cel.data.split('-').reverse().join('/') : '--/--/----';
-
-                if (listaCelebracoesCheckboxes) {
-                    listaCelebracoesCheckboxes.innerHTML += `
-                        <label class="flex items-center gap-3 bg-slate-50/50 dark:bg-zinc-800/30 p-2.5 rounded-xl border border-slate-100 dark:border-zinc-800/60 cursor-pointer text-[11px] font-medium text-slate-700 dark:text-zinc-300 hover:bg-amber-50/50 dark:hover:bg-amber-950/20 transition-all">
-                            <input type="checkbox" name="celebracao_resp" value="${cel.idChave}" ${jaMarcado ? 'checked' : ''} class="w-4 h-4 accent-amber-700 rounded focus:ring-amber-500">
-                            <div>
-                                <span class="font-bold text-amber-900 dark:text-amber-500 block">${formatData} - ${cel.horario || ''}</span>
-                                ${cel.rotulo || ''} ${jaMarcado ? '<span class="text-[9px] text-emerald-600 font-bold font-sans ml-1">(Já respondido)</span>' : ''}
-                            </div>
-                        </label>`;
+                if(opcoesVisiveisCount > 0 && cardEnqueteDisponibilidade) {
+                    cardEnqueteDisponibilidade.classList.remove('hidden');
+                } else if(cardEnqueteDisponibilidade) {
+                    cardEnqueteDisponibilidade.classList.add('hidden');
                 }
-            });
-        } else if (cardEnqueteDisponibilidade) { 
-            cardEnqueteDisponibilidade.classList.add('hidden'); 
-        }
-    }, (error) => {
-        console.error("Erro ao carregar enquete de disponibilidade:", error);
-    });
-}
+            } else if(cardEnqueteDisponibilidade) { 
+                cardEnqueteDisponibilidade.classList.add('hidden'); 
+            }
+        });
+    }
 
     formResponderEnquete?.addEventListener('submit', async (e) => {
         e.preventDefault();
