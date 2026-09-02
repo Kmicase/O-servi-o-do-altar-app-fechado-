@@ -1170,6 +1170,8 @@
             ];
 
             funcoes.forEach(f => {
+                 if (!esc[f.id] && f.id.startsWith('altar')) return;
+
                 const campoAtivo = f.id.startsWith('altar') ? true : (f.id === 'turiferario' ? esc.turibuloAtivo : esc.navetaAtiva);
                 if (campoAtivo === false) return; 
 
