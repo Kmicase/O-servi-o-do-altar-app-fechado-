@@ -1359,78 +1359,123 @@ function inicializarLeitorBiblia() {
     const btnAnterior = document.getElementById('btn-cap-anterior');
     const btnProximo = document.getElementById('btn-cap-proximo');
 
-    // Mapeamento de abreviações exigidas por APIs em Português
-    const abbrevLivros = {
-        "Gênesis": "gn", "Êxodo": "ex", "Levítico": "lv", "Números": "nm", "Deuteronômio": "dt",
-        "Josué": "js", "Juízes": "jz", "Rute": "rt", "1 Samuel": "1sm", "2 Samuel": "2sm",
-        "1 Reis": "1kc", "2 Reis": "2kc", "1 Crônicas": "1ch", "2 Crônicas": "2ch",
-        "Esdras": "ez", "Neemias": "ne", "Ester": "et", "Jó": "job", "Salmos": "ps",
-        "Provérbios": "pr", "Eclesiastes": "ec", "Cânticos": "so", "Isaías": "is",
-        "Jeremias": "jr", "Lamentações": "lm", "Ezequiel": "ezk", "Daniel": "dn",
-        "Oseias": "ho", "Joel": "jl", "Amós": "am", "Obadias": "ob", "Jonas": "jn",
-        "Miqueias": "mc", "Naum": "na", "Habacuque": "hk", "Sofonias": "zp", "Ageu": "hg",
-        "Zacarias": "zc", "Malaquias": "ml", "Mateus": "mt", "Marcos": "mk", "Lucas": "lk",
-        "João": "jo", "Atos": "act", "Romanos": "rm", "1 Coríntios": "1co", "2 Coríntios": "2co",
-        "Gálatas": "ga", "Efésios": "ep", "Filipenses": "ph", "Colossenses": "col",
-        "1 Tessalonicenses": "1th", "2 Tessalonicenses": "2th", "1 Timóteo": "1tm",
-        "2 Timóteo": "2tm", "Tito": "tit", "Filemom": "phm", "Hebreus": "he", "Tiago": "jas",
-        "1 Pedro": "1pt", "2 Pedro": "2pt", "1 João": "1jn", "2 João": "2jn", "3 João": "3jn",
-        "Judas": "jud", "Apocalipse": "rev"
+    // Mapeamento dos 66 livros (PT -> EN e total de capítulos)
+    const mapaLivros = {
+        "Gênesis": { en: "Genesis", caps: 50 },
+        "Êxodo": { en: "Exodus", caps: 40 },
+        "Levítico": { en: "Leviticus", caps: 27 },
+        "Números": { en: "Numbers", caps: 36 },
+        "Deuteronômio": { en: "Deuteronomy", caps: 34 },
+        "Josué": { en: "Joshua", caps: 24 },
+        "Juízes": { en: "Judges", caps: 21 },
+        "Rute": { en: "Ruth", caps: 4 },
+        "1 Samuel": { en: "1 Samuel", caps: 31 },
+        "2 Samuel": { en: "2 Samuel", caps: 24 },
+        "1 Reis": { en: "1 Kings", caps: 22 },
+        "2 Reis": { en: "2 Kings", caps: 25 },
+        "1 Crônicas": { en: "1 Chronicles", caps: 29 },
+        "2 Crônicas": { en: "2 Chronicles", caps: 36 },
+        "Esdras": { en: "Ezra", caps: 10 },
+        "Neemias": { en: "Nehemiah", caps: 13 },
+        "Ester": { en: "Esther", caps: 10 },
+        "Jó": { en: "Job", caps: 42 },
+        "Salmos": { en: "Psalms", caps: 150 },
+        "Provérbios": { en: "Proverbs", caps: 31 },
+        "Eclesiastes": { en: "Ecclesiastes", caps: 12 },
+        "Cânticos": { en: "Song of Solomon", caps: 8 },
+        "Isaías": { en: "Isaiah", caps: 66 },
+        "Jeremias": { en: "Jeremiah", caps: 52 },
+        "Lamentações": { en: "Lamentations", caps: 5 },
+        "Ezequiel": { en: "Ezekiel", caps: 48 },
+        "Daniel": { en: "Daniel", caps: 12 },
+        "Oseias": { en: "Hosea", caps: 14 },
+        "Joel": { en: "Joel", caps: 3 },
+        "Amós": { en: "Amos", caps: 9 },
+        "Obadias": { en: "Obadiah", caps: 1 },
+        "Jonas": { en: "Jonah", caps: 4 },
+        "Miqueias": { en: "Micah", caps: 7 },
+        "Naum": { en: "Nahum", caps: 3 },
+        "Habacuque": { en: "Habakkuk", caps: 3 },
+        "Sofonias": { en: "Zephaniah", caps: 3 },
+        "Ageu": { en: "Haggai", caps: 2 },
+        "Zacarias": { en: "Zechariah", caps: 14 },
+        "Malaquias": { en: "Malachi", caps: 4 },
+        "Mateus": { en: "Matthew", caps: 28 },
+        "Marcos": { en: "Mark", caps: 16 },
+        "Lucas": { en: "Luke", caps: 24 },
+        "João": { en: "John", caps: 21 },
+        "Atos": { en: "Acts", caps: 28 },
+        "Romanos": { en: "Romans", caps: 16 },
+        "1 Coríntios": { en: "1 Corinthians", caps: 16 },
+        "2 Coríntios": { en: "2 Corinthians", caps: 13 },
+        "Gálatas": { en: "Galatians", caps: 6 },
+        "Efésios": { en: "Ephesians", caps: 6 },
+        "Filipenses": { en: "Philippians", caps: 4 },
+        "Colossenses": { en: "Colossians", caps: 4 },
+        "1 Tessalonicenses": { en: "1 Thessalonians", caps: 5 },
+        "2 Tessalonicenses": { en: "2 Thessalonians", caps: 3 },
+        "1 Timóteo": { en: "1 Timothy", caps: 6 },
+        "2 Timóteo": { en: "2 Timothy", caps: 4 },
+        "Tito": { en: "Titus", caps: 3 },
+        "Filemom": { en: "Philemon", caps: 1 },
+        "Hebreus": { en: "Hebrews", caps: 13 },
+        "Tiago": { en: "James", caps: 5 },
+        "1 Pedro": { en: "1 Peter", caps: 5 },
+        "2 Pedro": { en: "2 Peter", caps: 3 },
+        "1 João": { en: "1 John", caps: 5 },
+        "2 João": { en: "2 John", caps: 1 },
+        "3 João": { en: "3 John", caps: 1 },
+        "Judas": { en: "Jude", caps: 1 },
+        "Apocalipse": { en: "Revelation", caps: 22 }
     };
 
     async function carregarCapitulo(livroPt, capitulo) {
         if (!container) return;
 
-        const capNum = parseInt(capitulo, 10) || 1;
-        const abbrev = abbrevLivros[livroPt] || 'gn';
+        const infoLivro = mapaLivros[livroPt] || { en: "Genesis", caps: 50 };
+        const capNum = Math.max(1, Math.min(parseInt(capitulo, 10) || 1, infoLivro.caps));
 
         container.innerHTML = `<p class="text-slate-400 dark:text-zinc-500 italic text-center pt-20"><i class="fa-solid fa-circle-notch animate-spin mr-1"></i> Buscando na Sagrada Escritura...</p>`;
 
+        // Atualiza os botões e input
+        if (inputCapitulo) inputCapitulo.value = capNum;
+        if (btnAnterior) btnAnterior.disabled = (capNum <= 1);
+        if (btnProximo) btnProximo.disabled = (capNum >= infoLivro.caps);
+
         try {
-            // Utilizando endpoint publico e estável sem limite agressivo de requisições
-            const res = await fetch(`https://www.abibliadigital.com.br/api/verses/nvi/${abbrev}/${capNum}`);
+            // Formata a URL corretamente lidando com espaços (ex: 1 Samuel -> 1%20Samuel)
+            const referencia = encodeURIComponent(`${infoLivro.en} ${capNum}`);
+            const res = await fetch(`https://bible-api.com/${referencia}?translation=almeida`);
 
-            if (res.status === 404) {
-                container.innerHTML = `<p class="text-rose-500 text-center pt-20 font-bold">Capítulo não encontrado. Verifique o número digitado.</p>`;
-                return;
-            }
-
-            if (!res.ok) throw new Error("Erro na requisição");
+            if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
             const data = await res.json();
 
             if (!data.verses || data.verses.length === 0) {
-                container.innerHTML = `<p class="text-rose-500 text-center pt-20 font-bold">Nenhum versículo encontrado.</p>`;
+                container.innerHTML = `<p class="text-rose-500 text-center pt-20 font-bold">Capítulo não encontrado.</p>`;
                 return;
             }
 
-            // Atualiza o estado dos botões e do campo de número
-            if (inputCapitulo) inputCapitulo.value = capNum;
-            if (btnAnterior) btnAnterior.disabled = capNum <= 1;
-            if (btnProximo) btnProximo.disabled = capNum >= data.chapter.number; // A API devolve quantos capítulos existem
-
             let htmlContent = `<h4 class="font-black text-amber-800 dark:text-amber-500 uppercase tracking-wide mb-3 border-b border-amber-200 dark:border-amber-900/40 pb-1.5">${livroPt} ${capNum}</h4>`;
             data.verses.forEach(v => {
-                htmlContent += `<p class="mb-2"><sup class="font-bold text-amber-600 dark:text-amber-400 mr-1">${v.number}</sup>${v.text}</p>`;
+                htmlContent += `<p class="mb-2"><sup class="font-bold text-amber-600 dark:text-amber-400 mr-1">${v.verse}</sup>${v.text}</p>`;
             });
 
             container.innerHTML = htmlContent;
             container.scrollTop = 0;
         } catch (err) {
-            console.error("Erro ao carregar a bíblia:", err);
-            container.innerHTML = `<p class="text-rose-500 text-center pt-20 font-bold">Ocorreu um erro ao buscar o capítulo. Tente novamente.</p>`;
+            console.error("Erro ao carregar a Bíblia:", err);
+            container.innerHTML = `<p class="text-rose-500 text-center pt-20 font-bold">Falha ao buscar capítulo. Verifique sua conexão.</p>`;
         }
     }
 
-    // Listeners
+    // Eventos
     btnBuscar?.addEventListener('click', () => {
         carregarCapitulo(selectLivro?.value || 'Gênesis', inputCapitulo?.value || '1');
     });
 
     btnAnterior?.addEventListener('click', () => {
         const capAtual = parseInt(inputCapitulo?.value, 10) || 1;
-        if (capAtual > 1) {
-            carregarCapitulo(selectLivro?.value || 'Gênesis', capAtual - 1);
-        }
+        if (capAtual > 1) carregarCapitulo(selectLivro?.value || 'Gênesis', capAtual - 1);
     });
 
     btnProximo?.addEventListener('click', () => {
